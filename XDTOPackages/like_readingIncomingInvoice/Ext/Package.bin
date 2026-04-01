@@ -1,0 +1,124 @@
+﻿<package xmlns="http://v8.1c.ru/8.1/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="https://izi.cloud/iiko/reading/incomingInvoice" elementFormQualified="true" attributeFormQualified="false">
+	<valueType name="refType" base="xs:string" variety="Atomic" length="36"/>
+	<objectType name="incomingInvoiceType">
+		<property name="cls" type="xs:string" lowerBound="0" form="Attribute"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="eid" type="d3p1:refType" lowerBound="0" form="Attribute"/>
+		<property name="revision" type="xs:integer"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="lastModifyNode" type="d3p1:nullableType"/>
+		<property name="dateIncoming" type="xs:string"/>
+		<property name="documentNumber" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="modifiedInfo" type="d3p1:infoType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="createdInfo" type="d3p1:infoType"/>
+		<property name="status" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="comment" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="conception" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="disableUserSaving" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="dueDate" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="paymentDate" type="d3p1:nullableType" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="manualPaymentDate" type="d3p1:nullableType" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="supplier" type="d3p1:refType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="paid" type="d3p1:nullableType" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="defaultStore" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="items" type="d3p1:invoiceItemsType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="invoice" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="employeePassToAccount" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="incomingDocumentNumber" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="incomingDate" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="deliveryOnTime" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="matchesToTheOrder" type="d3p1:nullableType"/>
+		<property name="manualDueDate" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="transportInvoiceNumber" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="internalOutgoingInvoiceId" type="d3p1:nullableType"/>
+		<property name="editable" type="xs:boolean"/>
+		<property name="automatic" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="sessionId" type="d3p1:nullableType"/>
+		<property name="boughtAtFront" type="xs:boolean"/>
+		<property name="isAdditionalExpensesBySum" type="xs:boolean"/>
+	</objectType>
+	<objectType name="infoType">
+		<property name="date" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="user" type="d3p1:refType"/>
+	</objectType>
+	<objectType name="invoiceItemType">
+		<property name="cls" type="xs:string" lowerBound="0" form="Attribute"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="eid" type="d3p1:refType" lowerBound="0" form="Attribute"/>
+		<property name="num" type="xs:integer"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="product" type="d3p1:refType"/>
+		<property name="amount" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="amountUnit" type="d3p1:refType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="containerId" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="invoice" type="d3p1:invoiceType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="store" type="d3p1:refType"/>
+		<property name="code" type="xs:string"/>
+		<property name="price" type="xs:float"/>
+		<property name="priceWithoutNds" type="xs:float" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="priceUnit" type="d3p1:nullableType"/>
+		<property name="sum" type="xs:decimal"/>
+		<property name="ndsPercent" type="xs:float"/>
+		<property name="sumWithoutNds" type="xs:float"/>
+		<property name="discountSum" type="xs:float"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="actualUnitWeight" type="d3p1:nullableType"/>
+		<property name="actualAmount" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="supplierProduct" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="customsDeclarationNumber" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="expireDate" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="comment" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="additionalExpenses" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="additionalExpensesNds" type="d3p1:nullableType"/>
+		<property name="isAdditionalExpense" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="orderNum" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="producer" type="d3p1:nullableType"/>
+		<property name="supCode" type="xs:string"/>
+		<property name="supProductName" type="xs:string"/>
+	</objectType>
+	<objectType name="invoiceItemsType" ordered="false" sequenced="true">
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="i" type="d3p1:invoiceItemType" lowerBound="0" upperBound="-1"/>
+	</objectType>
+	<objectType name="invoiceType">
+		<property name="cls" type="xs:string" lowerBound="0" form="Attribute"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="eid" type="d3p1:refType" lowerBound="0" form="Attribute"/>
+	</objectType>
+	<objectType name="itemType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="id" type="d3p1:refType"/>
+		<property name="type" type="xs:string"/>
+		<property name="deleted" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="xml" type="d3p1:nullableType"/>
+		<property name="r" type="xs:anyType"/>
+	</objectType>
+	<objectType name="itemsSeqType" ordered="false" sequenced="true">
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="i" type="d3p1:itemType" lowerBound="0" upperBound="-1"/>
+	</objectType>
+	<objectType name="licenceInfoType">
+		<property name="licenseHash" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="licenseData" type="d3p1:nullableType"/>
+		<property name="stateHash" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="stateData" type="d3p1:nullableType"/>
+		<property name="validTill" type="xs:dateTime"/>
+	</objectType>
+	<objectType name="nameType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="defaultResourceId" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="currentResourceId" type="d3p1:nullableType"/>
+		<property name="customValue" type="xs:string"/>
+	</objectType>
+	<objectType name="nullableType">
+		<property name="null" type="xs:decimal" lowerBound="0" form="Attribute"/>
+		<property name="__content" type="xs:string" form="Text"/>
+	</objectType>
+	<objectType name="result">
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="returnValue" type="d3p1:incomingInvoiceType"/>
+		<property name="success" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="errorString" type="d3p1:nullableType"/>
+		<property name="resultStatus" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="stackTrace" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="entitiesUpdate" type="d3p1:updateType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="licenseInfo" type="d3p1:nullableType"/>
+		<property name="watchDogCheckResults" type="xs:anyType" nillable="true"/>
+	</objectType>
+	<objectType name="updateType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="serverInstanceId" type="d3p1:refType"/>
+		<property name="revision" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="items" type="d3p1:itemsSeqType"/>
+		<property name="fullUpdate" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/incomingInvoice" name="version" type="d3p1:nullableType"/>
+	</objectType>
+</package>

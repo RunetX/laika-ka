@@ -1,0 +1,9 @@
+﻿<package xmlns="http://v8.1c.ru/8.1/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="https://izi.cloud/iiko/read/sql" elementFormQualified="true" attributeFormQualified="false">
+	<objectType name="resultSetType" ordered="false" sequenced="true">
+		<property name="row" type="xs:anyType" lowerBound="0" upperBound="-1"/>
+	</objectType>
+	<objectType name="rootType">
+		<property name="query" type="xs:anyType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/read/sql" name="resultSet" type="d3p1:resultSetType"/>
+	</objectType>
+</package>

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:pal="http://v8.1c.ru/8.1/data/ui/colors/palette" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.21">
+	<Enum uuid="49a9a8eb-b3af-4b54-b966-22ee4e3bfa90">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.СтатусыРеализацийТоваровУслуг" category="Ref">
+				<xr:TypeId>73f4af99-749d-4442-9110-1aebcbe133e7</xr:TypeId>
+				<xr:ValueId>bbaca7a2-e2fe-4b5c-aaa3-c87c989323c3</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.СтатусыРеализацийТоваровУслуг" category="Manager">
+				<xr:TypeId>13518afa-74b0-4a33-84e3-c110a979567f</xr:TypeId>
+				<xr:ValueId>d0918fbd-5f3e-41bd-b255-215892112d27</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.СтатусыРеализацийТоваровУслуг" category="List">
+				<xr:TypeId>36e9c0eb-4fe4-41cf-bcea-01c04b689502</xr:TypeId>
+				<xr:ValueId>ffe23a53-17de-458b-855c-101b1e542a1a</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<ObjectBelonging>Adopted</ObjectBelonging>
+			<Name>СтатусыРеализацийТоваровУслуг</Name>
+			<Comment/>
+			<ExtendedConfigurationObject>4a1d6358-e147-4d42-837c-789380e77ba0</ExtendedConfigurationObject>
+		</Properties>
+		<ChildObjects>
+			<EnumValue uuid="75ab5843-396d-4e79-8945-1972477ca889">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>ВПути</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>9eecbfe8-9526-4cb2-b701-86383ea87cad</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="588bd287-daa7-48d3-9495-255e33f8b993">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>КПредоплате</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>56f07675-a2f8-4ddb-9844-2f6199f18f86</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="7d10d2cb-9a84-46f6-b3ad-db8f80bea5d5">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Отгружено</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>1fbefaf2-f396-4451-a44d-9654122b6c5a</ExtendedConfigurationObject>
+				</Properties>
+			</EnumValue>
+		</ChildObjects>
+	</Enum>
+</MetaDataObject>

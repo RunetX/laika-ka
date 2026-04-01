@@ -1,0 +1,12 @@
+﻿<package xmlns="http://v8.1c.ru/8.1/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="https://izi.cloud/iiko/common" elementFormQualified="true" attributeFormQualified="false">
+	<valueType name="refType" base="xs:string" variety="Atomic" length="36"/>
+	<objectType name="nullableType">
+		<property name="null" type="xs:decimal" lowerBound="0" form="Attribute"/>
+		<property name="__content" type="xs:string" form="Text"/>
+	</objectType>
+	<objectType name="nameType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="defaultResourceId" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="currentResourceId" type="d3p1:nullableType"/>
+		<property name="customValue" type="xs:string"/>
+	</objectType>
+</package>

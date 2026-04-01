@@ -1,0 +1,17 @@
+﻿<package xmlns="http://v8.1c.ru/8.1/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="https://izi.cloud/iiko/reading/entitiesUpdate" elementFormQualified="true" attributeFormQualified="false">
+	<import namespace="https://izi.cloud/iiko/common"/>
+	<objectType name="args">
+		<property name="entities_version" type="xs:decimal" localName="entities-version"/>
+		<property name="client_type" type="xs:string" fixed="false" default="BACK" localName="client-type"/>
+		<property name="enable_warnings" type="xs:boolean" lowerBound="0" fixed="false" default="false" localName="enable-warnings"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="client_call_id" type="d3p1:refType" localName="client-call-id"/>
+		<property name="license_hash" type="xs:decimal" localName="license-hash"/>
+		<property name="restrictions_state_hash" type="xs:decimal" localName="restrictions-state-hash"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="obtained_license_connections_ids" type="d3p1:refType" localName="obtained-license-connections-ids"/>
+		<property name="request_watchdog_check_results" type="xs:boolean" fixed="false" default="true" localName="request-watchdog-check-results"/>
+		<property name="use_raw_entities" type="xs:boolean" fixed="false" default="true" localName="use-raw-entities"/>
+		<property name="fromRevision" type="xs:decimal"/>
+		<property name="timeoutMillis" type="xs:decimal"/>
+		<property name="useRawEntities" type="xs:boolean" fixed="false" default="true"/>
+	</objectType>
+</package>

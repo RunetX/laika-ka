@@ -1,0 +1,110 @@
+﻿<package xmlns="http://v8.1c.ru/8.1/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="https://izi.cloud/iiko/package">
+	<valueType name="refType" base="xs:string" variety="Atomic" length="36"/>
+	<objectType name="args">
+		<property name="entities_version" type="xs:decimal" localName="entities-version"/>
+		<property name="client_type" type="xs:string" localName="client-type"/>
+		<property name="enable_warnings" type="xs:boolean" localName="enable-warnings"/>
+		<property name="request_watchdog_check_results" type="xs:boolean" localName="request-watchdog-check-results"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="product" type="d3p1:productType" lowerBound="0"/>
+		<property name="overrideFastCode" type="xs:boolean" lowerBound="0" fixed="false" default="true"/>
+		<property name="overrideCode" type="xs:boolean" lowerBound="0" fixed="false" default="true"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="productGroup" type="d3p1:productGroupType" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="settingsDto" type="d3p1:settingsDTOType" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="user" type="d3p1:userType" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="document" type="d3p1:invoiceType" lowerBound="0"/>
+	</objectType>
+	<objectType name="baseObjectType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="eid" type="d3p1:refType" lowerBound="1" form="Attribute"/>
+		<property name="code" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="parent" type="d3p1:refType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="name" type="d3p1:nameType"/>
+		<property name="type" type="xs:string"/>
+		<property name="description" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="id" type="d3p1:refType"/>
+	</objectType>
+	<objectType name="invoiceItemInvoiceType">
+		<property name="cls" type="xs:string" lowerBound="0" form="Attribute"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="eid" type="d3p1:refType" lowerBound="0" form="Attribute"/>
+	</objectType>
+	<objectType name="invoiceItemType">
+		<property name="cls" type="xs:string" lowerBound="1" form="Attribute"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="eid" type="d3p1:refType" lowerBound="1" form="Attribute"/>
+		<property name="amountFactor" type="xs:decimal" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="store" type="d3p1:refType"/>
+		<property name="code" type="xs:string"/>
+		<property name="price" type="xs:decimal"/>
+		<property name="priceWithoutNds" type="xs:decimal"/>
+		<property name="sum" type="xs:decimal"/>
+		<property name="ndsPercent" type="xs:decimal"/>
+		<property name="sumWithoutNds" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="invoice" type="d3p1:invoiceItemInvoiceType"/>
+		<property name="discountSum" type="xs:decimal"/>
+		<property name="actualAmount" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="amountUnit" type="d3p1:refType"/>
+		<property name="num" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="product" type="d3p1:refType"/>
+		<property name="amount" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="id" type="d3p1:refType"/>
+	</objectType>
+	<objectType name="invoiceItemsType" ordered="false" sequenced="true">
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="i" type="d3p1:invoiceItemType" lowerBound="0" upperBound="-1"/>
+	</objectType>
+	<objectType name="invoiceType">
+		<property name="cls" type="xs:string" lowerBound="1" form="Attribute"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="eid" type="d3p1:refType" lowerBound="1" form="Attribute"/>
+		<property name="incomingDocumentNumber" type="xs:string" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="accountTo" type="d3p1:refType" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="revenueAccount" type="d3p1:refType" lowerBound="0"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="supplier" type="d3p1:refType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="defaultStore" type="d3p1:refType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="items" type="d3p1:invoiceItemsType"/>
+		<property name="documentNumber" type="xs:string"/>
+		<property name="status" type="xs:string"/>
+		<property name="dateIncoming" type="xs:string"/>
+		<property name="comment" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="conception" type="d3p1:refType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="id" type="d3p1:refType"/>
+	</objectType>
+	<objectType name="nameType">
+		<property name="customValue" type="xs:string"/>
+	</objectType>
+	<objectType name="npeParentType">
+		<property name="cls" type="xs:string" lowerBound="0" form="Attribute"/>
+		<property name="__content" type="xs:string" form="Text"/>
+	</objectType>
+	<objectType xmlns:d2p1="https://izi.cloud/iiko/package" name="productGroupType" base="d2p1:baseObjectType">
+		<property name="num" type="xs:string"/>
+	</objectType>
+	<objectType xmlns:d2p1="https://izi.cloud/iiko/package" name="productType" base="d2p1:productGroupType">
+		<property name="mainUnit" type="d2p1:refType"/>
+		<property name="placeType" type="d2p1:refType"/>
+		<property name="unitWeight" type="xs:decimal" lowerBound="0"/>
+		<property name="unitCapacity" type="xs:decimal" lowerBound="0"/>
+		<property name="accountingCategory" type="d2p1:refType" lowerBound="0"/>
+	</objectType>
+	<objectType name="settingsDTOType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="stores" type="d3p1:storesType"/>
+	</objectType>
+	<objectType xmlns:d2p1="https://izi.cloud/iiko/package" name="storeType" base="d2p1:baseObjectType">
+		<property name="npeParent" type="d2p1:npeParentType"/>
+		<property name="systemAccount" type="xs:boolean"/>
+	</objectType>
+	<objectType name="storesSeqType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="store" type="d3p1:storeType"/>
+		<property name="useForInternalTransfers" type="xs:boolean"/>
+	</objectType>
+	<objectType name="storesType" ordered="false" sequenced="true">
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="i" type="d3p1:storesSeqType" lowerBound="0" upperBound="-1"/>
+	</objectType>
+	<objectType xmlns:d2p1="https://izi.cloud/iiko/package" name="userType" base="d2p1:baseObjectType">
+		<property name="supplier" type="xs:boolean"/>
+		<property name="employee" type="xs:boolean"/>
+		<property name="client" type="xs:boolean"/>
+		<property name="pluginUser" type="xs:boolean"/>
+		<property name="system" type="xs:boolean"/>
+		<property name="taxpayerIdNumber" type="xs:integer"/>
+		<property name="accountingReasonCode" type="xs:integer"/>
+		<property name="supplierType" type="xs:string"/>
+		<property name="ediSystem" type="d2p1:refType"/>
+	</objectType>
+</package>

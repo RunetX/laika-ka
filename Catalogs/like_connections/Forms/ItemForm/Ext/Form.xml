@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:pal="http://v8.1c.ru/8.1/data/ui/colors/palette" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.21">
+	<WindowOpeningMode>LockOwner</WindowOpeningMode>
+	<Group>Vertical</Group>
+	<UseForFoldersAndItems>Items</UseForFoldersAndItems>
+	<AutoCommandBar name="FormCommandBar" id="-1"/>
+	<ChildItems>
+		<UsualGroup name="Group3" id="29">
+			<Group>HorizontalIfPossible</Group>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="Group3ExtendedTooltip" id="30"/>
+			<ChildItems>
+				<InputField name="Code" id="1">
+					<DataPath>Object.Code</DataPath>
+					<Visible>false</Visible>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="CodeContextMenu" id="2"/>
+					<ExtendedTooltip name="CodeExtendedTooltip" id="3"/>
+				</InputField>
+				<InputField name="Description" id="4">
+					<DataPath>Object.Description</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="DescriptionContextMenu" id="5"/>
+					<ExtendedTooltip name="DescriptionExtendedTooltip" id="6"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="Group4" id="31">
+			<Visible>false</Visible>
+			<Group>HorizontalIfPossible</Group>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="Group4ExtendedTooltip" id="32"/>
+			<ChildItems>
+				<InputField name="edition" id="7">
+					<DataPath>Object.edition</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="editionContextMenu" id="8"/>
+					<ExtendedTooltip name="editionExtendedTooltip" id="9"/>
+				</InputField>
+				<InputField name="version" id="10">
+					<DataPath>Object.version</DataPath>
+					<ReadOnly>true</ReadOnly>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="versionContextMenu" id="11"/>
+					<ExtendedTooltip name="versionExtendedTooltip" id="12"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="Group5" id="33">
+			<Group>Vertical</Group>
+			<Representation>None</Representation>
+			<ShowTitle>false</ShowTitle>
+			<ExtendedTooltip name="Group5ExtendedTooltip" id="34"/>
+			<ChildItems>
+				<UsualGroup name="Group1" id="25">
+					<Group>AlwaysHorizontal</Group>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="Group1ExtendedTooltip" id="26"/>
+					<ChildItems>
+						<InputField name="host" id="13">
+							<DataPath>Object.host</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Адрес сервера</v8:content>
+								</v8:item>
+							</Title>
+							<EditMode>EnterOnInput</EditMode>
+							<AutoEditMode>true</AutoEditMode>
+							<ContextMenu name="hostContextMenu" id="14"/>
+							<ExtendedTooltip name="hostExtendedTooltip" id="15"/>
+						</InputField>
+						<InputField name="port" id="16">
+							<DataPath>Object.port</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Порт</v8:content>
+								</v8:item>
+							</Title>
+							<EditMode>EnterOnInput</EditMode>
+							<AutoEditMode>true</AutoEditMode>
+							<ContextMenu name="portContextMenu" id="17"/>
+							<ExtendedTooltip name="portExtendedTooltip" id="18"/>
+						</InputField>
+					</ChildItems>
+				</UsualGroup>
+				<UsualGroup name="Group2" id="27">
+					<Group>Vertical</Group>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="Group2ExtendedTooltip" id="28"/>
+					<ChildItems>
+						<InputField name="login" id="19">
+							<DataPath>Object.login</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Пользователь</v8:content>
+								</v8:item>
+							</Title>
+							<EditMode>EnterOnInput</EditMode>
+							<AutoEditMode>true</AutoEditMode>
+							<ContextMenu name="loginContextMenu" id="20"/>
+							<ExtendedTooltip name="loginExtendedTooltip" id="21"/>
+						</InputField>
+						<InputField name="password" id="22">
+							<DataPath>Object.password</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Пароль</v8:content>
+								</v8:item>
+							</Title>
+							<EditMode>EnterOnInput</EditMode>
+							<AutoEditMode>true</AutoEditMode>
+							<PasswordMode>true</PasswordMode>
+							<ContextMenu name="passwordContextMenu" id="23"/>
+							<ExtendedTooltip name="passwordExtendedTooltip" id="24"/>
+						</InputField>
+						<UsualGroup name="Group6" id="40">
+							<Group>HorizontalIfPossible</Group>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="Group6ExtendedTooltip" id="41"/>
+							<ChildItems>
+								<CheckBoxField name="backgroundUpdate" id="37">
+									<DataPath>Object.backgroundUpdate</DataPath>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Обновлять в фоне</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="backgroundUpdateContextMenu" id="38"/>
+									<ExtendedTooltip name="backgroundUpdateExtendedTooltip" id="39"/>
+								</CheckBoxField>
+								<CheckBoxField name="isSecure" id="42">
+									<DataPath>Object.isSecure</DataPath>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Защищенное соединение (HTTPS)</v8:content>
+										</v8:item>
+									</Title>
+									<ContextMenu name="isSecureContextMenu" id="43"/>
+									<ExtendedTooltip name="isSecureExtendedTooltip" id="44"/>
+								</CheckBoxField>
+							</ChildItems>
+						</UsualGroup>
+					</ChildItems>
+				</UsualGroup>
+			</ChildItems>
+		</UsualGroup>
+		<UsualGroup name="Group7" id="45">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Версия сервера</v8:content>
+				</v8:item>
+			</Title>
+			<Group>HorizontalIfPossible</Group>
+			<Behavior>Collapsible</Behavior>
+			<Collapsed>true</Collapsed>
+			<Representation>WeakSeparation</Representation>
+			<ExtendedTooltip name="Group7ExtendedTooltip" id="46"/>
+			<ChildItems>
+				<InputField name="edition1" id="47">
+					<DataPath>Object.edition</DataPath>
+					<ContextMenu name="edition1ContextMenu" id="48"/>
+					<ExtendedTooltip name="edition1ExtendedTooltip" id="49"/>
+				</InputField>
+				<InputField name="version1" id="50">
+					<DataPath>Object.version</DataPath>
+					<ContextMenu name="version1ContextMenu" id="51"/>
+					<ExtendedTooltip name="version1ExtendedTooltip" id="52"/>
+				</InputField>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Object" id="1">
+			<Type>
+				<v8:Type>cfg:CatalogObject.like_connections</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+			<SavedData>true</SavedData>
+		</Attribute>
+	</Attributes>
+</Form>

@@ -1,0 +1,42 @@
+﻿<package xmlns="http://v8.1c.ru/8.1/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="https://izi.cloud/iiko/reading/store" elementFormQualified="true" attributeFormQualified="false">
+	<import namespace="https://izi.cloud/iiko/common"/>
+	<objectType name="nameType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="defaultResourceId" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="currentResourceId" type="d3p1:nullableType"/>
+		<property name="customValue" type="xs:string"/>
+	</objectType>
+	<objectType name="npeParentType">
+		<property name="cls" type="xs:string" lowerBound="0" form="Attribute"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="npeParent" type="d3p1:refType"/>
+	</objectType>
+	<objectType name="anyType">
+		<property name="cls" type="xs:string" lowerBound="1" form="Attribute"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="eid" type="d3p1:refType" lowerBound="1" form="Attribute"/>
+		<property name="revision" type="xs:decimal"/>
+		<property name="lastModifyNode" type="xs:string"/>
+		<property name="deleted" type="xs:boolean"/>
+		<property name="modified" type="xs:dateTime"/>
+		<property name="created" type="xs:dateTime"/>
+		<property name="deletedDate" type="xs:dateTime"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="userCreatedId" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="userModifiedId" type="d3p1:nullableType"/>
+		<property name="localId" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/store" name="name" type="d3p1:nameType"/>
+		<property name="type" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="parent" type="d3p1:nullableType"/>
+		<property name="code" type="xs:string"/>
+		<property name="description" type="xs:string"/>
+		<property name="systemAccount" type="xs:boolean"/>
+		<property name="customTransactionsAllowed" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="startBalanceDate" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="startBalanceSum" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="startBalanceTransactionId" type="d3p1:nullableType"/>
+		<property name="responsibleUsers" type="xs:anyType"/>
+		<property name="responsibleRoles" type="xs:anyType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/store" name="npeParent" type="d3p1:npeParentType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="representativeSupplier" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="gln" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="externalStoreGuid" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="address" type="d3p1:nullableType"/>
+	</objectType>
+</package>

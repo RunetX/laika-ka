@@ -1,0 +1,38 @@
+﻿<package xmlns="http://v8.1c.ru/8.1/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="https://izi.cloud/iiko/reading/entitiesUpdateResponse" elementFormQualified="true" attributeFormQualified="false">
+	<import namespace="https://izi.cloud/iiko/common"/>
+	<valueType name="watchDogType" base="xs:string" variety="Atomic" maxLength="0"/>
+	<objectType name="itemType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="id" type="d3p1:refType"/>
+		<property name="type" type="xs:string"/>
+		<property name="deleted" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="xml" type="d3p1:nullableType"/>
+		<property name="r" type="xs:anyType"/>
+	</objectType>
+	<objectType name="itemsSeqType" ordered="false" sequenced="true">
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/entitiesUpdateResponse" name="i" type="d3p1:itemType" lowerBound="0" upperBound="-1"/>
+	</objectType>
+	<objectType name="licenceInfoType">
+		<property name="licenseHash" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="licenseData" type="d3p1:nullableType"/>
+		<property name="stateHash" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="stateData" type="d3p1:nullableType"/>
+		<property name="validTill" type="xs:dateTime"/>
+	</objectType>
+	<objectType name="result">
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="returnValue" type="d3p1:nullableType"/>
+		<property name="success" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="errorString" type="d3p1:nullableType"/>
+		<property name="resultStatus" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="stackTrace" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/entitiesUpdateResponse" name="entitiesUpdate" type="d3p1:updateType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="licenseInfo" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="watchDogCheckResults" type="d3p1:nullableType"/>
+	</objectType>
+	<objectType name="updateType">
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="serverInstanceId" type="d3p1:refType"/>
+		<property name="revision" type="xs:decimal"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/entitiesUpdateResponse" name="items" type="d3p1:itemsSeqType"/>
+		<property name="fullUpdate" type="xs:boolean"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="version" type="d3p1:nullableType"/>
+	</objectType>
+</package>

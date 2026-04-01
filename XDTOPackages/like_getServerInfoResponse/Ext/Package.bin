@@ -1,0 +1,25 @@
+﻿<package xmlns="http://v8.1c.ru/8.1/xdto" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="https://izi.cloud/iiko/reading/serverInfoResponse" elementFormQualified="true" attributeFormQualified="false">
+	<import namespace="https://izi.cloud/iiko/common"/>
+	<valueType name="serverStateType" base="xs:string" variety="Atomic">
+		<enumeration>NEW</enumeration>
+		<enumeration>WAITING_LICENSE</enumeration>
+		<enumeration>STARTING</enumeration>
+		<enumeration>START_FAILED</enumeration>
+		<enumeration>STARTED_SUCCESSFULLY</enumeration>
+		<enumeration>EMERGENCY</enumeration>
+		<enumeration>STOPPING</enumeration>
+		<enumeration>STOPPED</enumeration>
+	</valueType>
+	<objectType name="r" ordered="false" sequenced="true">
+		<property name="serverName" type="xs:string"/>
+		<property name="edition" type="xs:string"/>
+		<property name="version" type="xs:string"/>
+		<property name="computerName" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/reading/serverInfoResponse" name="serverState" type="d3p1:serverStateType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="protocol" type="d3p1:nullableType" lowerBound="0" nillable="true"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="serverAddr" type="d3p1:nullableType"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="serverSubUrl" type="d3p1:nullableType"/>
+		<property name="port" type="xs:decimal"/>
+		<property name="isPresent" type="xs:boolean"/>
+	</objectType>
+</package>

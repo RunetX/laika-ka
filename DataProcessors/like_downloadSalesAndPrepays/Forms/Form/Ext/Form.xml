@@ -1,0 +1,1039 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:pal="http://v8.1c.ru/8.1/data/ui/colors/palette" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.21">
+	<WindowOpeningMode>DontBlock</WindowOpeningMode>
+	<Group>Vertical</Group>
+	<AutoCommandBar name="FormCommandBar" id="-1">
+		<Autofill>false</Autofill>
+	</AutoCommandBar>
+	<ChildItems>
+		<InputField name="prepaysDate" id="3">
+			<DataPath>prepaysDate</DataPath>
+			<ContextMenu name="prepaysDateContextMenu" id="4"/>
+			<ExtendedTooltip name="prepaysDateExtendedTooltip" id="5"/>
+			<Events>
+				<Event name="OnChange">prepaysDateOnChange</Event>
+			</Events>
+		</InputField>
+		<Table name="prepaysTable" id="6">
+			<Representation>List</Representation>
+			<RowSelectionMode>Cell</RowSelectionMode>
+			<Footer>true</Footer>
+			<AutoInsertNewRow>true</AutoInsertNewRow>
+			<EnableStartDrag>true</EnableStartDrag>
+			<EnableDrag>true</EnableDrag>
+			<DataPath>prepaysTable</DataPath>
+			<RowFilter xsi:nil="true"/>
+			<ContextMenu name="prepaysTableContextMenu" id="7"/>
+			<AutoCommandBar name="prepaysTableCommandBar" id="8">
+				<Autofill>false</Autofill>
+				<ChildItems>
+					<Button name="prepaysTableFind" id="124">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Item.prepaysTable.StandardCommand.Find</CommandName>
+						<ExtendedTooltip name="prepaysTableFindExtendedTooltip" id="125"/>
+					</Button>
+					<Button name="prepaysTableSortListAsc" id="120">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Item.prepaysTable.StandardCommand.SortListAsc</CommandName>
+						<ExtendedTooltip name="prepaysTableSortListAscExtendedTooltip" id="121"/>
+					</Button>
+					<Button name="prepaysTableSortListDesc" id="122">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Item.prepaysTable.StandardCommand.SortListDesc</CommandName>
+						<ExtendedTooltip name="prepaysTableSortListDescExtendedTooltip" id="123"/>
+					</Button>
+					<Button name="prepaysTableOutputList" id="118">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Item.prepaysTable.StandardCommand.OutputList</CommandName>
+						<ExtendedTooltip name="prepaysTableOutputListExtendedTooltip" id="119"/>
+					</Button>
+				</ChildItems>
+			</AutoCommandBar>
+			<ExtendedTooltip name="prepaysTableExtendedTooltip" id="9"/>
+			<SearchStringAddition name="prepaysTableSearchString" id="10">
+				<AdditionSource>
+					<Item>prepaysTable</Item>
+					<Type>SearchStringRepresentation</Type>
+				</AdditionSource>
+				<ContextMenu name="prepaysTableSearchStringContextMenu" id="11"/>
+				<ExtendedTooltip name="prepaysTableSearchStringExtendedTooltip" id="12"/>
+			</SearchStringAddition>
+			<ViewStatusAddition name="prepaysTableViewStatus" id="13">
+				<AdditionSource>
+					<Item>prepaysTable</Item>
+					<Type>ViewStatusRepresentation</Type>
+				</AdditionSource>
+				<ContextMenu name="prepaysTableViewStatusContextMenu" id="14"/>
+				<ExtendedTooltip name="prepaysTableViewStatusExtendedTooltip" id="15"/>
+			</ViewStatusAddition>
+			<SearchControlAddition name="prepaysTableSearchControl" id="16">
+				<AdditionSource>
+					<Item>prepaysTable</Item>
+					<Type>SearchControl</Type>
+				</AdditionSource>
+				<ContextMenu name="prepaysTableSearchControlContextMenu" id="17"/>
+				<ExtendedTooltip name="prepaysTableSearchControlExtendedTooltip" id="18"/>
+			</SearchControlAddition>
+			<ChildItems>
+				<InputField name="sqlTabledate" id="19">
+					<DataPath>prepaysTable.pdate</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="sqlTabledateContextMenu" id="20"/>
+					<ExtendedTooltip name="sqlTabledateExtendedTooltip" id="21"/>
+				</InputField>
+				<InputField name="sqlTablesum" id="22">
+					<DataPath>prepaysTable.sum</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<FooterDataPath>prepaysSummarySum</FooterDataPath>
+					<AutoEditMode>true</AutoEditMode>
+					<Format>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</Format>
+					<EditFormat>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</EditFormat>
+					<ContextMenu name="sqlTablesumContextMenu" id="23"/>
+					<ExtendedTooltip name="sqlTablesumExtendedTooltip" id="24"/>
+				</InputField>
+				<InputField name="sqlTablesumNds" id="25">
+					<DataPath>prepaysTable.sumNds</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<Format>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</Format>
+					<EditFormat>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</EditFormat>
+					<ContextMenu name="sqlTablesumNdsContextMenu" id="26"/>
+					<ExtendedTooltip name="sqlTablesumNdsExtendedTooltip" id="27"/>
+				</InputField>
+				<InputField name="sqlTablendsPercent" id="28">
+					<DataPath>prepaysTable.ndsPercent</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<Format>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</Format>
+					<EditFormat>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</EditFormat>
+					<ContextMenu name="sqlTablendsPercentContextMenu" id="29"/>
+					<ExtendedTooltip name="sqlTablendsPercentExtendedTooltip" id="30"/>
+				</InputField>
+				<InputField name="sqlTablepaymentType" id="34">
+					<DataPath>prepaysTable.paymentType</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="sqlTablepaymentTypeContextMenu" id="35"/>
+					<ExtendedTooltip name="sqlTablepaymentTypeExtendedTooltip" id="36"/>
+				</InputField>
+				<InputField name="sqlTablecustomerId" id="37">
+					<DataPath>prepaysTable.customer</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="sqlTablecustomerIdContextMenu" id="38"/>
+					<ExtendedTooltip name="sqlTablecustomerIdExtendedTooltip" id="39"/>
+				</InputField>
+			</ChildItems>
+		</Table>
+		<Table name="salesTable" id="40">
+			<Representation>List</Representation>
+			<RowSelectionMode>Cell</RowSelectionMode>
+			<Footer>true</Footer>
+			<AutoInsertNewRow>true</AutoInsertNewRow>
+			<EnableStartDrag>true</EnableStartDrag>
+			<EnableDrag>true</EnableDrag>
+			<DataPath>salesTable</DataPath>
+			<RowFilter xsi:nil="true"/>
+			<ContextMenu name="salesTableContextMenu" id="41"/>
+			<AutoCommandBar name="salesTableCommandBar" id="42">
+				<Autofill>false</Autofill>
+				<ChildItems>
+					<Button name="salesTableFind" id="126">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Item.salesTable.StandardCommand.Find</CommandName>
+						<ExtendedTooltip name="salesTableFindExtendedTooltip" id="127"/>
+					</Button>
+					<Button name="salesTableSortListAsc" id="128">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Item.salesTable.StandardCommand.SortListAsc</CommandName>
+						<ExtendedTooltip name="salesTableSortListAscExtendedTooltip" id="129"/>
+					</Button>
+					<Button name="salesTableSortListDesc" id="130">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Item.salesTable.StandardCommand.SortListDesc</CommandName>
+						<ExtendedTooltip name="salesTableSortListDescExtendedTooltip" id="131"/>
+					</Button>
+					<Button name="salesTableOutputList" id="116">
+						<Type>CommandBarButton</Type>
+						<CommandName>Form.Item.salesTable.StandardCommand.OutputList</CommandName>
+						<ExtendedTooltip name="salesTableOutputListExtendedTooltip" id="117"/>
+					</Button>
+				</ChildItems>
+			</AutoCommandBar>
+			<ExtendedTooltip name="salesTableExtendedTooltip" id="43"/>
+			<SearchStringAddition name="salesTableSearchString" id="44">
+				<AdditionSource>
+					<Item>salesTable</Item>
+					<Type>SearchStringRepresentation</Type>
+				</AdditionSource>
+				<ContextMenu name="salesTableSearchStringContextMenu" id="45"/>
+				<ExtendedTooltip name="salesTableSearchStringExtendedTooltip" id="46"/>
+			</SearchStringAddition>
+			<ViewStatusAddition name="salesTableViewStatus" id="47">
+				<AdditionSource>
+					<Item>salesTable</Item>
+					<Type>ViewStatusRepresentation</Type>
+				</AdditionSource>
+				<ContextMenu name="salesTableViewStatusContextMenu" id="48"/>
+				<ExtendedTooltip name="salesTableViewStatusExtendedTooltip" id="49"/>
+			</ViewStatusAddition>
+			<SearchControlAddition name="salesTableSearchControl" id="50">
+				<AdditionSource>
+					<Item>salesTable</Item>
+					<Type>SearchControl</Type>
+				</AdditionSource>
+				<ContextMenu name="salesTableSearchControlContextMenu" id="51"/>
+				<ExtendedTooltip name="salesTableSearchControlExtendedTooltip" id="52"/>
+			</SearchControlAddition>
+			<ChildItems>
+				<InputField name="salesTablepdate" id="53">
+					<DataPath>salesTable.pdate</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<FooterText>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Итого</v8:content>
+						</v8:item>
+					</FooterText>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTablepdateContextMenu" id="54"/>
+					<ExtendedTooltip name="salesTablepdateExtendedTooltip" id="55"/>
+				</InputField>
+				<InputField name="salesTabledepartment" id="56">
+					<DataPath>salesTable.department</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<FooterDataPath>salesSummaryOrdersNum</FooterDataPath>
+					<FooterText>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Заказов: </v8:content>
+						</v8:item>
+					</FooterText>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTabledepartmentContextMenu" id="57"/>
+					<ExtendedTooltip name="salesTabledepartmentExtendedTooltip" id="58"/>
+				</InputField>
+				<InputField name="salesTablecashRegister" id="59">
+					<DataPath>salesTable.cashRegister</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTablecashRegisterContextMenu" id="60"/>
+					<ExtendedTooltip name="salesTablecashRegisterExtendedTooltip" id="61"/>
+				</InputField>
+				<InputField name="salesTableorderSum" id="71">
+					<DataPath>salesTable.orderSum</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<FooterDataPath>salesSummarySum</FooterDataPath>
+					<AutoEditMode>true</AutoEditMode>
+					<Format>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</Format>
+					<EditFormat>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</EditFormat>
+					<ContextMenu name="salesTableorderSumContextMenu" id="72"/>
+					<ExtendedTooltip name="salesTableorderSumExtendedTooltip" id="73"/>
+				</InputField>
+				<InputField name="salesTableorderSumAfterDiscount" id="132">
+					<DataPath>salesTable.orderSumAfterDiscount</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<FooterDataPath>salesSummarySumAfterDiscount</FooterDataPath>
+					<AutoEditMode>true</AutoEditMode>
+					<Format>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</Format>
+					<EditFormat>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</EditFormat>
+					<ContextMenu name="salesTableorderSumAfterDiscountContextMenu" id="133"/>
+					<ExtendedTooltip name="salesTableorderSumAfterDiscountExtendedTooltip" id="134"/>
+				</InputField>
+				<InputField name="salesTablesumCard" id="77">
+					<DataPath>salesTable.sumCard</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<FooterDataPath>salesSummaryCard</FooterDataPath>
+					<AutoEditMode>true</AutoEditMode>
+					<Format>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</Format>
+					<EditFormat>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</EditFormat>
+					<ContextMenu name="salesTablesumCardContextMenu" id="78"/>
+					<ExtendedTooltip name="salesTablesumCardExtendedTooltip" id="79"/>
+				</InputField>
+				<InputField name="salesTablesumCash" id="80">
+					<DataPath>salesTable.sumCash</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<FooterDataPath>salesSummaryCash</FooterDataPath>
+					<AutoEditMode>true</AutoEditMode>
+					<Format>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</Format>
+					<EditFormat>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</EditFormat>
+					<ContextMenu name="salesTablesumCashContextMenu" id="81"/>
+					<ExtendedTooltip name="salesTablesumCashExtendedTooltip" id="82"/>
+				</InputField>
+				<InputField name="salesTablesumCredit" id="83">
+					<DataPath>salesTable.sumCredit</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<FooterDataPath>salesSummaryCredit</FooterDataPath>
+					<AutoEditMode>true</AutoEditMode>
+					<Format>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</Format>
+					<EditFormat>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</EditFormat>
+					<ContextMenu name="salesTablesumCreditContextMenu" id="84"/>
+					<ExtendedTooltip name="salesTablesumCreditExtendedTooltip" id="85"/>
+				</InputField>
+				<InputField name="salesTablesumPrepay" id="86">
+					<DataPath>salesTable.sumPrepay</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<FooterDataPath>salesSummaryPrepay</FooterDataPath>
+					<AutoEditMode>true</AutoEditMode>
+					<Format>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</Format>
+					<EditFormat>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NZ=0</v8:content>
+						</v8:item>
+					</EditFormat>
+					<ContextMenu name="salesTablesumPrepayContextMenu" id="87"/>
+					<ExtendedTooltip name="salesTablesumPrepayExtendedTooltip" id="88"/>
+				</InputField>
+				<InputField name="salesTableisBanquet" id="62">
+					<DataPath>salesTable.isBanquet</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTableisBanquetContextMenu" id="63"/>
+					<ExtendedTooltip name="salesTableisBanquetExtendedTooltip" id="64"/>
+				</InputField>
+				<InputField name="salesTableisDelivery" id="65">
+					<DataPath>salesTable.isDelivery</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTableisDeliveryContextMenu" id="66"/>
+					<ExtendedTooltip name="salesTableisDeliveryExtendedTooltip" id="67"/>
+				</InputField>
+				<InputField name="salesTableconception" id="89">
+					<DataPath>salesTable.conception</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTableconceptionContextMenu" id="90"/>
+					<ExtendedTooltip name="salesTableconceptionExtendedTooltip" id="91"/>
+				</InputField>
+				<InputField name="salesTabledishAmount" id="92">
+					<DataPath>salesTable.dishAmount</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTabledishAmountContextMenu" id="93"/>
+					<ExtendedTooltip name="salesTabledishAmountExtendedTooltip" id="94"/>
+				</InputField>
+				<InputField name="salesTableproduct" id="95">
+					<DataPath>salesTable.product</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTableproductContextMenu" id="96"/>
+					<ExtendedTooltip name="salesTableproductExtendedTooltip" id="97"/>
+				</InputField>
+				<InputField name="salesTabledishSum" id="98">
+					<DataPath>salesTable.dishSum</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTabledishSumContextMenu" id="99"/>
+					<ExtendedTooltip name="salesTabledishSumExtendedTooltip" id="100"/>
+				</InputField>
+				<InputField name="salesTablends" id="101">
+					<DataPath>salesTable.nds</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTablendsContextMenu" id="102"/>
+					<ExtendedTooltip name="salesTablendsExtendedTooltip" id="103"/>
+				</InputField>
+				<InputField name="salesTablendsSum" id="104">
+					<DataPath>salesTable.ndsSum</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTablendsSumContextMenu" id="105"/>
+					<ExtendedTooltip name="salesTablendsSumExtendedTooltip" id="106"/>
+				</InputField>
+				<InputField name="salesTablestore" id="110">
+					<DataPath>salesTable.store</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTablestoreContextMenu" id="111"/>
+					<ExtendedTooltip name="salesTablestoreExtendedTooltip" id="112"/>
+				</InputField>
+				<InputField name="salesTablecustomer" id="113">
+					<DataPath>salesTable.customer</DataPath>
+					<EditMode>EnterOnInput</EditMode>
+					<AutoEditMode>true</AutoEditMode>
+					<ContextMenu name="salesTablecustomerContextMenu" id="114"/>
+					<ExtendedTooltip name="salesTablecustomerExtendedTooltip" id="115"/>
+				</InputField>
+			</ChildItems>
+		</Table>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Object" id="1">
+			<Type>
+				<v8:Type>cfg:DataProcessorObject.like_downloadSalesAndPrepays</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+		<Attribute name="prepaysDate" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Дата предоплат</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:dateTime</v8:Type>
+				<v8:DateQualifiers>
+					<v8:DateFractions>Date</v8:DateFractions>
+				</v8:DateQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="prepaysTable" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Prepays table</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="pdate" id="1">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Дата</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:dateTime</v8:Type>
+						<v8:DateQualifiers>
+							<v8:DateFractions>Date</v8:DateFractions>
+						</v8:DateQualifiers>
+					</Type>
+				</Column>
+				<Column name="sum" id="2">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="sumNds" id="3">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма НДС</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="ndsPercent" id="4">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Процент НДС</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>3</v8:Digits>
+							<v8:FractionDigits>0</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="paymentType" id="6">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Тип оплаты</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>cfg:CatalogRef.like_paymentTypes</v8:Type>
+					</Type>
+				</Column>
+				<Column name="customer" id="7">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Покупатель</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>cfg:CatalogRef.like_customers</v8:Type>
+					</Type>
+				</Column>
+				<Column name="paymentTypeId" id="5">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Payment type id</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>36</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="customerId" id="8">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Customer id</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>36</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="salesTable" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Sales table</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="pdate" id="1">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Дата</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:dateTime</v8:Type>
+						<v8:DateQualifiers>
+							<v8:DateFractions>Date</v8:DateFractions>
+						</v8:DateQualifiers>
+					</Type>
+				</Column>
+				<Column name="department" id="2">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Подразделение</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>cfg:CatalogRef.like_departments</v8:Type>
+					</Type>
+				</Column>
+				<Column name="cashRegister" id="3">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Касса</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>cfg:CatalogRef.like_cashRegisters</v8:Type>
+					</Type>
+				</Column>
+				<Column name="isBanquet" id="4">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Это банкет</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>1</v8:Digits>
+							<v8:FractionDigits>0</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="isDelivery" id="5">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Это доставка</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>1</v8:Digits>
+							<v8:FractionDigits>0</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="orderSum" id="7">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма заказа</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="session_id" id="8">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>ID смены</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>36</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="sumCard" id="9">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма картой</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="sumCash" id="10">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма наличных</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="sumCredit" id="11">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>В кредит</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="sumPrepay" id="12">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Предоплата</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="conception" id="13">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Концепция</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>cfg:CatalogRef.like_conceptions</v8:Type>
+					</Type>
+				</Column>
+				<Column name="dishAmount" id="14">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Количество</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>3</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="product" id="15">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Номенклатура</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>cfg:CatalogRef.like_products</v8:Type>
+					</Type>
+				</Column>
+				<Column name="dishSum" id="16">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>3</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="nds" id="17">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>НДС</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>5</v8:Digits>
+							<v8:FractionDigits>0</v8:FractionDigits>
+							<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="ndsSum" id="18">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма НДС</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>3</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+				<Column name="orderId" id="19">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>ID заказа</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>36</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="store" id="20">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Склад</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>cfg:CatalogRef.like_stores</v8:Type>
+					</Type>
+				</Column>
+				<Column name="customer" id="21">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Гость банкета</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>cfg:CatalogRef.like_customers</v8:Type>
+					</Type>
+				</Column>
+				<Column name="orderSumAfterDiscount" id="6">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Сумма со скидкой</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:decimal</v8:Type>
+						<v8:NumberQualifiers>
+							<v8:Digits>10</v8:Digits>
+							<v8:FractionDigits>2</v8:FractionDigits>
+							<v8:AllowedSign>Any</v8:AllowedSign>
+						</v8:NumberQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="salesSummarySum" id="5">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Sales summary sum</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="salesSummarySumAfterDiscount" id="6">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Sales summary sum after discount</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="salesSummaryOrdersNum" id="7">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Sales summary orders num</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>0</v8:FractionDigits>
+					<v8:AllowedSign>Nonnegative</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="prepaysSummarySum" id="8">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Prepays summary sum</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="salesSummaryCash" id="9">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Sales summary cash</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="salesSummaryCard" id="10">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Sales summary card</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="salesSummaryCredit" id="11">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Sales summary credit</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="salesSummaryPrepay" id="12">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Sales summary prepay</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:decimal</v8:Type>
+				<v8:NumberQualifiers>
+					<v8:Digits>10</v8:Digits>
+					<v8:FractionDigits>2</v8:FractionDigits>
+					<v8:AllowedSign>Any</v8:AllowedSign>
+				</v8:NumberQualifiers>
+			</Type>
+		</Attribute>
+	</Attributes>
+</Form>

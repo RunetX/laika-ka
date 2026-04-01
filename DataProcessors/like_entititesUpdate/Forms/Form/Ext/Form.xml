@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:pal="http://v8.1c.ru/8.1/data/ui/colors/palette" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.21">
+	<WindowOpeningMode>LockOwner</WindowOpeningMode>
+	<Group>Vertical</Group>
+	<AutoCommandBar name="FormCommandBar" id="-1">
+		<Autofill>false</Autofill>
+	</AutoCommandBar>
+	<Events>
+		<Event name="OnOpen">OnOpen</Event>
+	</Events>
+	<ChildItems>
+		<UsualGroup name="Group2" id="13">
+			<HorizontalStretch>false</HorizontalStretch>
+			<Group>Vertical</Group>
+			<Representation>WeakSeparation</Representation>
+			<ExtendedTooltip name="Group2ExtendedTooltip" id="14"/>
+			<ChildItems>
+				<UsualGroup name="GroupConnection" id="11">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Group connection</v8:content>
+						</v8:item>
+					</Title>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Group connection</v8:content>
+						</v8:item>
+					</ToolTip>
+					<Group>HorizontalIfPossible</Group>
+					<Representation>None</Representation>
+					<ShowTitle>false</ShowTitle>
+					<ExtendedTooltip name="GroupConnectionExtendedTooltip" id="12"/>
+					<ChildItems>
+						<InputField name="connection" id="1">
+							<DataPath>Object.connection</DataPath>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Подключение</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>en</v8:lang>
+									<v8:content>Connection</v8:content>
+								</v8:item>
+							</Title>
+							<ContextMenu name="connectionContextMenu" id="2"/>
+							<ExtendedTooltip name="connectionExtendedTooltip" id="3"/>
+						</InputField>
+						<Button name="Connect" id="9">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.Connect</CommandName>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Подключиться</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>en</v8:lang>
+									<v8:content>Connect</v8:content>
+								</v8:item>
+							</Title>
+							<ExtendedTooltip name="ConnectExtendedTooltip" id="10"/>
+						</Button>
+					</ChildItems>
+				</UsualGroup>
+				<LabelDecoration name="ActiveConnectionStatus" id="6">
+					<ContextMenu name="ActiveConnectionStatusContextMenu" id="7"/>
+					<ExtendedTooltip name="ActiveConnectionStatusExtendedTooltip" id="8"/>
+				</LabelDecoration>
+				<UsualGroup name="GroupUpdateObjects" id="17">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Ручное обновление</v8:content>
+						</v8:item>
+					</Title>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Group update objects</v8:content>
+						</v8:item>
+					</ToolTip>
+					<Group>HorizontalIfPossible</Group>
+					<Representation>WeakSeparation</Representation>
+					<ExtendedTooltip name="GroupUpdateObjectsExtendedTooltip" id="18"/>
+					<ChildItems>
+						<Button name="entitiesUpdate" id="4">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.entitiesUpdate</CommandName>
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Справочники</v8:content>
+								</v8:item>
+								<v8:item>
+									<v8:lang>en</v8:lang>
+									<v8:content>Entities update</v8:content>
+								</v8:item>
+							</Title>
+							<ExtendedTooltip name="entitiesUpdateExtendedTooltip" id="5"/>
+						</Button>
+						<Button name="customersUpdate" id="15">
+							<Type>UsualButton</Type>
+							<CommandName>Form.Command.customersUpdate</CommandName>
+							<ExtendedTooltip name="customersUpdateExtendedTooltip" id="16"/>
+						</Button>
+					</ChildItems>
+				</UsualGroup>
+			</ChildItems>
+		</UsualGroup>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="Object" id="1">
+			<Type>
+				<v8:Type>cfg:DataProcessorObject.like_entititesUpdate</v8:Type>
+			</Type>
+			<MainAttribute>true</MainAttribute>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="entitiesUpdate" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Обновить объекты</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Entities update</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Picture>
+				<xr:Ref>StdPicture.Refresh</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>entitiesUpdate</Action>
+			<Representation>TextPicture</Representation>
+		</Command>
+		<Command name="Connect" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Connect</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Connect</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>Connect</Action>
+		</Command>
+		<Command name="customersUpdate" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Гости банкетов</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Customers update</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Picture>
+				<xr:Ref>StdPicture.GroupConversation</xr:Ref>
+				<xr:LoadTransparent>true</xr:LoadTransparent>
+			</Picture>
+			<Action>customersUpdate</Action>
+			<Representation>TextPicture</Representation>
+		</Command>
+	</Commands>
+</Form>

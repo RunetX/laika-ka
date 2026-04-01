@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:pal="http://v8.1c.ru/8.1/data/ui/colors/palette" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.21">
+	<Enum uuid="f3fd9169-b0ee-42d0-9d84-0137c87e9851">
+		<InternalInfo>
+			<xr:GeneratedType name="EnumRef.like_serverStates" category="Ref">
+				<xr:TypeId>0835e5ba-1bc8-4d1f-9b0f-0a07a3087e96</xr:TypeId>
+				<xr:ValueId>e9e920f8-bdc8-4ca0-9679-965928e38018</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumManager.like_serverStates" category="Manager">
+				<xr:TypeId>db4256af-f582-4806-938b-d318e198f83d</xr:TypeId>
+				<xr:ValueId>0b703511-e414-4ce5-9a97-fffd94199474</xr:ValueId>
+			</xr:GeneratedType>
+			<xr:GeneratedType name="EnumList.like_serverStates" category="List">
+				<xr:TypeId>ff37e7d1-9a58-414f-b8c4-82dc1f5574f7</xr:TypeId>
+				<xr:ValueId>f5d13b5b-a734-4c3b-9839-e8c197edca42</xr:ValueId>
+			</xr:GeneratedType>
+		</InternalInfo>
+		<Properties>
+			<Name>like_serverStates</Name>
+			<Synonym>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Состояния сервера IIKO</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>IIKO server states</v8:content>
+				</v8:item>
+			</Synonym>
+			<Comment/>
+			<UseStandardCommands>false</UseStandardCommands>
+			<Characteristics/>
+			<QuickChoice>true</QuickChoice>
+			<ChoiceMode>BothWays</ChoiceMode>
+			<DefaultListForm/>
+			<DefaultChoiceForm/>
+			<AuxiliaryListForm/>
+			<AuxiliaryChoiceForm/>
+			<ListPresentation/>
+			<ExtendedListPresentation/>
+			<Explanation/>
+			<ChoiceHistoryOnInput>Auto</ChoiceHistoryOnInput>
+		</Properties>
+		<ChildObjects>
+			<EnumValue uuid="4297128a-a91a-447c-a5f8-89c8a608a057">
+				<Properties>
+					<Name>NEW</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>NEW</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment>Server was not started</Comment>
+					<Color>auto</Color>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="fb5045c0-8e6b-4a3e-a284-afe9bf1e0b9d">
+				<Properties>
+					<Name>WAITING_LICENSE</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>WAITING LICENSE</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment>Server is waiting for license</Comment>
+					<Color>auto</Color>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="b1f87ef1-2cc2-4d47-a16e-746f245343ee">
+				<Properties>
+					<Name>STARTING</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>STARTING</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment>Server is starting now</Comment>
+					<Color>auto</Color>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="f11fdc96-5ece-440a-9b89-b4eb9732a113">
+				<Properties>
+					<Name>START_FAILED</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>START FAILED</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment>Server startup failed</Comment>
+					<Color>auto</Color>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="003d36e1-b0e2-404b-9f8e-46b1eb5da93e">
+				<Properties>
+					<Name>STARTED_SUCCESSFULLY</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>STARTED SUCCESSFULLY</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment>Server was started successfully and now is working</Comment>
+					<Color>auto</Color>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="8334c01e-cda9-4e08-b3f7-77d93794d8f4">
+				<Properties>
+					<Name>EMERGENCY</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>EMERGENCY</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment>Server is in emergency mode</Comment>
+					<Color>auto</Color>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="2488f602-ce20-4aef-999a-f3f7f6b1ee06">
+				<Properties>
+					<Name>STOPPING</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>STOPPING</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment>Server is shutting down now</Comment>
+					<Color>auto</Color>
+				</Properties>
+			</EnumValue>
+			<EnumValue uuid="a4bdaf4c-8faa-40ab-9218-bce37411994d">
+				<Properties>
+					<Name>STOPPED</Name>
+					<Synonym>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>STOPPED</v8:content>
+						</v8:item>
+					</Synonym>
+					<Comment>Server is stopped</Comment>
+					<Color>auto</Color>
+				</Properties>
+			</EnumValue>
+		</ChildObjects>
+	</Enum>
+</MetaDataObject>
