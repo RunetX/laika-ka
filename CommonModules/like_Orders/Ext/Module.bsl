@@ -20,7 +20,7 @@
 	EndIf;
 
 	messages = New Array;
-	mobileOrder = like_AdapterКА.CreateMobileOrder(parseResult.Order, settings);
+	mobileOrder = like_Adapter.CreateMobileOrder(parseResult.Order, settings);
 	If mobileOrder <> Undefined Then
 		МобильноеПриложениеЗаказыКлиентовПереопределяемый.СоздатьОбновитьЗаказКлиента(
 			mobileOrder, messages);

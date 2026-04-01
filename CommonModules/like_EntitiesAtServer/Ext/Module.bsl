@@ -500,8 +500,8 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 		Return;
 	EndIf;
 
-	// 5. Адаптер записывает готовые объекты в справочники КА
-	like_AdapterКА.WriteEntities(syncResult.Upsert);
+	// 5. Адаптер записывает готовые объекты в справочники
+	like_Adapter.WriteEntities(syncResult.Upsert);
 
 EndProcedure
 

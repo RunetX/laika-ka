@@ -62,7 +62,7 @@ Function GetInvoices(dateFrom, dateTo, docType) Export
 
 	// 3. Применить сопутствующие обновления справочников
 	If parseResult.EntityUpsert.Count() > 0 Then
-		like_AdapterКА.WriteEntities(parseResult.EntityUpsert);
+		like_Adapter.WriteEntities(parseResult.EntityUpsert);
 	EndIf;
 
 	If parseResult.Invoices.Count() = 0 Then

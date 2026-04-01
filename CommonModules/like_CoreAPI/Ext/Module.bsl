@@ -106,8 +106,55 @@ Function Execute(method, resource, body = Undefined) Export
 		                    |ru = 'Подписка истекла. Продлите через настройки Лайки.'");
 		like_Common.UsrMessage(result.Error);
 	ElsIf response.StatusCode = 403 Then
-		result.Error = NStr("en = 'This feature is not available in your plan.';
-		                    |ru = 'Эта функция недоступна в вашем тарифе.'");
+		If Find(result.Body, "demo document limit") > 0 Then
+			result.Error = NStr("en = 'Demo document limit reached. Subscribe to continue.';
+			                    |ru = 'Лимит документов в демо-режиме исчерпан. Оформите подписку для продолжения работы.'");
+		Else
+			result.Error = NStr("en = 'This feature is not available in your plan.';
+			                    |ru = 'Эта функция недоступна в вашем тарифе.'");
+		EndIf;
+		like_Common.UsrMessage(result.Error);
+	Else
+		result.Error = NStr("en = 'Server error: '; ru = 'Ошибка сервера: '") + response.StatusCode;
+		WriteLogEvent("like_CoreAPI", EventLogLevel.Error,,, result.Error + " | " + result.Body);
+	EndIf;
+
+	Return result;
+
+EndFunction
+
+// Вариант Execute без заголовка License-Key (для /demo/activate).
+Function ExecuteNoAuth(method, resource, body = Undefined) Export
+
+	result = New Structure("Success, StatusCode, Body, Error", False, 0, "", "");
+
+	Try
+		connection = BuildConnection();
+
+		Headers = New Map;
+		Headers.Insert("Content-Type", "application/json");
+		Headers.Insert("Accept",       "application/json");
+
+		Request = New HTTPRequest(resource, Headers);
+		If body <> Undefined Then
+			Request.SetBodyFromString(body, TextEncoding.UTF8, ByteOrderMarkUse.DontUse);
+		EndIf;
+
+		response = connection.CallHTTPMethod(method, Request);
+	Except
+		result.Error = NStr("en = 'Connection error: '; ru = 'Ошибка соединения: '") + ErrorDescription();
+		WriteLogEvent("like_CoreAPI", EventLogLevel.Error,,, result.Error);
+		Return result;
+	EndTry;
+
+	result.StatusCode = response.StatusCode;
+	result.Body       = response.GetBodyAsString("UTF-8");
+
+	If response.StatusCode = 200 Or response.StatusCode = 201 Then
+		result.Success = True;
+	ElsIf response.StatusCode = 409 Then
+		result.Error = NStr("en = 'Demo already activated for this email.';
+		                    |ru = 'Демо-режим уже был активирован для этого email.'");
 		like_Common.UsrMessage(result.Error);
 	Else
 		result.Error = NStr("en = 'Server error: '; ru = 'Ошибка сервера: '") + response.StatusCode;
@@ -279,7 +326,7 @@ Function GetLicenseStatus() Export
 
 	result = Execute("GET", "/api/v1/license/status?licenseKey=" + LicenseKey());
 
-	status = New Structure("Success, Plan, ExpiresAt, Features", False, "", "", New Map);
+	status = New Structure("Success, Plan, ExpiresAt, Features, DocCount", False, "", "", New Map, 0);
 	If Not result.Success Then
 		Return status;
 	EndIf;
@@ -293,7 +340,110 @@ Function GetLicenseStatus() Export
 	status.Plan      = parsed["plan"];
 	status.ExpiresAt = parsed["expiresAt"];
 	status.Features  = parsed["features"];
+	status.DocCount  = ?(parsed["docCount"] <> Undefined, parsed["docCount"], 0);
 	Return status;
+
+EndFunction
+
+// ============================================================
+// БИЛЛИНГ
+// ============================================================
+
+// Создаёт платёж на сервисе и возвращает данные для QR-кода СБП.
+// period — "month" | "year"
+// Возвращает структуру:
+//   Success    — Булево
+//   PaymentId  — Строка (UUID)
+//   QRCodeData — Строка (данные для формирования QR)
+//   Amount     — Строка ("990.00")
+//   Period     — Строка
+Function CreatePayment(period) Export
+
+	bodyMap = New Map;
+	bodyMap.Insert("period", period);
+
+	result = Execute("POST", "/api/v1/billing/payment", MapToJSON(bodyMap));
+
+	empty = New Structure("Success, PaymentId, QRCodeData, Amount, Period",
+		False, "", "", "", "");
+	If Not result.Success Then
+		Return empty;
+	EndIf;
+
+	parsed = ParseJSON(result.Body);
+	If parsed = Undefined Then
+		Return empty;
+	EndIf;
+
+	Return New Structure("Success, PaymentId, QRCodeData, Amount, Period",
+		True,
+		parsed["paymentId"],
+		parsed["qrCodeData"],
+		parsed["amount"],
+		parsed["period"]);
+
+EndFunction
+
+// Опрашивает статус платежа.
+// Возвращает структуру:
+//   Success — Булево
+//   Status  — Строка ("pending" | "succeeded" | "canceled")
+//   PaidAt  — Строка (ISO 8601) или ""
+Function GetPaymentStatus(paymentId) Export
+
+	result = Execute("GET", "/api/v1/billing/payment/" + paymentId + "/status");
+
+	empty = New Structure("Success, Status, PaidAt", False, "", "");
+	If Not result.Success Then
+		Return empty;
+	EndIf;
+
+	parsed = ParseJSON(result.Body);
+	If parsed = Undefined Then
+		Return empty;
+	EndIf;
+
+	Return New Structure("Success, Status, PaidAt",
+		True,
+		parsed["status"],
+		?(parsed["paidAt"] <> Undefined, parsed["paidAt"], ""));
+
+EndFunction
+
+// ============================================================
+// ДЕМО-РЕЖИМ
+// ============================================================
+
+// Активирует демо-лицензию без оплаты.
+// Этот запрос не требует License-Key — ключ создаётся на сервисе.
+// Возвращает структуру:
+//   Success    — Булево
+//   LicenseKey — Строка (UUID)
+//   Plan       — Строка ("demo")
+//   ExpiresAt  — Строка (ISO 8601)
+Function ActivateDemo(name, email) Export
+
+	bodyMap = New Map;
+	bodyMap.Insert("name",  name);
+	bodyMap.Insert("email", email);
+
+	result = ExecuteNoAuth("POST", "/api/v1/demo/activate", MapToJSON(bodyMap));
+
+	empty = New Structure("Success, LicenseKey, Plan, ExpiresAt", False, "", "", "");
+	If Not result.Success Then
+		Return empty;
+	EndIf;
+
+	parsed = ParseJSON(result.Body);
+	If parsed = Undefined Then
+		Return empty;
+	EndIf;
+
+	Return New Structure("Success, LicenseKey, Plan, ExpiresAt",
+		True,
+		parsed["licenseKey"],
+		parsed["plan"],
+		parsed["expiresAt"]);
 
 EndFunction
 

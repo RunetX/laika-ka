@@ -121,7 +121,9 @@
 			<CommonModule>like_Orders</CommonModule>
 			<CommonModule>like_OrdersServerCall</CommonModule>
 			<CommonModule>like_SQLRequestsAtServer</CommonModule>
+			<CommonModule>like_Adapter</CommonModule>
 			<CommonModule>like_AdapterКА</CommonModule>
+			<CommonModule>like_AdapterУТ</CommonModule>
 			<CommonModule>like_CoreAPI</CommonModule>
 			<CommonModule>like_StandartSubsystemsAtClient</CommonModule>
 			<CommonModule>like_TypesAndDescriptionsAtServer</CommonModule>
@@ -182,6 +184,8 @@
 			<DataProcessor>like_entititesUpdate</DataProcessor>
 			<DataProcessor>like_invoicesDownload</DataProcessor>
 			<DataProcessor>like_productionOrdersDownload</DataProcessor>
+			<DataProcessor>like_billing</DataProcessor>
+			<DataProcessor>like_demo</DataProcessor>
 			<InformationRegister>like_customersRevisions</InformationRegister>
 			<InformationRegister>like_documentsMatching</InformationRegister>
 			<InformationRegister>like_entititesVersions</InformationRegister>
