@@ -87,13 +87,13 @@
 			<VendorInformationAddress>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>https://mu7.ru</v8:content>
+					<v8:content>https://tyan.pw</v8:content>
 				</v8:item>
 			</VendorInformationAddress>
 			<ConfigurationInformationAddress>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>https://mu7.ru/лайка/</v8:content>
+					<v8:content>https://tyan.pw/лайка/</v8:content>
 				</v8:item>
 			</ConfigurationInformationAddress>
 			<CompatibilityMode>Version8_3_17</CompatibilityMode>
@@ -121,6 +121,8 @@
 			<CommonModule>like_Orders</CommonModule>
 			<CommonModule>like_OrdersServerCall</CommonModule>
 			<CommonModule>like_SQLRequestsAtServer</CommonModule>
+			<CommonModule>like_AdapterКА</CommonModule>
+			<CommonModule>like_CoreAPI</CommonModule>
 			<CommonModule>like_StandartSubsystemsAtClient</CommonModule>
 			<CommonModule>like_TypesAndDescriptionsAtServer</CommonModule>
 			<XDTOPackage>like_commonTypes</XDTOPackage>
@@ -136,6 +138,7 @@
 			<XDTOPackage>like_readingIncomingInvoice</XDTOPackage>
 			<XDTOPackage>like_readingOutgoingInvoice</XDTOPackage>
 			<XDTOPackage>like_SQLResponse</XDTOPackage>
+			<Constant>like_LicenseKey</Constant>
 			<DefinedType>ДенежнаяСуммаНеотрицательная</DefinedType>
 			<DefinedType>Цена</DefinedType>
 			<CommonCommand>like_OpenAbout</CommonCommand>

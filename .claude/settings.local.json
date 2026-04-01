@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /d/Prj/like-ka -name *.go -o -name Dockerfile -o -name docker-compose*.yml -o -name *.yaml)",
+      "Bash(mkdir -p /d/Prj/laika-service/cmd/server /d/Prj/laika-service/internal/api /d/Prj/laika-service/internal/iiko /d/Prj/laika-service/internal/license /d/Prj/laika-service/internal/billing /d/Prj/laika-service/migrations)",
+      "Bash(mkdir -p /c/docker-services/laika)",
+      "Bash(go build:*)",
+      "Bash(go mod:*)",
+      "Bash(cmd /c \"cd /d d:\\\\Prj\\\\laika-service && go build ./... 2>&1\")",
+      "Bash(bash -c \"cd ''d:/Prj/laika-service'' && go build ./... 2>&1\")",
+      "Bash(bash -c \"cd ''d:/Prj/laika-service'' && go vet ./... 2>&1\")"
+    ]
+  }
+}

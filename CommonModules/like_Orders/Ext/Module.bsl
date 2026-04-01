@@ -1,15 +1,26 @@
 ﻿Procedure Order1CFromIiko(DocumentID) Export
 
-	docData = like_DocumentAtServer.GetDocument(DocumentID, "https://izi.cloud/iiko/reading/productionOrder");
-
-	If Not docData.success Then
-		Raise docData.errorString;
-		Return;
+	// 1. Получить rawXML от IIKO
+	rawXML = like_DocumentAtServer.GetDocumentRawXML(DocumentID);
+	If rawXML = Undefined Then
+		Raise NStr("en = 'Failed to get document from IIKO'; ru = 'Не удалось получить документ из IIKO'");
 	EndIf;
 
-	orderData	= OrderDataFromPackage(docData.returnValue);
-	mobileOrder = MobileOrder(orderData);
+	// 2. Разобрать на сервисе
+	parseResult = like_CoreAPI.ParseOrder(rawXML);
+	If Not parseResult.Success Then
+		Raise NStr("en = 'Failed to parse order'; ru = 'Не удалось разобрать заказ'");
+	EndIf;
+
+	// 3. Создать мобильный заказ в 1С через адаптер
+	activeConnection = like_ConnectionAtServer.GetActiveConnecton();
+	settings = OrdersSettings(activeConnection);
+	If Not ValueIsFilled(settings.Организация) Then
+		Raise NStr("ru = 'Не удалось получить настройку загрузки заказов'");
+	EndIf;
+
 	messages = New Array;
+	mobileOrder = like_AdapterКА.CreateMobileOrder(parseResult.Order, settings);
 	If mobileOrder <> Undefined Then
 		МобильноеПриложениеЗаказыКлиентовПереопределяемый.СоздатьОбновитьЗаказКлиента(
 			mobileOrder, messages);

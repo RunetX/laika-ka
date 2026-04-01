@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://mu7.ru
+// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://tyan.pw
 // All rights reserved. This program and accompanying materials 
 // are subject to license terms Attribution 4.0 International (CC BY 4.0)
 // The license text is available here:
@@ -26,46 +26,52 @@ Function GetReadingInvoicesXML(connection, dateFrom, dateTo, docType)
 EndFunction
 
 Function GetInvoices(dateFrom, dateTo, docType) Export
-	
+
 	ActiveConnection = like_ConnectionAtServer.GetActiveConnecton();
 	If ActiveConnection = Undefined Then
 		Return New Structure("success, errorString", False, NStr("en = 'No active connection'; ru = 'Подключение неактивно'"));
 	EndIf;
-	
-	XMLPackage = getReadingInvoicesXML(ActiveConnection, dateFrom, dateTo, docType);	
+
+	// 1. Получить rawXML от IIKO
+	XMLPackage   = GetReadingInvoicesXML(ActiveConnection, dateFrom, dateTo, docType);
 	ConnectionFields = like_ConnectionAtServer.GetConnectionFields(ActiveConnection);
-	
+
 	ObjectFields = like_CommonAtServer.GetObjectFieldsStructure();
-	ObjectFields.ConProps  	 = ConnectionFields;
-	ObjectFields.Resource 	 = "/resto/services/document";
-	ObjectFields.Namespace 	 = "https://izi.cloud/iiko/reading/invoicesResponse";
-	ObjectFields.TypeName 	 = "result";
+	ObjectFields.ConProps    = ConnectionFields;
+	ObjectFields.Resource    = "/resto/services/document";
 	ObjectFields.RequestType = "POST";
+	ObjectFields.Headers     = like_Common.GetIIKOHeaders(ConnectionFields);
+	ObjectFields.Body        = XMLPackage;
+	ObjectFields.isGZIP      = True;
 	Params = New Map;
 	Params.Insert("methodName", "getIncomingDocumentsRecordsByDepartments");
 	ObjectFields.Parameters  = Params;
-	ObjectFields.Headers     = like_Common.GetIIKOHeaders(ConnectionFields);
-	ObjectFields.Body		 = XMLPackage;
-	ObjectFields.isGZIP		 = True;
-	
-	IIKOObject = like_CommonAtServer.GetIIKOObject(ObjectFields);	
-	If IIKOObject = Undefined Then
-		Return New Structure("success, errorString", False, NStr("en = 'Receiving data from IIKO server error'; ru = 'Ошибка получения данных с сервера IIKO'"));	
+
+	rawXML = like_CommonAtServer.GetIikoRawXML(ObjectFields);
+	If rawXML = Undefined Then
+		Return New Structure("success, errorString", False,
+			NStr("en = 'Receiving data from IIKO server error'; ru = 'Ошибка получения данных с сервера IIKO'"));
 	EndIf;
-	
-	If IIKOObject.success Then
-		updateItems = IIKOObject.entitiesUpdate.items;
-		If updateItems.Properties().Get("i") <> Undefined Then
-			like_EntitiesAtServer.ExeItems(updateItems.i, ActiveConnection, IIKOObject.entitiesUpdate.revision);
-		EndIf;
-		If IIKOObject.returnValue.Properties().Get("i") <> Undefined Then
-			Return New Structure("success, returnValue", True, IIKOObject.returnValue.i);
-		Else
-			Return New Structure("success, errorString", False, NStr("en = 'No invoices '; ru = 'Нет накладных типа '") + docType);
-		EndIf;
-	Else
-		Return New Structure("success, errorString", False, IIKOObject.errorString); 
-	EndIf;	
+
+	// 2. Разобрать на сервисе — бизнес-логика там
+	parseResult = like_CoreAPI.ParseInvoiceList(rawXML);
+	If Not parseResult.Success Then
+		Return New Structure("success, errorString", False,
+			NStr("en = 'No invoices '; ru = 'Нет накладных типа '") + docType);
+	EndIf;
+
+	// 3. Применить сопутствующие обновления справочников
+	If parseResult.EntityUpsert.Count() > 0 Then
+		like_AdapterКА.WriteEntities(parseResult.EntityUpsert);
+	EndIf;
+
+	If parseResult.Invoices.Count() = 0 Then
+		Return New Structure("success, errorString", False,
+			NStr("en = 'No invoices '; ru = 'Нет накладных типа '") + docType);
+	EndIf;
+
+	Return New Structure("success, returnValue", True, parseResult.Invoices);
+
 EndFunction
 
 Function FindByCodeAndConnection(CatalogName, code) Export

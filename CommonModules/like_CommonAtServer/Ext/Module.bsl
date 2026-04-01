@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://mu7.ru
+// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://tyan.pw
 // All rights reserved. This program and accompanying materials 
 // are subject to license terms Attribution 4.0 International (CC BY 4.0)
 // The license text is available here:
@@ -117,6 +117,45 @@ Function GetIikoDate(date1C, ms) Export
 	datePart2 = Right(IIKODate, 6);
 	Return datePart1 + "." + ms + datePart2;
 	
+EndFunction
+
+// Аналог GetIikoObject, но возвращает сырую XML-строку вместо XDTO.
+// Используется для передачи ответа IIKO в Laika-сервис.
+Function GetIikoRawXML(objectFields) Export
+
+	ParametersString = "";
+	If ObjectFields.Parameters <> Undefined Then
+		ParametersArray = New Array;
+		For each Parameter In ObjectFields.Parameters Do
+			ParametersArray.Add(Parameter.Key + "=" + EncodeString(Parameter.Value, StringEncodingMethod.URLEncoding));
+		EndDo;
+		ParametersString = "?" + StrConcat(ParametersArray, "&");
+	EndIf;
+
+	IIKORequest = New HTTPRequest(ObjectFields.Resource + ParametersString, ObjectFields.Headers);
+	If ObjectFields.Body <> Undefined Then
+		IIKORequest.SetBodyFromString(ObjectFields.Body);
+	EndIf;
+
+	cp = ObjectFields.ConProps;
+	If cp.isSecure Then
+		IIKOConnection = New HTTPConnection(cp.host, cp.port, cp.user, cp.password,,, New OpenSSLSecureConnection());
+	Else
+		IIKOConnection = New HTTPConnection(cp.host, cp.port, cp.user, cp.password);
+	EndIf;
+
+	IIKOResponse = IIKOConnection.CallHTTPMethod(ObjectFields.RequestType, IIKORequest);
+
+	If IIKOResponse.StatusCode <> 200 Then
+		WriteLogEvent("IIKO. transport", EventLogLevel.Error,, IIKOResponse,
+			NStr("en = 'Server returned HTTP '; ru = 'Сервер вернул HTTP '") + IIKOResponse.StatusCode);
+		Return Undefined;
+	EndIf;
+
+	Return ?(IIKOResponse.Headers.Get("content-encoding") = "gzip",
+		like_Common.DecompressGZIP(IIKOResponse.GetBodyAsBinaryData()),
+		IIKOResponse.GetBodyAsString("UTF-8"));
+
 EndFunction
 
 Function GetMatchedObject(matchedObjects, ref1C, matchingType = Undefined) Export

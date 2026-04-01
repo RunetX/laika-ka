@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://mu7.ru
+// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://tyan.pw
 // All rights reserved. This program and accompanying materials 
 // are subject to license terms Attribution 4.0 International (CC BY 4.0)
 // The license text is available here:
@@ -23,6 +23,35 @@ Function GetReadingDocumentXML(connection, documentId)
 	
 EndFunction
 
+// GetDocumentRawXML возвращает сырой XML ответа IIKO для документа по ID.
+// Заменяет GetDocument — парсинг выполняется на стороне сервиса через like_CoreAPI.
+Function GetDocumentRawXML(documentId) Export
+
+	ActiveConnection = like_ConnectionAtServer.GetActiveConnecton();
+	If ActiveConnection = Undefined Then
+		Return Undefined;
+	EndIf;
+
+	XMLPackage       = GetReadingDocumentXML(ActiveConnection, documentId);
+	ConnectionFields = like_ConnectionAtServer.GetConnectionFields(ActiveConnection);
+
+	ObjectFields = like_CommonAtServer.GetObjectFieldsStructure();
+	ObjectFields.ConProps    = ConnectionFields;
+	ObjectFields.Resource    = "/resto/services/document";
+	ObjectFields.RequestType = "POST";
+	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
+	ObjectFields.Body        = XMLPackage;
+	ObjectFields.isGZIP      = True;
+	Params = New Map;
+	Params.Insert("methodName", "getAbstractDocument");
+	ObjectFields.Parameters  = Params;
+
+	Return like_CommonAtServer.GetIikoRawXML(ObjectFields);
+
+EndFunction
+
+// GetDocument оставлен для обратной совместимости с формами, которые ещё не переведены.
+// Будет удалён после полного рефакторинга форм.
 Function GetDocument(documentId, namespace) Export
 
 	ActiveConnection = like_ConnectionAtServer.GetActiveConnecton();
@@ -30,32 +59,31 @@ Function GetDocument(documentId, namespace) Export
 		Return New Structure("success, errorString", False, "No active connection");
 	EndIf;
 
-	XMLPackage = getReadingDocumentXML(ActiveConnection, documentId);	
+	XMLPackage       = GetReadingDocumentXML(ActiveConnection, documentId);
 	ConnectionFields = like_ConnectionAtServer.GetConnectionFields(ActiveConnection);
 
 	ObjectFields = like_CommonAtServer.GetObjectFieldsStructure();
-	ObjectFields.ConProps  	 = ConnectionFields;
-	ObjectFields.Resource 	 = "/resto/services/document";
-	ObjectFields.Namespace 	 = namespace;
-	ObjectFields.TypeName 	 = "result";
+	ObjectFields.ConProps    = ConnectionFields;
+	ObjectFields.Resource    = "/resto/services/document";
+	ObjectFields.Namespace   = namespace;
+	ObjectFields.TypeName    = "result";
 	ObjectFields.RequestType = "POST";
 	Params = New Map;
 	Params.Insert("methodName", "getAbstractDocument");
 	ObjectFields.Parameters  = Params;
 	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
-	ObjectFields.Body		 = XMLPackage;
-	ObjectFields.isGZIP		 = True;
+	ObjectFields.Body        = XMLPackage;
+	ObjectFields.isGZIP      = True;
 
-	IIKOObject = like_CommonAtServer.GetIIKOObject(ObjectFields);	
+	IIKOObject = like_CommonAtServer.GetIIKOObject(ObjectFields);
 	If IIKOObject.success Then
 		updateItems = IIKOObject.entitiesUpdate.items;
 		If updateItems.Properties().Get("i") <> Undefined Then
 			like_EntitiesAtServer.ExeItems(updateItems.i, ActiveConnection, IIKOObject.entitiesUpdate.revision);
 		EndIf;
-		
 		Return New Structure("success, returnValue", True, IIKOObject.returnValue);
 	Else
-		Return New Structure("success, errorString", False, IIKOObject.errorString); 
+		Return New Structure("success, errorString", False, IIKOObject.errorString);
 	EndIf;
 
 EndFunction

@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://mu7.ru
+// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://tyan.pw
 // All rights reserved. This program and accompanying materials 
 // are subject to license terms Attribution 4.0 International (CC BY 4.0)
 // The license text is available here:
@@ -460,48 +460,71 @@ Function MajorVersion(connectionVersion)
 EndFunction
 
 Procedure Update(parameters, resultLink, interactive = False) Export
-	
+
 	ActiveConnection = like_ConnectionAtServer.GetActiveConnecton();
 	If ActiveConnection = Undefined Then
 		Return;
 	EndIf;
-	
+
 	If Not (Interactive Or ActiveConnection.backgroundUpdate) Then
 		Return;
 	EndIf;
-	
-	XMLPackage = getXMLEntitiesUpdate(ActiveConnection);	
+
+	// 1. Получить текущую revision с сервиса (сервис хранит состояние синхронизации)
+	revision = like_CoreAPI.GetEntitiesRevision();
+
+	// 2. Построить XML-запрос к IIKO с revision от сервиса
+	XMLPackage = GetXMLEntitiesUpdateWithRevision(ActiveConnection, revision);
 	ConnectionFields = like_ConnectionAtServer.GetConnectionFields(ActiveConnection);
-	
-	If MajorVersion(ConnectionFields.version) < 9 Then
-		namespace = "https://izi.cloud/iiko/reading/entitiesUpdateResponse";
-	Else
-		namespace = "https://izi.cloud/iiko/reading/entitiesUpdateResponse9";
-	EndIf;
-	
+
 	ObjectFields = like_CommonAtServer.GetObjectFieldsStructure();
-	ObjectFields.ConProps  	 = ConnectionFields;
-	ObjectFields.Resource 	 = "/resto/services/update";
-	ObjectFields.Namespace 	 = namespace;
-	ObjectFields.TypeName 	 = "result";
+	ObjectFields.ConProps    = ConnectionFields;
+	ObjectFields.Resource    = "/resto/services/update";
 	ObjectFields.RequestType = "POST";
+	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
+	ObjectFields.Body        = XMLPackage;
+	ObjectFields.isGZIP      = True;
 	Params = New Map;
 	Params.Insert("methodName", "waitEntitiesUpdate");
 	ObjectFields.Parameters  = Params;
-	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
-	ObjectFields.Body		 = XMLPackage;
-	ObjectFields.isGZIP		 = True;
-	
-	IIKOObject = like_CommonAtServer.GetIIKOObject(ObjectFields);
-	If IIKOObject = Undefined Then
+
+	// 3. Получить сырой XML-ответ от IIKO (не разбирать — передать сервису)
+	rawXML = like_CommonAtServer.GetIikoRawXML(ObjectFields);
+	If rawXML = Undefined Then
 		Return;
 	EndIf;
-	
-	If IIKOObject.success Then
-		ExeItems(IIKOObject.entitiesUpdate.items.i, ActiveConnection, IIKOObject.entitiesUpdate.revision);
-	EndIf;	
-	
+
+	// 4. Сервис разбирает XML, применяет бизнес-логику, возвращает список объектов
+	syncResult = like_CoreAPI.SyncEntities(rawXML);
+	If Not syncResult.Success Then
+		Return;
+	EndIf;
+
+	// 5. Адаптер записывает готовые объекты в справочники КА
+	like_AdapterКА.WriteEntities(syncResult.Upsert);
+
 EndProcedure
+
+// Строит XML-тело запроса к IIKO с явно переданной revision.
+// В отличие от GetXMLEntitiesUpdate, не читает revision из БД 1С —
+// она теперь хранится на сервисе.
+Function GetXMLEntitiesUpdateWithRevision(connection, revision)
+
+	argsType = XDTOFactory.Type("https://izi.cloud/iiko/reading/entitiesUpdate", "args");
+	args = XDTOFactory.Create(argsType);
+
+	args.entities_version               = revision;
+	args.client_type                    = "BACK";
+	args.enable_warnings                = False;
+	args.request_watchdog_check_results = False;
+	args.use_raw_entities               = True;
+	args.fromRevision                   = revision;
+	args.timeoutMillis                  = 30000;
+	args.useRawEntities                 = True;
+
+	Return like_CommonAtServer.XDTO2XML(args);
+
+EndFunction
 
 Procedure ExeItems(updateItems, connection, revision) Export
 	
