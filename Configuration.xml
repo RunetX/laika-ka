@@ -60,14 +60,14 @@
 			<ConfigurationExtensionPurpose>AddOn</ConfigurationExtensionPurpose>
 			<KeepMappingToExtendedConfigurationObjectsByIDs>true</KeepMappingToExtendedConfigurationObjectsByIDs>
 			<NamePrefix>like_</NamePrefix>
-			<ConfigurationExtensionCompatibilityMode>Version8_3_12</ConfigurationExtensionCompatibilityMode>
+			<ConfigurationExtensionCompatibilityMode>Version8_3_17</ConfigurationExtensionCompatibilityMode>
 			<DefaultRunMode>ManagedApplication</DefaultRunMode>
 			<UsePurposes>
 				<v8:Value xsi:type="app:ApplicationUsePurpose">PlatformApplication</v8:Value>
 			</UsePurposes>
 			<ScriptVariant>English</ScriptVariant>
 			<Vendor>Тян Семен Сергеевич</Vendor>
-			<Version>0.4.1.4</Version>
+			<Version>0.5</Version>
 			<Caption/>
 			<ShortCaption/>
 			<DefaultLanguage>Language.Русский</DefaultLanguage>
@@ -81,7 +81,7 @@
 			<Copyright>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Copyright (С) Самозанятый "Тян Семен Сергеевич", 2023. Все права защищены</v8:content>
+					<v8:content>Copyright (С) Самозанятый "Тян Семен Сергеевич", 2026. Все права защищены</v8:content>
 				</v8:item>
 			</Copyright>
 			<VendorInformationAddress>
@@ -140,10 +140,10 @@
 			<XDTOPackage>like_readingIncomingInvoice</XDTOPackage>
 			<XDTOPackage>like_readingOutgoingInvoice</XDTOPackage>
 			<XDTOPackage>like_SQLResponse</XDTOPackage>
-			<Constant>like_LicenseKey</Constant>
 			<DefinedType>ДенежнаяСуммаНеотрицательная</DefinedType>
 			<DefinedType>Цена</DefinedType>
 			<CommonCommand>like_OpenAbout</CommonCommand>
+			<Constant>like_LicenseKey</Constant>
 			<CommonForm>like_aboutForm</CommonForm>
 			<CommonForm>like_unmatchedObjectsForm</CommonForm>
 			<Catalog>Валюты</Catalog>
