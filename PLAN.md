@@ -215,15 +215,14 @@ IIKO-сервер работает в локальной сети клиента
 
 ### G. Тесты (Tester)
 
-- [ ] G1. Unit-тесты чистых функций: `Translit()`, `iikoDateTimeTo1C()`, `SafeGet()`, `MapToJSON()`, `StrValue()`
-- [ ] G2. Серверные тесты: `FetchInvoicesList()`, `WriteEntity()`, `GetDocumentRequisites()`
-- [ ] G3. Регрессия: unsafe `.Next()`, XDTO/JSON в outgoingInvoiceForm
-- [ ] G4. E2E: синхронизация → загрузка накладных → отправка в IIKO
+- [x] G1. Unit-тесты: 13 кейсов в `like_tests` (Translit, IikoDateTimeTo1C, SafeGet, MapToJSON, регрессия unsafe .Next()). Все пройдены.
+- [ ] G2. Серверные тесты: `FetchInvoicesList()`, `WriteEntity()`, `GetDocumentRequisites()` *(ждут IIKO)*
+- [ ] G3. E2E: синхронизация → загрузка накладных → отправка в IIKO *(ждут IIKO)*
 
 ### H. Стиль кода
 
-- [ ] H1. Именование: `getIIKOHeaders` → `GetIIKOHeaders` (PascalCase), убрать смешение ru/en
-- [ ] H2. Опечатка `entitites` — исправить в коде (регистр `like_entititesVersions` в метаданных не переименовать)
+- [x] H1. `getIIKOHeaders` → `GetIikoHeaders`, `getIIKODate` → `GetIikoDate` (PascalCase)
+- [x] H2. `GetEntititesTableDefinition` → `GetEntitiesTableDefinition`, `SetEntititesVersion` → `SetEntitiesVersion`
 
 ---
 
