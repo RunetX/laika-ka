@@ -183,29 +183,29 @@ IIKO-сервер работает в локальной сети клиента
 
 Сервис теперь возвращает JSON, но некоторые формы всё ещё читают XDTO-свойства.
 
-- [ ] B1. `like_outgoingInvoiceForm` — перевести с `d.items.i` / `d.__content` на `SafeGet()`
-- [ ] B2. `like_OrdersForm.GetInvoices()` — убрать проверки `Type("XDTOList")`, читать JSON-массив
+- [x] B1. `like_outgoingInvoiceForm` — перевести с `d.items.i` / `d.__content` на `SafeGet()`
+- [x] B2. `like_OrdersForm.GetInvoices()` — убрать проверки `Type("XDTOList")`, читать JSON-массив
 
 ### C. Консолидация серверной логики
 
-- [ ] C1. Три `GetRequisites` → одна параметризованная `GetDocumentRequisites(documentsList, docMeta, requisites)`
-- [ ] C2. Три XDTO-билдера → общий `BuildInvoiceXDTO()` с параметрами маппинга
-- [ ] C3. `GetIikoObject`/`GetIikoRawXML` → общий `ExecuteIikoRequest()` для HTTP-механики
-- [ ] C4. `DoExecute`/`ExecuteNoAuth` в `like_CoreAPI` → общий `DoHTTPRequest()`
+- [ ] C1. Три `GetRequisites` → одна параметризованная `GetDocumentRequisites(documentsList, docMeta, requisites)` *(отложено — требует тестирования с IIKO)*
+- [ ] C2. Три XDTO-билдера → общий `BuildInvoiceXDTO()` с параметрами маппинга *(отложено — требует тестирования с IIKO)*
+- [x] C3. `GetIikoObject`/`GetIikoRawXML` → общий `ExecuteIikoHTTPRequest()`
+- [x] C4. `DoExecute`/`ExecuteNoAuth` → общий `DoHTTPRequest()`
 
 ### D. Безопасность запросов (.Next() без проверки)
 
-- [ ] D1. `like_ConnectionAtServer.GetActiveConnecton()` — `If Not .Next() Return Undefined`
-- [ ] D2. `like_EntitiesAtServer.GetEntitiesVersion()`
-- [ ] D3. `like_InvoicesAtServer.FindByCodeAndConnection()`
-- [ ] D4. `like_Orders.OrdersSettings()`
+- [x] D1. `like_ConnectionAtServer.GetActiveConnecton()` — `If Not .Next() Return Undefined`
+- [x] D2. `like_EntitiesAtServer.GetEntitiesVersion()` — возвращает -1
+- [x] D3. `like_InvoicesAtServer.FindByCodeAndConnection()` — возвращает ""
+- [x] D4. `like_Orders.OrdersSettings()` — возвращает Undefined
 
 ### E. Удаление мёртвого кода
 
-- [ ] E1. `like_EntitiesAtServer`: `GetXMLEntitiesUpdate()`, `FindByIDAndConnection()` (баг: `like_products.UUID`), `GetExeEntityStructure()`
-- [ ] E2. `like_Orders`: `MobileOrder()`, `OrderDataFromPackage()`, `OrderItemModel()`, `IdStrByRef()`
-- [ ] E3. `like_Common.InsertAttribute()` — заменена на `InsertAttr()`
-- [ ] E4. Дубликат `GetTableWithColumns()` в `like_downloadSalesAndPrepays` → `like_TypesAndDescriptionsAtServer`
+- [x] E1. `like_EntitiesAtServer`: удалены `GetXMLEntitiesUpdate()`, `FindByIDAndConnection()` (содержала баг), `GetExeEntityStructure()`
+- [x] E2. `like_Orders`: удалены `MobileOrder()`, `OrderDataFromPackage()`, `OrderItemModel()` (-116 строк)
+- [x] E3. `like_Common.InsertAttribute()` удалена (-20 строк)
+- [x] E4. Дубликат `GetTableWithColumns()` заменён на `like_TypesAndDescriptionsAtServer`
 
 ### F. Унификация форм справочников
 
