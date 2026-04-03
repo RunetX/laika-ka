@@ -69,7 +69,7 @@ Procedure InitServerInfo(connection)
 	ObjectFields.Namespace 	 = "https://izi.cloud/iiko/reading/serverInfoResponse";
 	ObjectFields.TypeName 	 = "r";
 	ObjectFields.RequestType = "GET";
-	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
+	ObjectFields.Headers     = like_Common.GetIikoHeaders(ConnectionFields);
 	ObjectFields.isGZIP		 = False;	
 	XDTOResponse = like_CommonAtServer.GetIIKOObject(ObjectFields);
 	

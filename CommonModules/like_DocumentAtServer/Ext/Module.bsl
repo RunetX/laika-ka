@@ -39,7 +39,7 @@ Function GetDocumentRawXML(documentId) Export
 	ObjectFields.ConProps    = ConnectionFields;
 	ObjectFields.Resource    = "/resto/services/document";
 	ObjectFields.RequestType = "POST";
-	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
+	ObjectFields.Headers     = like_Common.GetIikoHeaders(ConnectionFields);
 	ObjectFields.Body        = XMLPackage;
 	ObjectFields.isGZIP      = True;
 	Params = New Map;
@@ -66,7 +66,7 @@ Function GetDocument(documentId, namespace) Export
 	ObjectFields.ConProps    = ConnectionFields;
 	ObjectFields.Resource    = "/resto/services/document";
 	ObjectFields.RequestType = "POST";
-	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
+	ObjectFields.Headers     = like_Common.GetIikoHeaders(ConnectionFields);
 	ObjectFields.Body        = XMLPackage;
 	ObjectFields.isGZIP      = True;
 	Params = New Map;

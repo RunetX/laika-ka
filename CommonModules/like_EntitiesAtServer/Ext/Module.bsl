@@ -35,7 +35,7 @@ Function Description(dscKey)
 	
 EndFunction
 
-Function GetEntititesTableDefinition()
+Function GetEntitiesTableDefinition()
 	
 	// value table section
 	entitiesTable = New ValueTable;
@@ -174,7 +174,7 @@ Procedure ExeItem(connection, item, ecTable, entitiesTable)
 
 EndProcedure
 
-Procedure SetEntititesVersion(connection, eVersion)
+Procedure SetEntitiesVersion(connection, eVersion)
 	
 	manager = InformationRegisters.like_entititesVersions.CreateRecordSet();
 	filter = manager.Filter;
@@ -440,7 +440,7 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 	ObjectFields.ConProps    = ConnectionFields;
 	ObjectFields.Resource    = "/resto/services/update";
 	ObjectFields.RequestType = "POST";
-	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
+	ObjectFields.Headers     = like_Common.GetIikoHeaders(ConnectionFields);
 	ObjectFields.Body        = XMLPackage;
 	ObjectFields.isGZIP      = True;
 	If MajorVersion(ConnectionFields.version) < 9 Then
@@ -497,7 +497,7 @@ EndFunction
 Procedure ExeItems(updateItems, connection, revision) Export
 	
 	ecTable 	  = GetEntitiesConformityTable();
-	entitiesTable = GetEntititesTableDefinition();
+	entitiesTable = GetEntitiesTableDefinition();
 	
 	If TypeOf(updateItems) = Type("XDTOList") Then
 		For each item In updateItems Do  
@@ -569,7 +569,7 @@ Procedure ExeItems(updateItems, connection, revision) Export
 			
 	EndDo;
 	
-	SetEntititesVersion(connection, revision);	
+	SetEntitiesVersion(connection, revision);	
 	
 EndProcedure
 

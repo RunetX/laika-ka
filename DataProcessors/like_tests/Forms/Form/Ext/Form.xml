@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:pal="http://v8.1c.ru/8.1/data/ui/colors/palette" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.21">
+	<AutoTitle>false</AutoTitle>
+	<Title>
+		<v8:item>
+			<v8:lang>ru</v8:lang>
+			<v8:content>Тесты Лайка</v8:content>
+		</v8:item>
+	</Title>
+	<Group>Vertical</Group>
+	<AutoCommandBar name="FormCommandBar" id="-1"/>
+	<ChildItems>
+		<Button name="RunTests" id="1">
+			<Type>UsualButton</Type>
+			<CommandName>Form.Command.RunTests</CommandName>
+			<ExtendedTooltip name="RunTestsExtendedTooltip" id="2"/>
+		</Button>
+		<InputField name="summary" id="3">
+			<DataPath>summary</DataPath>
+			<ReadOnly>true</ReadOnly>
+			<ContextMenu name="summaryContextMenu" id="4"/>
+			<ExtendedTooltip name="summaryExtendedTooltip" id="5"/>
+		</InputField>
+		<Table name="results" id="6">
+			<Representation>List</Representation>
+			<DataPath>results</DataPath>
+			<ReadOnly>true</ReadOnly>
+			<ContextMenu name="resultsContextMenu" id="7"/>
+			<AutoCommandBar name="resultsCommandBar" id="8">
+				<Autofill>false</Autofill>
+			</AutoCommandBar>
+			<ExtendedTooltip name="resultsExtendedTooltip" id="9"/>
+			<ChildItems>
+				<InputField name="resultsResult" id="10">
+					<DataPath>results.result</DataPath>
+					<ContextMenu name="resultsResultContextMenu" id="11"/>
+					<ExtendedTooltip name="resultsResultExtendedTooltip" id="12"/>
+				</InputField>
+				<InputField name="resultsTestName" id="13">
+					<DataPath>results.testName</DataPath>
+					<ContextMenu name="resultsTestNameContextMenu" id="14"/>
+					<ExtendedTooltip name="resultsTestNameExtendedTooltip" id="15"/>
+				</InputField>
+				<InputField name="resultsError" id="16">
+					<DataPath>results.error</DataPath>
+					<ContextMenu name="resultsErrorContextMenu" id="17"/>
+					<ExtendedTooltip name="resultsErrorExtendedTooltip" id="18"/>
+				</InputField>
+			</ChildItems>
+		</Table>
+	</ChildItems>
+	<Attributes>
+		<Attribute name="results" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Результаты</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>v8:ValueTable</v8:Type>
+			</Type>
+			<Columns>
+				<Column name="result" id="1">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Результат</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>10</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="testName" id="2">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Тест</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>150</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+				<Column name="error" id="3">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Ошибка</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:string</v8:Type>
+						<v8:StringQualifiers>
+							<v8:Length>0</v8:Length>
+							<v8:AllowedLength>Variable</v8:AllowedLength>
+						</v8:StringQualifiers>
+					</Type>
+				</Column>
+			</Columns>
+		</Attribute>
+		<Attribute name="summary" id="2">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Итого</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+	</Attributes>
+	<Commands>
+		<Command name="RunTests" id="1">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Запустить тесты</v8:content>
+				</v8:item>
+			</Title>
+			<Action>RunTests</Action>
+		</Command>
+	</Commands>
+</Form>

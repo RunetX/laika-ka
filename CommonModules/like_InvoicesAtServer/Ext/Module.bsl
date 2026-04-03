@@ -17,8 +17,8 @@ Function GetReadingInvoicesXML(connection, dateFrom, dateTo, docType)
 	args.enable_warnings  = False;	
 	args.request_watchdog_check_results = True;
 	args.use_raw_entities = True;
-	args.dateFrom 		  = like_CommonAtServer.getIIKODate(dateFrom, "000");
-	args.dateTo 		  = like_CommonAtServer.getIIKODate(dateTo, "999");
+	args.dateFrom 		  = like_CommonAtServer.GetIikoDate(dateFrom, "000");
+	args.dateTo 		  = like_CommonAtServer.GetIikoDate(dateTo, "999");
 	args.docType 		  = docType;	
 	
 	return like_CommonAtServer.XDTO2XML(args);

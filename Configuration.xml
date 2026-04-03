@@ -188,6 +188,7 @@
 			<DataProcessor>like_productionOrdersDownload</DataProcessor>
 			<DataProcessor>like_billing</DataProcessor>
 			<DataProcessor>like_demo</DataProcessor>
+			<DataProcessor>like_tests</DataProcessor>
 			<InformationRegister>like_customersRevisions</InformationRegister>
 			<InformationRegister>like_documentsMatching</InformationRegister>
 			<InformationRegister>like_entititesVersions</InformationRegister>

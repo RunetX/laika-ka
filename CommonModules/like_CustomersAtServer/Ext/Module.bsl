@@ -82,7 +82,7 @@ Procedure UpdateCustomers() Export
 	Params = New Map;
 	Params.Insert("methodName", "getAllBrdData");
 	ObjectFields.Parameters  = Params;
-	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
+	ObjectFields.Headers     = like_Common.GetIikoHeaders(ConnectionFields);
 	ObjectFields.Body		 = GetXMLCustomers(ActiveConnection);
 	ObjectFields.isGZIP		 = True;
 	
