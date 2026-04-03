@@ -509,9 +509,8 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 	// 4. Разобрать сущности и записать в справочники 1С
 	ExeItems(IIKOObject.entitiesUpdate.items.i, ActiveConnection, newRevision);
 
-	// 5. Сохранить состояние на сервисе (только revision + UUID для трекинга)
-	persistObjects = BuildPersistObjects(ActiveConnection, newRevision);
-	like_CoreAPI.PersistEntities(newRevision, persistObjects);
+	// 5. Сохранить revision на сервисе (для следующего GET /entities/revision)
+	like_CoreAPI.PersistEntities(newRevision, New Array);
 
 EndProcedure
 
@@ -614,18 +613,6 @@ Procedure ExeItems(updateItems, connection, revision) Export
 	SetEntititesVersion(connection, revision);	
 	
 EndProcedure
-
-// Собирает массив объектов для отправки на сервис (трекинг состояния).
-// Вызывается после ExeItems — читает то, что было обработано.
-Function BuildPersistObjects(connection, revision)
-
-	// Для простоты — отправляем только revision без списка объектов.
-	// Сервис обновит entity_versions. Object_matching на сервисе
-	// используется только для фильтрации при облачном парсинге (sync),
-	// а при локальном парсинге фильтрация делается в 1С по revision в справочниках.
-	Return New Array;
-
-EndFunction
 
 Procedure BackgroundUpdate() Export
 	
