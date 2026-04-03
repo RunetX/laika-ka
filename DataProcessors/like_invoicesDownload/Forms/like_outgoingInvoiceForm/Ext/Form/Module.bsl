@@ -1,6 +1,6 @@
-﻿&AtServer
+&AtServer
 Function FillInvoiceData(invoiceVT)
-	
+
 	fQuery = New Query("SELECT
 	                   |	iVT.number AS number,
 	                   |	iVT.date AS date,
@@ -77,7 +77,7 @@ Function FillInvoiceData(invoiceVT)
 	                   |	tI.eid");
 	fQuery.SetParameter("invoiceVT", invoiceVT);
 	Return fQuery.Execute().Unload();
-	
+
 EndFunction
 
 &AtServer
@@ -85,43 +85,57 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	If Not Parameters.Property("UUID") Then
 		Return;
 	EndIf;
-	
+
 	docData = like_DocumentAtServer.GetDocument(Parameters.UUID, "https://izi.cloud/iiko/reading/outgoingInvoice");
 	If Not docData.success Then
 		Message(docData.errorString);
 		Return;
 	EndIf;
-	
+
 	d = docData.returnValue;
-	invoiceVT 	  = invoiceData.Unload();
-	
-	For each invoiceItem In d.items.i Do
-	
+	invoiceVT = invoiceData.Unload();
+
+	docNumber        = like_CoreAPI.SafeGet(d, "documentNumber", "");
+	dateIncoming     = like_CoreAPI.SafeGet(d, "dateIncoming", "");
+	conceptionUUID   = like_CoreAPI.SafeGet(d, "conceptionUUID", "");
+	If Not ValueIsFilled(conceptionUUID) Then
+		conceptionUUID = like_InvoicesAtServer.FindByCodeAndConnection("like_conceptions", "no_concept");
+	EndIf;
+	commentVal       = like_CoreAPI.SafeGet(d, "comment", "");
+	supplierUUID     = like_CoreAPI.SafeGet(d, "supplierUUID", "");
+	defaultStoreUUID = like_CoreAPI.SafeGet(d, "defaultStoreUUID", "");
+	revenueAccountUUID = like_CoreAPI.SafeGet(d, "revenueAccountUUID", "");
+	accountToUUID    = like_CoreAPI.SafeGet(d, "accountToUUID", "");
+
+	invoiceLines = like_CoreAPI.SafeGet(d, "items", New Array);
+	For Each invoiceItem In invoiceLines Do
+
 		newInvoiceStr = invoiceVT.Add();
-		
-		newInvoiceStr.number 		 		 	= d.documentNumber;
-		newInvoiceStr.date	 		 		 	= like_Common.iikoDateTimeTo1C(d.dateIncoming);
-		newInvoiceStr.conceptionUUID 		 	= ?(ValueIsFilled(d.conception.__content), d.conception.__content, 
-													like_InvoicesAtServer.FindByCodeAndConnection("like_conceptions", "no_concept"));
-		newInvoiceStr.comment				 	= d.comment.__content;
-		newInvoiceStr.supplierUUID			 	= d.supplier;
-		newInvoiceStr.defaultStoreUUID		 	= d.defaultStore.__content;
-		newInvoiceStr.revenueAccountUUID		= d.revenueAccount;
-		newInvoiceStr.accountToUUID				= d.accountTo;
-		
-		newInvoiceStr.eid						= invoiceItem.eid;
-		newInvoiceStr.code						= invoiceItem.code;
-		newInvoiceStr.productUUID				= invoiceItem.product;
-		newInvoiceStr.amount					= invoiceItem.amount;
-		newInvoiceStr.amountUnitUUID			= invoiceItem.amountUnit;
-		newInvoiceStr.storeUUID					= invoiceItem.store;
-		newInvoiceStr.price						= invoiceItem.price;
-		newInvoiceStr.priceWithoutNds			= invoiceItem.sumWithoutNds/invoiceItem.amount;
-		newInvoiceStr.sum						= invoiceItem.sum;
-		newInvoiceStr.ndsPercent				= invoiceItem.ndsPercent;
-		newInvoiceStr.ndsSum 					= invoiceItem.sum - invoiceItem.sumWithoutNds;
-		newInvoiceStr.sumWithoutNds				= invoiceItem.sumWithoutNds;
-		
+
+		newInvoiceStr.number              = docNumber;
+		newInvoiceStr.date                = ?(ValueIsFilled(dateIncoming), like_Common.iikoDateTimeTo1C(dateIncoming), Date(1,1,1));
+		newInvoiceStr.conceptionUUID      = conceptionUUID;
+		newInvoiceStr.comment             = commentVal;
+		newInvoiceStr.supplierUUID        = supplierUUID;
+		newInvoiceStr.defaultStoreUUID    = defaultStoreUUID;
+		newInvoiceStr.revenueAccountUUID  = revenueAccountUUID;
+		newInvoiceStr.accountToUUID       = accountToUUID;
+
+		newInvoiceStr.eid            = like_CoreAPI.SafeGet(invoiceItem, "eid", "");
+		newInvoiceStr.code           = like_CoreAPI.SafeGet(invoiceItem, "code", "");
+		newInvoiceStr.productUUID    = like_CoreAPI.SafeGet(invoiceItem, "productUUID", "");
+		itemAmount                   = Number(like_CoreAPI.SafeGet(invoiceItem, "amount", 0));
+		newInvoiceStr.amount         = itemAmount;
+		newInvoiceStr.amountUnitUUID = like_CoreAPI.SafeGet(invoiceItem, "amountUnitUUID", "");
+		newInvoiceStr.storeUUID      = like_CoreAPI.SafeGet(invoiceItem, "storeUUID", "");
+		newInvoiceStr.price          = Number(like_CoreAPI.SafeGet(invoiceItem, "price", 0));
+		itemSumWithoutNds            = Number(like_CoreAPI.SafeGet(invoiceItem, "sumWithoutNds", 0));
+		newInvoiceStr.priceWithoutNds = ?(itemAmount <> 0, itemSumWithoutNds / itemAmount, 0);
+		newInvoiceStr.sum            = Number(like_CoreAPI.SafeGet(invoiceItem, "sum", 0));
+		newInvoiceStr.ndsPercent     = Number(like_CoreAPI.SafeGet(invoiceItem, "ndsPercent", 0));
+		newInvoiceStr.ndsSum         = newInvoiceStr.sum - itemSumWithoutNds;
+		newInvoiceStr.sumWithoutNds  = itemSumWithoutNds;
+
 	EndDo;
 
 	invoiceVT = FillInvoiceData(invoiceVT);
@@ -133,10 +147,10 @@ EndProcedure
 
 &AtClient
 Procedure OnOpen(Cancel)
-	Title = NStr("en = 'Outgoing invoice №'; ru = 'Расходная накладная №'") + Format(Number, "NGS=' '; NG=0") + NStr("en = ' from '; ru = ' от '") + Date;
-	
+	Title = NStr("en = 'Outgoing invoice №'; ru = 'Расходная накладная №'") + Format(Number, "NGS=' '; NG=0") + NStr("en = ' from '; ru = ' от '") + Date;
+
 	If defaultStore.IsEmpty() Then
-		Items.defaultStore.Enabled = False;	
+		Items.defaultStore.Enabled = False;
 	Else
 		Items.invoiceItemsstore.Visible = False;
 	EndIf;

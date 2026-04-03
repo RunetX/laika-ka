@@ -28,7 +28,9 @@ Function GetActiveConnecton() Export
 	                            |WHERE
 	                            |	like_connections.active");
 	ConnectionSelection = ConnectionQuery.Execute().Select();
-	ConnectionSelection.Next();
+	If Not ConnectionSelection.Next() Then
+		Return Undefined;
+	EndIf;
 	Return ConnectionSelection.ActiveConnection;
 	
 EndFunction

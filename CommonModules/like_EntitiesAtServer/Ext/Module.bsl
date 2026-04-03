@@ -16,7 +16,9 @@ Function GetEntitiesVersion(connection) Export
 	                          |	like_entititesVersions.connection = &connection");
 	EntitiesQuery.SetParameter("connection", connection);
 	EntitiesSelection = EntitiesQuery.Execute().Select();
-	EntitiesSelection.Next();
+	If Not EntitiesSelection.Next() Then
+		Return -1;
+	EndIf;
 	Return EntitiesSelection.entityVersion;
 	
 EndFunction
@@ -24,49 +26,6 @@ EndFunction
 Function GetXMLFromXDTO(XDTOObject)
 
 	Return like_CommonAtServer.XDTO2XML(XDTOObject);
-	
-EndFunction
-
-Function GetXMLEntitiesUpdate(connection)
-	
-	argsType = XDTOFactory.Type("https://izi.cloud/iiko/reading/entitiesUpdate", "args");
-	args = XDTOFactory.Create(argsType); 
-	
-	eVersion = GetEntitiesVersion(connection);
-	args.entities_version = eVersion;
-	args.client_type = "BACK";
-	args.enable_warnings = False;	
-	args.request_watchdog_check_results = False;
-	args.use_raw_entities = True;
-	args.fromRevision = eVersion;
-	args.timeoutMillis = 30000;
-	args.useRawEntities = True;	
-	
-	return getXMLfromXDTO(args);
-	
-EndFunction
-
-Function GetExeEntityStructure()
-	
-	Return like_CommonAtServer.GetStructureWithFields("connection, item, catalogName, isContainer");
-	
-EndFunction
-
-Function FindByIDAndConnection(catalogName, UUID, connection) 
-	
-	FindQuery = New Query("SELECT
-	                      |	like_catalog.Ref AS Ref
-	                      |FROM
-	                      |	Catalog.[catalogName] AS like_catalog
-	                      |WHERE
-	                      |	like_products.UUID = &UUID
-	                      |	AND like_catalog.connection = &connection");
-	FindQuery.Text = StrReplace(FindQuery.Text, "[catalogName]", CatalogName);
-	FindQuery.SetParameter("UUID", UUID);
-	FindQuery.SetParameter("connection", connection);
-	FindSelection = FindQuery.Execute().Select();
-	FindSelection.Next();
-	Return FindSelection.Ref;
 	
 EndFunction
 

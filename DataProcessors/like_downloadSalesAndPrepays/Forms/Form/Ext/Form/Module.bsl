@@ -24,23 +24,10 @@ Function prepaysRequest()
 EndFunction
 
 &AtServer
-Function GetTableWithColumns(columnsString)
-	
-	dsc = like_TypesAndDescriptionsAtServer.GetDescriptionMap();
-	newTable = New ValueTable;
-	For each nameType In StrSplit(columnsString, "|") Do		
-		nameTypeList = StrSplit(nameType, ";");
-		newTable.Columns.Add(nameTypeList[0], dsc.Get(nameTypeList[1]));	
-	EndDo;
-	Return newTable;
-	
-EndFunction
-
-&AtServer
 Function GetPrepaysData()
 		
 	prepaysObject = prepaysRequest();
-	prepaysData   = GetTableWithColumns("pdate;shortDate"+
+	prepaysData   = like_TypesAndDescriptionsAtServer.GetTableWithColumns("pdate;shortDate"+
 										"|sum;sum"+
 										"|sumNds;sum"+
 										"|ndsPercent;smallInt"+
@@ -139,7 +126,7 @@ EndFunction
 Function GetSalesData()
 	
 	salesObject = salesRequest();
-	salesData = GetTableWithColumns("pdate;shortDate"+
+	salesData = like_TypesAndDescriptionsAtServer.GetTableWithColumns("pdate;shortDate"+
 									 "|departmentId;UUID"+
 									 "|department;department"+
 									 "|cashRegisterId;UUID"+

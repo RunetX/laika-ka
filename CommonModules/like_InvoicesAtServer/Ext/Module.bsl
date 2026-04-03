@@ -87,7 +87,9 @@ Function FindByCodeAndConnection(CatalogName, code) Export
 	FindQuery.SetParameter("Code", code);
 	FindQuery.SetParameter("connection", like_ConnectionAtServer.GetActiveConnecton());
 	FindSelection = FindQuery.Execute().Select();
-	FindSelection.Next();
+	If Not FindSelection.Next() Then
+		Return "";
+	EndIf;
 	Return FindSelection.UUID;
 	
 EndFunction

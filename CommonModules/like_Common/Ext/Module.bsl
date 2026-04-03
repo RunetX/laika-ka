@@ -114,27 +114,6 @@ Function DecompressGZIP(binaryData) Export
 	Return Text;	
 EndFunction
 
-Function InsertAttribute(XMLString, nodeName, attributeName, attributeValue) Export
-	
-	XMLReader = New XMLReader;
-	XMLReader.SetString(XMLString);
-	DOMBuilder = Новый DOMBuilder;
-	Document = DOMBuilder.Read(XMLReader);
-	XMLReader.Close();
-	
-	Nodes = Document.GetElementByTagName(NodeName);
-	For each Node In Nodes Do
-		Node.SetAttribute(AttributeName, AttributeValue);
-	EndDo;
-	
-	XMLWriter = New XMLWriter;
-	XMLWriter.SetString();	
-	DOMWriter = New DOMWriter;
-	DOMWriter.Write(Document, XMLWriter);	
-	Return XMLWriter.Close();
-	
-EndFunction
-
 Function InsertAttr(XMLString, nodeName, attributeName, attributeValue) Export
 
 	XMLString = StrReplace(
