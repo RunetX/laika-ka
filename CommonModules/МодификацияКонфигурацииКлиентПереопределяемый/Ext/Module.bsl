@@ -33,6 +33,7 @@
 		ОткрытьФорму("ОбщаяФорма.like_unmatchedObjectsForm", ПараметрыФормы);
 	Иначе
 		like_InvoicesAtServer.SendInvoices2IIKO(МассивНакладных);
+		Оповестить("like_InvoicesSent");
 	КонецЕсли;
 
 КонецПроцедуры

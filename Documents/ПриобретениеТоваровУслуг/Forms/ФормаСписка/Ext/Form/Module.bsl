@@ -39,6 +39,13 @@ Procedure like_UpdateInvoicesListAtServer()
 EndProcedure
 
 &AtClient
+Procedure like_NotificationProcessing(EventName, Parameter, Source)
+	If EventName = "like_InvoicesSent" Or EventName = "EndOfMatching" Then
+		like_UpdateInvoicesListAtServer();
+	EndIf;
+EndProcedure
+
+&AtClient
 Procedure like_InvoicesListSelection(Item, SelectedRow, Field, StandardProcessing)
 	StandardProcessing = False;
 
