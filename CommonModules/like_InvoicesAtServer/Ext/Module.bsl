@@ -604,15 +604,45 @@ Function FetchInvoicesList(periodStart, periodEnd, loadIncoming, loadOutgoing) E
 	                         |	iVT.sumWithoutNds AS sumWithoutNds,
 	                         |	iVT.invoiceIncomingNumber AS invoiceIncomingNumber,
 	                         |	iVT.conceptionRef AS conceptionRef,
-	                         |	iVT.counteragentRef AS counteragentRef,
-	                         |	sVT.store AS store
+	                         |	iVT.counteragentRef AS counteragentRef
+	                         |INTO tmpResultInvoices
 	                         |FROM
 	                         |	&iVT AS iVT
-	                         |		INNER JOIN &sVT AS sVT
+	                         |;
+	                         |
+	                         |////////////////////////////////////////////////////////////////////////////////
+	                         |SELECT
+	                         |	sVT.documentID AS documentID,
+	                         |	sVT.store AS store
+	                         |INTO tmpResultStores
+	                         |FROM
+	                         |	&sVT AS sVT
+	                         |;
+	                         |
+	                         |////////////////////////////////////////////////////////////////////////////////
+	                         |SELECT
+	                         |	iVT.type,
+	                         |	iVT.documentID,
+	                         |	iVT.date,
+	                         |	iVT.counteragent,
+	                         |	iVT.number,
+	                         |	iVT.documentSummary,
+	                         |	iVT.sum,
+	                         |	iVT.processed,
+	                         |	iVT.conception,
+	                         |	iVT.comment,
+	                         |	iVT.sumWithoutNds,
+	                         |	iVT.invoiceIncomingNumber,
+	                         |	iVT.conceptionRef,
+	                         |	iVT.counteragentRef,
+	                         |	sVT.store
+	                         |FROM
+	                         |	tmpResultInvoices AS iVT
+	                         |		INNER JOIN tmpResultStores AS sVT
 	                         |		ON iVT.documentID = sVT.documentID");
 	resultQuery.SetParameter("iVT", invoicesAndStores.invoicesVT);
 	resultQuery.SetParameter("sVT", concatenatedStores);
-	resultVT = resultQuery.Execute().Unload();
+	resultVT = resultQuery.ExecuteBatch()[2].Unload();
 	resultVT.Sort("date Desc");
 
 	Return New Structure("invoicesVT, sumSum, sumSumWithoutNds, count",

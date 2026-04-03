@@ -1,5 +1,5 @@
 &AtClient
-Procedure like_UpdateInvoicesList(Command)
+Procedure like_PeriodOnChange(Item)
 	like_UpdateInvoicesListAtServer();
 EndProcedure
 
