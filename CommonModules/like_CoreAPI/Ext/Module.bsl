@@ -488,14 +488,14 @@ EndFunction
 Function SafeGet(collection, fieldName, defaultValue) Export
 
 	If TypeOf(collection) = Type("Map") Then
-		val = collection[fieldName];
-		Return ?(val <> Undefined, val, defaultValue);
+		mapValue = collection[fieldName];
+		Return ?(mapValue <> Undefined, mapValue, defaultValue);
 	EndIf;
 
 	If TypeOf(collection) = Type("Structure") Then
-		val = Undefined;
-		If collection.Property(fieldName, val) Then
-			Return ?(val <> Undefined, val, defaultValue);
+		mapValue = Undefined;
+		If collection.Property(fieldName, mapValue) Then
+			Return ?(mapValue <> Undefined, mapValue, defaultValue);
 		EndIf;
 		Return defaultValue;
 	EndIf;

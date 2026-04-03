@@ -1,4 +1,4 @@
-&AtClient
+﻿&AtClient
 Procedure LinkClick(Item)
 	RunApp(cfgLink);
 EndProcedure
