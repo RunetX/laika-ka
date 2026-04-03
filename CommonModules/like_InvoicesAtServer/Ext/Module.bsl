@@ -564,5 +564,247 @@ Function DocTypeByDocumentsList(documentsList) Export
 	Else
 		Return Undefined;
 	EndIf;
-	
+
 EndFunction
+
+// Returns a Structure with invoicesList (ValueTable), sumSum, sumSumWithoutNds, count
+// for loading into the form.
+Function FetchInvoicesList(periodStart, periodEnd, loadIncoming, loadOutgoing) Export
+
+	If Not (loadIncoming Or loadOutgoing) Then
+		Return Undefined;
+	EndIf;
+
+	invoicesVT = like_InvoicesListColumns();
+	incomingVT = invoicesVT.Copy();
+	outgoingVT = invoicesVT.Copy();
+
+	If loadIncoming Then
+		FillInvoicesFromIIKO(incomingVT, periodStart, periodEnd, "INCOMING_INVOICE", 0);
+	EndIf;
+	If loadOutgoing Then
+		FillInvoicesFromIIKO(outgoingVT, periodStart, periodEnd, "OUTGOING_INVOICE", 1);
+	EndIf;
+
+	concatenatedStores = invoicesVT.Copy(, "documentID, store");
+	invoicesAndStores  = like_GetInvoicesAndStores(incomingVT, outgoingVT);
+	like_FillConcatenatedStores(concatenatedStores, invoicesAndStores.storesVT);
+
+	resultQuery = New Query("SELECT
+	                         |	iVT.type AS type,
+	                         |	iVT.documentID AS documentID,
+	                         |	iVT.date AS date,
+	                         |	iVT.counteragent AS counteragent,
+	                         |	iVT.number AS number,
+	                         |	iVT.documentSummary AS documentSummary,
+	                         |	iVT.sum AS sum,
+	                         |	iVT.processed AS processed,
+	                         |	iVT.conception AS conception,
+	                         |	iVT.comment AS comment,
+	                         |	iVT.sumWithoutNds AS sumWithoutNds,
+	                         |	iVT.invoiceIncomingNumber AS invoiceIncomingNumber,
+	                         |	iVT.conceptionRef AS conceptionRef,
+	                         |	iVT.counteragentRef AS counteragentRef,
+	                         |	sVT.store AS store
+	                         |FROM
+	                         |	&iVT AS iVT
+	                         |		INNER JOIN &sVT AS sVT
+	                         |		ON iVT.documentID = sVT.documentID");
+	resultQuery.SetParameter("iVT", invoicesAndStores.invoicesVT);
+	resultQuery.SetParameter("sVT", concatenatedStores);
+	resultVT = resultQuery.Execute().Unload();
+	resultVT.Sort("date Desc");
+
+	Return New Structure("invoicesVT, sumSum, sumSumWithoutNds, count",
+		resultVT,
+		"Итого: " + resultVT.Total("sum"),
+		"Итого: " + resultVT.Total("sumWithoutNds"),
+		"Кол-во: " + resultVT.Count());
+
+EndFunction
+
+Function like_InvoicesListColumns()
+
+	VT = New ValueTable;
+	VT.Columns.Add("type",                  New TypeDescription("Number", New NumberQualifiers(1, 0, AllowedSign.Nonnegative)));
+	VT.Columns.Add("documentID",            New TypeDescription("String", , New StringQualifiers(36)));
+	VT.Columns.Add("date",                  New TypeDescription("Date", , , New DateQualifiers(DateFractions.Date)));
+	VT.Columns.Add("counteragent",          New TypeDescription("String", , New StringQualifiers(36)));
+	VT.Columns.Add("number",                New TypeDescription("String", , New StringQualifiers(20)));
+	VT.Columns.Add("documentSummary",       New TypeDescription("String", , New StringQualifiers(100)));
+	VT.Columns.Add("sum",                   New TypeDescription("Number", New NumberQualifiers(10, 2)));
+	VT.Columns.Add("processed",             New TypeDescription("Boolean"));
+	VT.Columns.Add("conception",            New TypeDescription("String", , New StringQualifiers(36)));
+	VT.Columns.Add("comment",               New TypeDescription("String", , New StringQualifiers(100)));
+	VT.Columns.Add("sumWithoutNds",         New TypeDescription("Number", New NumberQualifiers(10, 2)));
+	VT.Columns.Add("invoiceIncomingNumber", New TypeDescription("String", , New StringQualifiers(100)));
+	VT.Columns.Add("assignedStoreUUID",     New TypeDescription("String", , New StringQualifiers(36)));
+	VT.Columns.Add("conceptionRef");
+	VT.Columns.Add("counteragentRef");
+	VT.Columns.Add("store",                 New TypeDescription("String", , New StringQualifiers(100)));
+	Return VT;
+
+EndFunction
+
+Procedure FillInvoicesFromIIKO(invoicesVT, periodStart, periodEnd, invoicesType, invoicesTypeNumber)
+
+	invoicesRequest = GetInvoices(periodStart, EndOfDay(periodEnd), invoicesType);
+	If Not invoicesRequest.success Then
+		Return;
+	EndIf;
+
+	returnValue = invoicesRequest.returnValue;
+	For Each invoiceData In returnValue Do
+		stores = like_CoreAPI.SafeGet(invoiceData, "assignedStores", New Array);
+		If stores.Count() = 0 Then
+			stores = New Array;
+			stores.Add("");
+		EndIf;
+		For Each storeUUID In stores Do
+			row = invoicesVT.Add();
+			row.documentID            = like_CoreAPI.SafeGet(invoiceData, "documentID", "");
+			row.date                  = like_Common.iikoDateTimeTo1C(like_CoreAPI.SafeGet(invoiceData, "date", ""));
+			row.number                = like_CoreAPI.SafeGet(invoiceData, "number", "");
+			row.type                  = invoicesTypeNumber;
+			row.documentSummary       = like_CoreAPI.SafeGet(invoiceData, "documentSummary", "");
+			row.comment               = like_CoreAPI.SafeGet(invoiceData, "comment", "");
+			row.counteragent          = like_CoreAPI.SafeGet(invoiceData, "counteragent", "");
+			row.conception            = like_CoreAPI.SafeGet(invoiceData, "conception", "");
+			row.sum                   = Number(like_CoreAPI.SafeGet(invoiceData, "sum", "0"));
+			row.sumWithoutNds         = Number(like_CoreAPI.SafeGet(invoiceData, "sumWithoutNds", "0"));
+			row.processed             = like_CoreAPI.SafeGet(invoiceData, "processed", False);
+			row.invoiceIncomingNumber = like_CoreAPI.SafeGet(invoiceData, "invoiceIncomingNumber", "");
+			row.assignedStoreUUID     = storeUUID;
+		EndDo;
+	EndDo;
+
+EndProcedure
+
+Function like_GetInvoicesAndStores(incomingVT, outgoingVT)
+
+	invoicesQuery = New Query("SELECT
+	                          |	iiVT.type AS type,
+	                          |	iiVT.documentID AS documentID,
+	                          |	iiVT.date AS date,
+	                          |	iiVT.counteragent AS counteragent,
+	                          |	iiVT.number AS number,
+	                          |	iiVT.documentSummary AS documentSummary,
+	                          |	iiVT.sum AS sum,
+	                          |	iiVT.processed AS processed,
+	                          |	iiVT.conception AS conception,
+	                          |	iiVT.comment AS comment,
+	                          |	iiVT.sumWithoutNds AS sumWithoutNds,
+	                          |	iiVT.invoiceIncomingNumber AS invoiceIncomingNumber,
+	                          |	iiVT.assignedStoreUUID AS assignedStoreUUID
+	                          |INTO tmpIncomingInvoices
+	                          |FROM
+	                          |	&incomingVT AS iiVT
+	                          |;
+	                          |
+	                          |////////////////////////////////////////////////////////////////////////////////
+	                          |SELECT
+	                          |	oiVT.type AS type,
+	                          |	oiVT.documentID AS documentID,
+	                          |	oiVT.date AS date,
+	                          |	oiVT.counteragent AS counteragent,
+	                          |	oiVT.number AS number,
+	                          |	oiVT.documentSummary AS documentSummary,
+	                          |	oiVT.sum AS sum,
+	                          |	oiVT.processed AS processed,
+	                          |	oiVT.conception AS conception,
+	                          |	oiVT.comment AS comment,
+	                          |	oiVT.sumWithoutNds AS sumWithoutNds,
+	                          |	oiVT.invoiceIncomingNumber AS invoiceIncomingNumber,
+	                          |	oiVT.assignedStoreUUID AS assignedStoreUUID
+	                          |INTO tmpOutgoingInvoices
+	                          |FROM
+	                          |	&outgoingVT AS oiVT
+	                          |;
+	                          |
+	                          |////////////////////////////////////////////////////////////////////////////////
+	                          |SELECT
+	                          |	t.type, t.documentID, t.date, t.counteragent, t.number,
+	                          |	t.documentSummary, t.sum, t.processed, t.conception,
+	                          |	t.comment, t.sumWithoutNds, t.invoiceIncomingNumber,
+	                          |	t.assignedStoreUUID
+	                          |INTO tmpInvoices
+	                          |FROM
+	                          |	tmpIncomingInvoices AS t
+	                          |
+	                          |UNION
+	                          |
+	                          |SELECT
+	                          |	t.type, t.documentID, t.date, t.counteragent, t.number,
+	                          |	t.documentSummary, t.sum, t.processed, t.conception,
+	                          |	t.comment, t.sumWithoutNds, t.invoiceIncomingNumber,
+	                          |	t.assignedStoreUUID
+	                          |FROM
+	                          |	tmpOutgoingInvoices AS t
+	                          |;
+	                          |
+	                          |////////////////////////////////////////////////////////////////////////////////
+	                          |SELECT DISTINCT
+	                          |	iVT.type AS type,
+	                          |	iVT.documentID AS documentID,
+	                          |	iVT.date AS date,
+	                          |	iVT.counteragent AS counteragent,
+	                          |	iVT.number AS number,
+	                          |	iVT.documentSummary AS documentSummary,
+	                          |	iVT.sum AS sum,
+	                          |	iVT.processed AS processed,
+	                          |	iVT.conception AS conception,
+	                          |	CASE
+	                          |		WHEN iVT.comment = ""ОбъектXDTO""
+	                          |				OR iVT.comment = ""XDTODataObject""
+	                          |			THEN """"
+	                          |		ELSE iVT.comment
+	                          |	END AS comment,
+	                          |	iVT.sumWithoutNds AS sumWithoutNds,
+	                          |	CASE
+	                          |		WHEN iVT.invoiceIncomingNumber = ""ОбъектXDTO""
+	                          |				OR iVT.invoiceIncomingNumber = ""XDTODataObject""
+	                          |			THEN """"
+	                          |		ELSE iVT.invoiceIncomingNumber
+	                          |	END AS invoiceIncomingNumber,
+	                          |	Conceptions.Ref AS conceptionRef,
+	                          |	Counteragents.Ref AS counteragentRef
+	                          |INTO Invoices
+	                          |FROM
+	                          |	tmpInvoices AS iVT
+	                          |		LEFT JOIN Catalog.like_conceptions AS Conceptions
+	                          |		ON iVT.conception = Conceptions.UUID
+	                          |		INNER JOIN Catalog.like_users AS Counteragents
+	                          |		ON iVT.counteragent = Counteragents.UUID
+	                          |;
+	                          |
+	                          |////////////////////////////////////////////////////////////////////////////////
+	                          |SELECT
+	                          |	iVT.documentID AS documentID,
+	                          |	Stores.Ref AS storeRef
+	                          |FROM
+	                          |	tmpInvoices AS iVT
+	                          |		INNER JOIN Catalog.like_stores AS Stores
+	                          |		ON iVT.assignedStoreUUID = Stores.UUID");
+	invoicesQuery.SetParameter("incomingVT", incomingVT);
+	invoicesQuery.SetParameter("outgoingVT", outgoingVT);
+	iqResult = invoicesQuery.ExecuteBatchWithIntermediateData();
+	Return New Structure("invoicesVT, storesVT", iqResult[3].Unload(), iqResult[4].Unload());
+
+EndFunction
+
+Procedure like_FillConcatenatedStores(concatenatedStores, storesVT)
+
+	invoicesIDs = storesVT.Copy(, "documentID");
+	invoicesIDs.GroupBy("documentID");
+	For Each strInvoiceID In invoicesIDs Do
+		invoiceStores = storesVT.FindRows(New Structure("documentID", strInvoiceID.documentID));
+		stores = New Array;
+		For Each invoiceStore In invoiceStores Do
+			stores.Add(invoiceStore.storeRef);
+		EndDo;
+		newString = concatenatedStores.Add();
+		newString.documentID = strInvoiceID.documentID;
+		newString.store = StrConcat(stores, ", ");
+	EndDo;
+
+EndProcedure
