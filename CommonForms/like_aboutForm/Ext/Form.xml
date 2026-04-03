@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:pal="http://v8.1c.ru/8.1/data/ui/colors/palette" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.21">
 	<WindowOpeningMode>DontBlock</WindowOpeningMode>
 	<AutoTitle>false</AutoTitle>
@@ -71,65 +71,83 @@
 			<Representation>WeakSeparation</Representation>
 			<ExtendedTooltip name="GroupLicenseExtendedTooltip" id="101"/>
 			<ChildItems>
-				<InputField name="FieldLicenseKey" id="102">
-					<DataPath>LicenseKeyValue</DataPath>
+				<UsualGroup name="GroupLicenseEdit" id="115">
 					<Title>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Ключ лицензии</v8:content>
+							<v8:content>Group license edit</v8:content>
 						</v8:item>
 					</Title>
-					<ContextMenu name="FieldLicenseKeyContextMenu" id="103"/>
-					<ExtendedTooltip name="FieldLicenseKeyExtendedTooltip" id="104">
-						<Title>
-							<v8:item>
-								<v8:lang>ru</v8:lang>
-								<v8:content>UUID-ключ, полученный при покупке или активации демо</v8:content>
-							</v8:item>
-						</Title>
-					</ExtendedTooltip>
-				</InputField>
-				<UsualGroup name="GroupLicenseButtons" id="105">
-					<Group>HorizontalIfPossible</Group>
+					<ToolTip>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Group license edit</v8:content>
+						</v8:item>
+					</ToolTip>
+					<Group>Vertical</Group>
 					<Representation>None</Representation>
 					<ShowTitle>false</ShowTitle>
-					<ExtendedTooltip name="GroupLicenseButtonsExtendedTooltip" id="106"/>
+					<ExtendedTooltip name="GroupLicenseEditExtendedTooltip" id="116"/>
 					<ChildItems>
-						<Button name="ButtonSaveLicenseKey" id="107">
-							<Type>UsualButton</Type>
+						<InputField name="FieldLicenseKey" id="102">
+							<DataPath>LicenseKeyValue</DataPath>
 							<Title>
 								<v8:item>
 									<v8:lang>ru</v8:lang>
-									<v8:content>Сохранить ключ</v8:content>
+									<v8:content>Ключ</v8:content>
 								</v8:item>
 							</Title>
-							<CommandName>Form.Command.SaveLicenseKey</CommandName>
-							<ExtendedTooltip name="ButtonSaveLicenseKeyExtendedTooltip" id="108"/>
-						</Button>
-						<Button name="ButtonRefreshStatus" id="109">
-							<Type>UsualButton</Type>
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Проверить статус</v8:content>
-								</v8:item>
-							</Title>
-							<CommandName>Form.Command.RefreshStatus</CommandName>
-							<ExtendedTooltip name="ButtonRefreshStatusExtendedTooltip" id="110"/>
-						</Button>
+							<TitleLocation>Top</TitleLocation>
+							<ContextMenu name="FieldLicenseKeyContextMenu" id="103"/>
+							<ExtendedTooltip name="FieldLicenseKeyExtendedTooltip" id="104">
+								<Title formatted="false">
+									<v8:item>
+										<v8:lang>ru</v8:lang>
+										<v8:content>UUID-ключ, полученный при покупке или активации демо</v8:content>
+									</v8:item>
+								</Title>
+							</ExtendedTooltip>
+						</InputField>
+						<LabelField name="LicenseStatusText" id="119">
+							<DataPath>LicenseStatusText</DataPath>
+							<TitleLocation>None</TitleLocation>
+							<AutoMaxWidth>false</AutoMaxWidth>
+							<ContextMenu name="LicenseStatusTextContextMenu" id="120"/>
+							<ExtendedTooltip name="LicenseStatusTextExtendedTooltip" id="121"/>
+						</LabelField>
+						<UsualGroup name="GroupLicenseButtons" id="105">
+							<GroupHorizontalAlign>Right</GroupHorizontalAlign>
+							<Group>HorizontalIfPossible</Group>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="GroupLicenseButtonsExtendedTooltip" id="106"/>
+							<ChildItems>
+								<Button name="ButtonSaveLicenseKey" id="107">
+									<Type>UsualButton</Type>
+									<CommandName>Form.Command.SaveLicenseKey</CommandName>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Сохранить</v8:content>
+										</v8:item>
+									</Title>
+									<ExtendedTooltip name="ButtonSaveLicenseKeyExtendedTooltip" id="108"/>
+								</Button>
+								<Button name="ButtonRefreshStatus" id="109">
+									<Type>UsualButton</Type>
+									<CommandName>Form.Command.RefreshStatus</CommandName>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Проверить</v8:content>
+										</v8:item>
+									</Title>
+									<ExtendedTooltip name="ButtonRefreshStatusExtendedTooltip" id="110"/>
+								</Button>
+							</ChildItems>
+						</UsualGroup>
 					</ChildItems>
 				</UsualGroup>
-				<LabelDecoration name="LabelLicenseStatus" id="111">
-					<Title>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content> </v8:content>
-						</v8:item>
-					</Title>
-					<Font ref="style:NormalTextFont" kind="StyleItem"/>
-					<ContextMenu name="LabelLicenseStatusContextMenu" id="112"/>
-					<ExtendedTooltip name="LabelLicenseStatusExtendedTooltip" id="113"/>
-				</LabelDecoration>
 			</ChildItems>
 		</UsualGroup>
 	</ChildItems>
@@ -160,6 +178,30 @@
 				<v8:Type>xs:string</v8:Type>
 				<v8:StringQualifiers>
 					<v8:Length>100</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="LicenseStatusText" id="3">
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>0</v8:Length>
+					<v8:AllowedLength>Variable</v8:AllowedLength>
+				</v8:StringQualifiers>
+			</Type>
+		</Attribute>
+		<Attribute name="LicenseStatusColor" id="4">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>License status color</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:string</v8:Type>
+				<v8:StringQualifiers>
+					<v8:Length>10</v8:Length>
 					<v8:AllowedLength>Variable</v8:AllowedLength>
 				</v8:StringQualifiers>
 			</Type>
