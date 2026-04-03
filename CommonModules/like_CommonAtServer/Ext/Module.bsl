@@ -62,89 +62,60 @@ EndFunction
 // - isGZIP - compression response boolean flag 
 Function GetIikoObject(objectFields) Export
 
-	ParametersString = "";
-	If ObjectFields.Parameters <> Undefined Then
-		ParametersArray = New Array;
-		For each Parameter In ObjectFields.Parameters Do
-			ParametersArray.Add(Parameter.Key + "=" + EncodeString(Parameter.Value, StringEncodingMethod.URLEncoding));
-		EndDo;                                                                
-		ParametersString = "?"+StrConcat(ParametersArray, "&");
-	EndIf;
-	
-	IIKORequest = New HTTPRequest(ObjectFields.Resource+ParametersString, ObjectFields.Headers);
-	If ObjectFields.Body <> Undefined Then
-		IIKORequest.SetBodyFromString(ObjectFields.Body);
-	EndIf;
-	// connection properties
-	cp = ObjectFields.ConProps;
-	If cp.isSecure Then
-		IIKOConnection = New HTTPConnection(cp.host, cp.port, cp.user, cp.password,,, New OpenSSLSecureConnection());
-	Else
-		IIKOConnection = New HTTPConnection(cp.host, cp.port, cp.user, cp.password);
-	EndIf;
-	IIKOResponse = IIKOConnection.CallHTTPMethod(ObjectFields.RequestType, IIKORequest);
-	
-	If IIKOResponse.StatusCode <> 200 Then
-		
-		If IIKOResponse.StatusCode = 403 Then
-			logString = NStr("en = 'Access error:'; ru = 'Ошибка доступа: '") + IIKOResponse.StatusCode;
-			WriteLogEvent("IIKO. transport", EventLogLevel.Error,, IIKOResponse, logString);	
-		Else 	
-			logString = NStr("en = 'The server returned an HTTP code other than HTTP_OK:'; 
-|ru = 'Сервер вернул код HTTP, отличный от успешного: '") + IIKOResponse.StatusCode;
-			WriteLogEvent("IIKO. transport", EventLogLevel.Error,, IIKOResponse, logString);	
-		EndIf;
-		
+	XMLResponse = ExecuteIikoHTTPRequest(objectFields);
+	If XMLResponse = Undefined Then
 		Return Undefined;
 	EndIf;
-	                                                  
-	XMLResponse = ?(IIKOResponse.Headers.Get("content-encoding") = "gzip", 
-	like_Common.DecompressGZIP(IIKOResponse.GetBodyAsBinaryData()), IIKOResponse.GetBodyAsString("UTF-8"));
 	Return XML2XDTO(XMLResponse, ObjectFields.Namespace, ObjectFields.TypeName);
+
 EndFunction
 
 Function GetIikoDate(date1C, ms) Export
-	
+
 	dWriter = New JSONWriter;
 	dWriter.SetString();
 	JSONCfg = New JSONSerializerSettings;
 	JSONCfg.DateSerializationFormat = JSONDateFormat.ISO;
 	JSONCfg.DateWritingVariant = JSONDateWritingVariant.LocalDateWithOffset;
-	WriteJSON(dWriter, date1C, JSONCfg);	
+	WriteJSON(dWriter, date1C, JSONCfg);
 	IIKODate = dWriter.Close();
 	IIKODate = Mid(IIKODate, 2, 25);
 	datePart1 = Left(IIKODate, 19);
 	datePart2 = Right(IIKODate, 6);
 	Return datePart1 + "." + ms + datePart2;
-	
+
 EndFunction
 
-// Аналог GetIikoObject, но возвращает сырую XML-строку вместо XDTO.
-// Используется для передачи ответа IIKO в Laika-сервис.
 Function GetIikoRawXML(objectFields) Export
 
+	Return ExecuteIikoHTTPRequest(objectFields);
+
+EndFunction
+
+Function ExecuteIikoHTTPRequest(objectFields)
+
 	ParametersString = "";
-	If ObjectFields.Parameters <> Undefined Then
+	If objectFields.Parameters <> Undefined Then
 		ParametersArray = New Array;
-		For each Parameter In ObjectFields.Parameters Do
+		For Each Parameter In objectFields.Parameters Do
 			ParametersArray.Add(Parameter.Key + "=" + EncodeString(Parameter.Value, StringEncodingMethod.URLEncoding));
 		EndDo;
 		ParametersString = "?" + StrConcat(ParametersArray, "&");
 	EndIf;
 
-	IIKORequest = New HTTPRequest(ObjectFields.Resource + ParametersString, ObjectFields.Headers);
-	If ObjectFields.Body <> Undefined Then
-		IIKORequest.SetBodyFromString(ObjectFields.Body);
+	IIKORequest = New HTTPRequest(objectFields.Resource + ParametersString, objectFields.Headers);
+	If objectFields.Body <> Undefined Then
+		IIKORequest.SetBodyFromString(objectFields.Body);
 	EndIf;
 
-	cp = ObjectFields.ConProps;
+	cp = objectFields.ConProps;
 	If cp.isSecure Then
 		IIKOConnection = New HTTPConnection(cp.host, cp.port, cp.user, cp.password,,, New OpenSSLSecureConnection());
 	Else
 		IIKOConnection = New HTTPConnection(cp.host, cp.port, cp.user, cp.password);
 	EndIf;
 
-	IIKOResponse = IIKOConnection.CallHTTPMethod(ObjectFields.RequestType, IIKORequest);
+	IIKOResponse = IIKOConnection.CallHTTPMethod(objectFields.RequestType, IIKORequest);
 
 	If IIKOResponse.StatusCode <> 200 Then
 		WriteLogEvent("IIKO. transport", EventLogLevel.Error,, IIKOResponse,

@@ -80,32 +80,20 @@ EndFunction
 //   Error      — Строка (если Success = Ложь)
 Function DoExecute(method, resource, body = Undefined) Export
 
-	result = New Structure("Success, StatusCode, Body, Error", False, 0, "", "");
-
-	Try
-		connection = BuildConnection();
-		request    = BuildRequest(resource, body);
-		response   = connection.CallHTTPMethod(method, request);
-	Except
-		result.Error = NStr("en = 'Connection error: '; ru = 'Ошибка соединения: '") + ErrorDescription();
-		WriteLogEvent("like_CoreAPI", EventLogLevel.Error,,, result.Error);
+	result = DoHTTPRequest(method, resource, body, True);
+	If result.Success Then
 		Return result;
-	EndTry;
+	EndIf;
 
-	result.StatusCode = response.StatusCode;
-	result.Body       = response.GetBodyAsString("UTF-8");
-
-	If response.StatusCode = 200 Then
-		result.Success = True;
-	ElsIf response.StatusCode = 401 Then
+	If result.StatusCode = 401 Then
 		result.Error = NStr("en = 'License key is invalid or missing.';
 		                    |ru = 'Ключ лицензии недействителен или не передан.'");
 		like_Common.UsrMessage(result.Error);
-	ElsIf response.StatusCode = 402 Then
+	ElsIf result.StatusCode = 402 Then
 		result.Error = NStr("en = 'Subscription expired. Renew via Laika settings.';
 		                    |ru = 'Подписка истекла. Продлите через настройки Лайки.'");
 		like_Common.UsrMessage(result.Error);
-	ElsIf response.StatusCode = 403 Then
+	ElsIf result.StatusCode = 403 Then
 		If Find(result.Body, "demo document limit") > 0 Then
 			result.Error = NStr("en = 'Demo document limit reached. Subscribe to continue.';
 			                    |ru = 'Лимит документов в демо-режиме исчерпан. Оформите подписку для продолжения работы.'");
@@ -114,9 +102,6 @@ Function DoExecute(method, resource, body = Undefined) Export
 			                    |ru = 'Эта функция недоступна в вашем тарифе.'");
 		EndIf;
 		like_Common.UsrMessage(result.Error);
-	Else
-		result.Error = NStr("en = 'Server error: '; ru = 'Ошибка сервера: '") + response.StatusCode;
-		WriteLogEvent("like_CoreAPI", EventLogLevel.Error,,, result.Error + " | " + result.Body);
 	EndIf;
 
 	Return result;
@@ -126,21 +111,41 @@ EndFunction
 // Вариант Execute без заголовка License-Key (для /demo/activate).
 Function ExecuteNoAuth(method, resource, body = Undefined) Export
 
+	result = DoHTTPRequest(method, resource, body, False);
+	If result.Success Then
+		Return result;
+	EndIf;
+
+	If result.StatusCode = 409 Then
+		result.Error = NStr("en = 'Demo already activated for this email.';
+		                    |ru = 'Демо-режим уже был активирован для этого email.'");
+		like_Common.UsrMessage(result.Error);
+	EndIf;
+
+	Return result;
+
+EndFunction
+
+Function DoHTTPRequest(method, resource, body, includeAuth)
+
 	result = New Structure("Success, StatusCode, Body, Error", False, 0, "", "");
 
 	Try
 		connection = BuildConnection();
 
-		Headers = New Map;
-		Headers.Insert("Content-Type", "application/json");
-		Headers.Insert("Accept",       "application/json");
-
-		Request = New HTTPRequest(resource, Headers);
-		If body <> Undefined Then
-			Request.SetBodyFromString(body, TextEncoding.UTF8, ByteOrderMarkUse.DontUse);
+		If includeAuth Then
+			request = BuildRequest(resource, body);
+		Else
+			Headers = New Map;
+			Headers.Insert("Content-Type", "application/json");
+			Headers.Insert("Accept",       "application/json");
+			request = New HTTPRequest(resource, Headers);
+			If body <> Undefined Then
+				request.SetBodyFromString(body, TextEncoding.UTF8, ByteOrderMarkUse.DontUse);
+			EndIf;
 		EndIf;
 
-		response = connection.CallHTTPMethod(method, Request);
+		response = connection.CallHTTPMethod(method, request);
 	Except
 		result.Error = NStr("en = 'Connection error: '; ru = 'Ошибка соединения: '") + ErrorDescription();
 		WriteLogEvent("like_CoreAPI", EventLogLevel.Error,,, result.Error);
@@ -150,12 +155,8 @@ Function ExecuteNoAuth(method, resource, body = Undefined) Export
 	result.StatusCode = response.StatusCode;
 	result.Body       = response.GetBodyAsString("UTF-8");
 
-	If response.StatusCode = 200 Or response.StatusCode = 201 Then
+	If response.StatusCode >= 200 And response.StatusCode < 300 Then
 		result.Success = True;
-	ElsIf response.StatusCode = 409 Then
-		result.Error = NStr("en = 'Demo already activated for this email.';
-		                    |ru = 'Демо-режим уже был активирован для этого email.'");
-		like_Common.UsrMessage(result.Error);
 	Else
 		result.Error = NStr("en = 'Server error: '; ru = 'Ошибка сервера: '") + response.StatusCode;
 		WriteLogEvent("like_CoreAPI", EventLogLevel.Error,,, result.Error + " | " + result.Body);
