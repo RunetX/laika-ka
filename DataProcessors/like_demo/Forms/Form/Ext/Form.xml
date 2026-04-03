@@ -61,7 +61,7 @@
 		<Button name="ButtonActivate" id="12">
 			<Type>UsualButton</Type>
 			<DefaultButton>true</DefaultButton>
-			<CommandName>Form.Command.Activate</CommandName>
+			<CommandName>Form.Command.DoActivate</CommandName>
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -115,7 +115,7 @@
 		</Attribute>
 	</Attributes>
 	<Commands>
-		<Command name="Activate" id="1">
+		<Command name="DoActivate" id="1">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
@@ -128,7 +128,7 @@
 					<v8:content>Активировать бесплатный демо-период</v8:content>
 				</v8:item>
 			</ToolTip>
-			<Action>Activate</Action>
+			<Action>DoActivate</Action>
 		</Command>
 	</Commands>
 </Form>

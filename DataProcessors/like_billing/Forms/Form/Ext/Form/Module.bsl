@@ -133,19 +133,9 @@ Procedure GenerateQRAtServer(qrData)
 		Return;
 	EndIf;
 
-	// Генерируем QR-код средствами платформы 1С (8.3.22+).
-	// QRCodeGenerator доступен начиная с платформы 8.3.22.
-	Try
-		generator = New QRCodeGenerator;
-		generator.ErrorCorrectionLevel = QRCodeErrorCorrectionLevel.Medium;
-		qrImage = generator.Generate(qrData, 256, 256);
-		QRPicture = PutToTempStorage(qrImage, UUID);
-	Except
-		// Если платформа не поддерживает QRCodeGenerator — показываем ссылку.
-		WriteLogEvent("like_billing", EventLogLevel.Warning,,,
-			NStr("ru = 'QRCodeGenerator недоступен: '") + ErrorDescription());
-		Items.LabelScanQR.Title = NStr("ru = 'Откройте ссылку в приложении банка: '") + qrData;
-	EndTry;
+	// QR-код: показываем данные для ручного ввода / сканирования.
+	// QRCodeGenerator (платформа 8.3.22+) может быть недоступен.
+	Items.LabelScanQR.Title = qrData;
 EndProcedure
 
 &AtServer

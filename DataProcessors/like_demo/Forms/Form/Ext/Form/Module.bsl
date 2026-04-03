@@ -11,7 +11,7 @@
 // ============================================================
 
 &AtClient
-Procedure Activate(Command)
+Procedure DoActivate(Command)
 
 	If Not ValueIsFilled(Email) Then
 		ShowMessageBox(, NStr("ru = 'Укажите Email.'"));
