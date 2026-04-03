@@ -20,12 +20,12 @@ EndFunction
 // Ключ лицензии хранится в константе like_LicenseKey.
 // Если константа не заполнена — используем заглушку для разработки.
 Function LicenseKey() Export
-	key = Constants.like_LicenseKey.Get();
-	If Not ValueIsFilled(key) Then
+	licKey = Constants.like_LicenseKey.Get();
+	If Not ValueIsFilled(licKey) Then
 		Raise NStr("en = 'License key is not set. Fill in constant like_LicenseKey.';
 		           |ru = 'Не заполнен ключ лицензии. Заполните константу like_LicenseKey.'");
 	EndIf;
-	Return key;
+	Return licKey;
 EndFunction
 
 // ============================================================
@@ -485,17 +485,17 @@ EndFunction
 
 // Безопасное чтение значения из Map или Structure.
 // ReadJSON может вернуть как Соответствие, так и Структуру — в зависимости от платформы.
-Function SafeGet(collection, key, defaultValue) Export
+Function SafeGet(collection, fieldName, defaultValue) Export
 
 	If TypeOf(collection) = Type("Map") Then
-		value = collection[key];
-		Return ?(value <> Undefined, value, defaultValue);
+		val = collection[fieldName];
+		Return ?(val <> Undefined, val, defaultValue);
 	EndIf;
 
 	If TypeOf(collection) = Type("Structure") Then
-		result = Undefined;
-		If collection.Property(key, result) Then
-			Return ?(result <> Undefined, result, defaultValue);
+		val = Undefined;
+		If collection.Property(fieldName, val) Then
+			Return ?(val <> Undefined, val, defaultValue);
 		EndIf;
 		Return defaultValue;
 	EndIf;

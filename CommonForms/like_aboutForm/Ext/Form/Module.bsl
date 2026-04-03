@@ -16,14 +16,13 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	EndIf;
 
 	LicenseKeyValue = Constants.like_LicenseKey.Get();
-	RefreshLicenseStatusAtServer();
+	RefreshLicenseStatusDisplay();
 EndProcedure
 
 &AtServer
-Procedure RefreshLicenseStatusAtServer()
+Procedure RefreshLicenseStatusDisplay()
 	If Not ValueIsFilled(LicenseKeyValue) Then
-		LicenseStatusText = NStr("ru = 'Ключ не установлен'");
-		LicenseStatusColor = "gray";
+		Items.LabelLicenseStatus.Title = NStr("ru = 'Ключ не установлен'");
 		Return;
 	EndIf;
 
@@ -31,37 +30,30 @@ Procedure RefreshLicenseStatusAtServer()
 	If status.Success Then
 		planLabel = Upper(status.Plan);
 		If ValueIsFilled(status.ExpiresAt) Then
-			LicenseStatusText = NStr("ru = 'План: '") + planLabel + NStr("ru = ' | Действует до: '") + Left(status.ExpiresAt, 10);
+			statusText = NStr("ru = 'План: '") + planLabel + NStr("ru = ' | Действует до: '") + Left(status.ExpiresAt, 10);
 		Else
-			LicenseStatusText = NStr("ru = 'План: '") + planLabel + NStr("ru = ' | Бессрочная'");
+			statusText = NStr("ru = 'План: '") + planLabel + NStr("ru = ' | Бессрочная'");
 		EndIf;
 		If status.Plan = "demo" Then
-			LicenseStatusText = LicenseStatusText + NStr("ru = ' | Документов: '") + status.DocCount + "/100";
+			statusText = statusText + NStr("ru = ' | Документов: '") + status.DocCount + "/100";
 		EndIf;
-		LicenseStatusColor = "green";
+		Items.LabelLicenseStatus.Title = statusText;
 	Else
-		LicenseStatusText = NStr("ru = 'Ключ недействителен или сервис недоступен'");
-		LicenseStatusColor = "red";
+		Items.LabelLicenseStatus.Title = NStr("ru = 'Ключ недействителен или сервис недоступен'");
 	EndIf;
 EndProcedure
 
 &AtClient
 Procedure SaveLicenseKey(Command)
-	keyToSave = TrimAll(LicenseKeyValue);
+	licenseKeyToSave = TrimAll(LicenseKeyValue);
 
-	If Not ValueIsFilled(keyToSave) Then
+	If Not ValueIsFilled(licenseKeyToSave) Then
 		ShowMessageBox(, NStr("ru = 'Введите ключ лицензии.'"));
 		Return;
 	EndIf;
 
-	SaveLicenseKeyAtServer(keyToSave);
-	RefreshLicenseStatusAtServer();
-
-	If LicenseStatusColor = "green" Then
-		ShowMessageBox(, NStr("ru = 'Ключ сохранён и проверен.'"));
-	Else
-		ShowMessageBox(, NStr("ru = 'Ключ сохранён, но проверка не прошла. Убедитесь что ключ верный и сервис доступен.'"));
-	EndIf;
+	SaveLicenseKeyAtServer(licenseKeyToSave);
+	RefreshLicenseStatusDisplay();
 EndProcedure
 
 &AtServerNoContext
@@ -71,5 +63,5 @@ EndProcedure
 
 &AtClient
 Procedure RefreshStatus(Command)
-	RefreshLicenseStatusAtServer();
+	RefreshLicenseStatusDisplay();
 EndProcedure
