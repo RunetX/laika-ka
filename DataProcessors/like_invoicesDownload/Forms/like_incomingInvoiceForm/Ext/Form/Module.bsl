@@ -133,6 +133,7 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 		newInvoiceStr.transportInvoiceNumber    = transportNum;
 
 		newInvoiceStr.eid            = like_CoreAPI.SafeGet(invoiceItem, "eid", "");
+		newInvoiceStr.code           = like_CoreAPI.SafeGet(invoiceItem, "code", "");
 		newInvoiceStr.productUUID    = like_CoreAPI.SafeGet(invoiceItem, "productUUID", "");
 		itemAmount                   = Number(like_CoreAPI.SafeGet(invoiceItem, "amount", 0));
 		newInvoiceStr.amount         = itemAmount;
