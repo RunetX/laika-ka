@@ -115,8 +115,8 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	incomingDateStr = like_CoreAPI.SafeGet(d, "incomingDate", "");
 	transportNum    = like_CoreAPI.SafeGet(d, "transportInvoiceNumber", "");
 
-	items = like_CoreAPI.SafeGet(d, "items", New Array);
-	For each invoiceItem In items Do
+	invoiceLines = like_CoreAPI.SafeGet(d, "items", New Array);
+	For each invoiceItem In invoiceLines Do
 
 		newInvoiceStr = invoiceVT.Add();
 
