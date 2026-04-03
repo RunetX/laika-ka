@@ -65,26 +65,33 @@ Function GetDocument(documentId, namespace) Export
 	ObjectFields = like_CommonAtServer.GetObjectFieldsStructure();
 	ObjectFields.ConProps    = ConnectionFields;
 	ObjectFields.Resource    = "/resto/services/document";
-	ObjectFields.Namespace   = namespace;
-	ObjectFields.TypeName    = "result";
 	ObjectFields.RequestType = "POST";
-	Params = New Map;
-	Params.Insert("methodName", "getAbstractDocument");
-	ObjectFields.Parameters  = Params;
 	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
 	ObjectFields.Body        = XMLPackage;
 	ObjectFields.isGZIP      = True;
+	Params = New Map;
+	Params.Insert("methodName", "getAbstractDocument");
+	ObjectFields.Parameters  = Params;
 
-	IIKOObject = like_CommonAtServer.GetIIKOObject(ObjectFields);
-	If IIKOObject.success Then
-		updateItems = IIKOObject.entitiesUpdate.items;
-		If updateItems.Properties().Get("i") <> Undefined Then
-			like_EntitiesAtServer.ExeItems(updateItems.i, ActiveConnection, IIKOObject.entitiesUpdate.revision);
-		EndIf;
-		Return New Structure("success, returnValue", True, IIKOObject.returnValue);
-	Else
-		Return New Structure("success, errorString", False, IIKOObject.errorString);
+	// Получаем сырой XML и отправляем на Go-сервис для парсинга.
+	rawXML = like_CommonAtServer.GetIikoRawXML(ObjectFields);
+	If rawXML = Undefined Then
+		Return New Structure("success, errorString", False,
+			NStr("en = 'Error receiving document from IIKO'; ru = 'Ошибка получения документа из IIKO'"));
 	EndIf;
+
+	parseResult = like_CoreAPI.ParseInvoice(rawXML);
+	If Not parseResult.Success Then
+		Return New Structure("success, errorString", False,
+			NStr("en = 'Error parsing invoice'; ru = 'Ошибка разбора накладной'"));
+	EndIf;
+
+	// Применить сопутствующие обновления справочников.
+	If parseResult.EntityUpsert.Count() > 0 Then
+		like_Adapter.WriteEntities(parseResult.EntityUpsert);
+	EndIf;
+
+	Return New Structure("success, returnValue", True, parseResult.Invoice);
 
 EndFunction
 
