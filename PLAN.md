@@ -167,8 +167,82 @@ IIKO-сервер работает в локальной сети клиента
 
 ## Следующие шаги
 
-- [ ] Убрать заимствование типовой формы ФормаСписка — добавить к��опку "Отправить в IIKO" программно
-- [ ] Тестирование отправки накладных из 1С в IIKO
-- [ ] Тестирование заказов на производство (раздел 6)
-- [ ] Подключение YuKassa (раздел 7)
+## Фаза 8 — Рефакторинг laika-ka
+
+### A. Устранение заимствованных форм (3 документа)
+
+ПриобретениеТоваровУслуг уже переведён на программное создание UI.
+Нужно сделать то же для оставшихся двух + удалить дублирующую обработку.
+
+- [x] ПриобретениеТоваровУслуг — программная кнопка + форма загрузки накладных
+- [ ] A1. РеализацияТоваровУслуг — добавить в `МодификацияКонфигурацииПереопределяемый`, перевести `Send2IIKO`, удалить заимствованную форму
+- [ ] A2. ОтгрузкаТоваровСХранения — аналогично
+- [ ] A3. Удалить `like_invoicesDownload/Forms/like_InvoicesForm` — полностью дублирует `FetchInvoicesList()`
+
+### B. Исправление сломанных форм (XDTO→JSON)
+
+Сервис теперь возвращает JSON, но некоторые формы всё ещё читают XDTO-свойства.
+
+- [ ] B1. `like_outgoingInvoiceForm` — перевести с `d.items.i` / `d.__content` на `SafeGet()`
+- [ ] B2. `like_OrdersForm.GetInvoices()` — убрать проверки `Type("XDTOList")`, читать JSON-массив
+
+### C. Консолидация серверной логики
+
+- [ ] C1. Три `GetRequisites` → одна параметризованная `GetDocumentRequisites(documentsList, docMeta, requisites)`
+- [ ] C2. Три XDTO-билдера → общий `BuildInvoiceXDTO()` с параметрами маппинга
+- [ ] C3. `GetIikoObject`/`GetIikoRawXML` → общий `ExecuteIikoRequest()` для HTTP-механики
+- [ ] C4. `DoExecute`/`ExecuteNoAuth` в `like_CoreAPI` → общий `DoHTTPRequest()`
+
+### D. Безопасность запросов (.Next() без проверки)
+
+- [ ] D1. `like_ConnectionAtServer.GetActiveConnecton()` — `If Not .Next() Return Undefined`
+- [ ] D2. `like_EntitiesAtServer.GetEntitiesVersion()`
+- [ ] D3. `like_InvoicesAtServer.FindByCodeAndConnection()`
+- [ ] D4. `like_Orders.OrdersSettings()`
+
+### E. Удаление мёртвого кода
+
+- [ ] E1. `like_EntitiesAtServer`: `GetXMLEntitiesUpdate()`, `FindByIDAndConnection()` (баг: `like_products.UUID`), `GetExeEntityStructure()`
+- [ ] E2. `like_Orders`: `MobileOrder()`, `OrderDataFromPackage()`, `OrderItemModel()`, `IdStrByRef()`
+- [ ] E3. `like_Common.InsertAttribute()` — заменена на `InsertAttr()`
+- [ ] E4. Дубликат `GetTableWithColumns()` в `like_downloadSalesAndPrepays` → `like_TypesAndDescriptionsAtServer`
+
+### F. Унификация форм справочников
+
+11 идентичных форм списка (22 строки каждая: фильтр по подключению + условное оформление).
+
+- [ ] F1. Выделить `like_CommonAtServer.SetupCatalogListForm(Form)`, заменить 11 форм на однострочный вызов
+
+### G. Тесты (Tester)
+
+- [ ] G1. Unit-тесты чистых функций: `Translit()`, `iikoDateTimeTo1C()`, `SafeGet()`, `MapToJSON()`, `StrValue()`
+- [ ] G2. Серверные тесты: `FetchInvoicesList()`, `WriteEntity()`, `GetDocumentRequisites()`
+- [ ] G3. Регрессия: unsafe `.Next()`, XDTO/JSON в outgoingInvoiceForm
+- [ ] G4. E2E: синхронизация → загрузка накладных → отправка в IIKO
+
+### H. Стиль кода
+
+- [ ] H1. Именование: `getIIKOHeaders` → `GetIIKOHeaders` (PascalCase), убрать смешение ru/en
+- [ ] H2. Опечатка `entitites` — исправить в коде (регистр `like_entititesVersions` в метаданных не переименовать)
+
+---
+
+### Приоритет выполнения
+
+1. **B** (сломанные формы) — баги, блокируют работу
+2. **D** (unsafe Next) — потенциальные падения
+3. **E** (мёртвый код) — простая чистка
+4. **C** (консолидация) — снижает сложность поддержки
+5. **A** (заимствованные формы) — архитектурная задача
+6. **F** (унификация справочников) — простой рефакторинг
+7. **G** (тесты) — на каждом этапе к изменённому коду
+8. **H** (стиль) — в последнюю очередь
+
+---
+
+## Следующие шаги (после рефакторинга)
+
+- [ ] Тестирование отправки накладных из 1С в IIKO (блокер: лицензия IIKO)
+- [ ] Тестирование заказов на производство
+- [ ] Подключение YuKassa
 - [ ] Реализация `like_AdapterУТ` по первому запросу клиента
