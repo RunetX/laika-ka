@@ -78,7 +78,7 @@ EndFunction
 //   StatusCode — Число
 //   Body       — Строка (JSON)
 //   Error      — Строка (если Success = Ложь)
-Function Execute(method, resource, body = Undefined) Export
+Function DoExecute(method, resource, body = Undefined) Export
 
 	result = New Structure("Success, StatusCode, Body, Error", False, 0, "", "");
 
@@ -173,7 +173,7 @@ EndFunction
 // Передаётся в тело запроса к IIKO (/resto/services/update, поле fromRevision).
 Function GetEntitiesRevision() Export
 
-	result = Execute("GET", "/api/v1/entities/revision?licenseKey=" + LicenseKey());
+	result = DoExecute("GET", "/api/v1/entities/revision?licenseKey=" + LicenseKey());
 	If Not result.Success Then
 		Return -1;
 	EndIf;
@@ -194,7 +194,7 @@ Function SyncEntities(rawXML) Export
 	bodyMap.Insert("licenseKey", LicenseKey());
 	bodyMap.Insert("rawXml",     rawXML);
 
-	result = Execute("POST", "/api/v1/entities/sync", MapToJSON(bodyMap));
+	result = DoExecute("POST", "/api/v1/entities/sync", MapToJSON(bodyMap));
 
 	syncResult = New Structure("Success, NewRevision, Upsert", False, -1, New Array);
 	If Not result.Success Then
@@ -229,7 +229,7 @@ Function ParseInvoiceList(rawXML) Export
 	bodyMap.Insert("licenseKey", LicenseKey());
 	bodyMap.Insert("rawXml",     rawXML);
 
-	result = Execute("POST", "/api/v1/invoices/parse-list", MapToJSON(bodyMap));
+	result = DoExecute("POST", "/api/v1/invoices/parse-list", MapToJSON(bodyMap));
 
 	empty = New Structure("Success, Invoices, NewRevision, EntityUpsert",
 		False, New Array, -1, New Array);
@@ -262,7 +262,7 @@ Function ParseInvoice(rawXML) Export
 	bodyMap.Insert("licenseKey", LicenseKey());
 	bodyMap.Insert("rawXml",     rawXML);
 
-	result = Execute("POST", "/api/v1/invoices/parse", MapToJSON(bodyMap));
+	result = DoExecute("POST", "/api/v1/invoices/parse", MapToJSON(bodyMap));
 
 	empty = New Structure("Success, Invoice, NewRevision, EntityUpsert",
 		False, New Map, -1, New Array);
@@ -297,7 +297,7 @@ Function ParseOrder(rawXML) Export
 	bodyMap.Insert("licenseKey", LicenseKey());
 	bodyMap.Insert("rawXml",     rawXML);
 
-	result = Execute("POST", "/api/v1/orders/parse", MapToJSON(bodyMap));
+	result = DoExecute("POST", "/api/v1/orders/parse", MapToJSON(bodyMap));
 
 	empty = New Structure("Success, Order", False, New Map);
 	If Not result.Success Then
@@ -324,7 +324,7 @@ EndFunction
 //   Features   — Соответствие (имя_фичи → Булево)
 Function GetLicenseStatus() Export
 
-	result = Execute("GET", "/api/v1/license/status?licenseKey=" + LicenseKey());
+	result = DoExecute("GET", "/api/v1/license/status?licenseKey=" + LicenseKey());
 
 	status = New Structure("Success, Plan, ExpiresAt, Features, DocCount", False, "", "", New Map, 0);
 	If Not result.Success Then
@@ -362,7 +362,7 @@ Function CreatePayment(period) Export
 	bodyMap = New Map;
 	bodyMap.Insert("period", period);
 
-	result = Execute("POST", "/api/v1/billing/payment", MapToJSON(bodyMap));
+	result = DoExecute("POST", "/api/v1/billing/payment", MapToJSON(bodyMap));
 
 	empty = New Structure("Success, PaymentId, QRCodeData, Amount, Period",
 		False, "", "", "", "");
@@ -391,7 +391,7 @@ EndFunction
 //   PaidAt  — Строка (ISO 8601) или ""
 Function GetPaymentStatus(paymentId) Export
 
-	result = Execute("GET", "/api/v1/billing/payment/" + paymentId + "/status");
+	result = DoExecute("GET", "/api/v1/billing/payment/" + paymentId + "/status");
 
 	empty = New Structure("Success, Status, PaidAt", False, "", "");
 	If Not result.Success Then
