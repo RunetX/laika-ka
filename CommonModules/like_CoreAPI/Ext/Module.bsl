@@ -337,10 +337,10 @@ Function GetLicenseStatus() Export
 	EndIf;
 
 	status.Success   = True;
-	status.Plan      = parsed["plan"];
-	status.ExpiresAt = parsed["expiresAt"];
-	status.Features  = parsed["features"];
-	status.DocCount  = ?(parsed["docCount"] <> Undefined, parsed["docCount"], 0);
+	status.Plan      = SafeGet(parsed, "plan", "");
+	status.ExpiresAt = SafeGet(parsed, "expiresAt", "");
+	status.Features  = SafeGet(parsed, "features", New Map);
+	status.DocCount  = SafeGet(parsed, "docCount", 0);
 	Return status;
 
 EndFunction
@@ -480,5 +480,26 @@ Function MapToJSON(map) Export
 	writer.SetString();
 	WriteJSON(writer, map);
 	Return writer.Close();
+
+EndFunction
+
+// Безопасное чтение значения из Map или Structure.
+// ReadJSON может вернуть как Соответствие, так и Структуру — в зависимости от платформы.
+Function SafeGet(collection, key, defaultValue) Export
+
+	If TypeOf(collection) = Type("Map") Then
+		value = collection[key];
+		Return ?(value <> Undefined, value, defaultValue);
+	EndIf;
+
+	If TypeOf(collection) = Type("Structure") Then
+		result = Undefined;
+		If collection.Property(key, result) Then
+			Return ?(result <> Undefined, result, defaultValue);
+		EndIf;
+		Return defaultValue;
+	EndIf;
+
+	Return defaultValue;
 
 EndFunction
