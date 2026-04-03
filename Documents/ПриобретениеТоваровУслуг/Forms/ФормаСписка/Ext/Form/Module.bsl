@@ -25,7 +25,13 @@ Procedure like_UpdateInvoicesListAtServer()
 		Return;
 	EndIf;
 
-	ValueToFormAttribute(result.invoicesVT, "like_invoicesList");
+	invoicesList = ThisObject["like_invoicesList"];
+	invoicesList.Clear();
+	For Each row In result.invoicesVT Do
+		newRow = invoicesList.Add();
+		FillPropertyValues(newRow, row);
+	EndDo;
+
 	ThisObject["like_sumSum"]          = result.sumSum;
 	ThisObject["like_sumSumWithoutNds"] = result.sumSumWithoutNds;
 	ThisObject["like_count"]           = result.count;
