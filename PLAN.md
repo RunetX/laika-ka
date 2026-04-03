@@ -3,26 +3,27 @@
 ## Архитектурная цель
 
 IIKO-сервер работает в локальной сети клиента — Go-сервис не имеет к нему прямого доступа.
-Бизнес-логика переносится в Go-сервис для защиты от обхода лицензии (1С-код открыт).
+Разделение по размеру данных:
+
+- **Справочники (большой XML, МБ)** — парсятся **локально в 1С** (LAN). На сервис отправляется только revision.
+- **Документы (маленький XML, КБ)** — парсятся **в Go-сервисе** (облако). Защита лицензии.
 
 ```text
-IIKO (LAN)
-    ↓  raw XML  (существующий BSL без изменений)
-   1С  — только сбор данных и запись готовых объектов
-    ↓  POST /api/v1/...  { license_key, raw_xml }
-  Go Service  ← проверяет лицензию, парсит XML, бизнес-логика, ведёт состояние sync
-    ↓  { objects_to_create[], objects_to_update[], new_revision }
-   1С  — записывает готовые объекты в справочники/документы
+Справочники (entity sync):
+  IIKO (LAN) → XML → 1С парсит XDTO → пишет каталоги → POST /entities/persist {revision}
+
+Документы (invoices, orders):
+  IIKO (LAN) → XML → 1С → POST /invoices/parse {rawXml} → Go парсит → 1С пишет документы
 ```
 
 **Что хранит сервис в БД** (нельзя подделать со стороны 1С):
 
 - лицензии и фича-флаги
-- состояние синхронизации: `entity_versions`, `object_matching`, `document_matching`
+- состояние синхронизации: `entity_versions`, `object_matching`
 - платежи
 
 **Адаптерная модель** для разных конфигураций 1С сохраняется: один адаптерный BSL-модуль
-на конфигурацию, общая бизнес-логика — в сервисе.
+на конфигурацию.
 
 ---
 
@@ -38,37 +39,37 @@ IIKO (LAN)
 
 ## Фаза 2 — Перенос бизнес-логики в сервис ✅
 
-1С собирает сырые XML-ответы от IIKO и отправляет их на сервис. Сервис разбирает,
-применяет логику, возвращает готовые структуры для записи в 1С.
+### Синхронизация справочников (локальный парсинг)
 
-### Синхронизация справочников
+Справочники (products, stores, users, departments и др.) — большой XML (мегабайты).
+Парсится **локально в 1С** через XDTO (IIKO в LAN — быстро).
+На сервис отправляется только revision для трекинга состояния.
 
 - [x] Миграция: `entity_versions(license_id, revision)`, `object_matching(license_id, iiko_uuid, catalog_name, revision)`
 - [x] `GET /api/v1/entities/revision` — текущая revision для лицензии (передаётся в IIKO-запрос)
-- [x] `POST /api/v1/entities/sync` — принимает `{ licenseKey, rawXml }`, возвращает `{ newRevision, upsert[] }`
-- [x] `internal/iiko/entities.go` — XML-типы и парсер ответа IIKO
-- [x] `internal/iiko/sync.go` — бизнес-логика: фильтрация по revision, сохранение в БД, формирование ответа для 1С
+- [x] `POST /api/v1/entities/persist` — принимает `{ newRevision, objects[] }`, сохраняет состояние
+- [x] `like_EntitiesAtServer.Update` — IIKO → XDTO → ExeItems (локально) → PersistEntities (на сервис)
+- [x] `like_CoreAPI.PersistEntities` — отправляет revision на сервис после локальной записи
 
-### Документы и накладные
+### Документы и накладные (облачный парсинг)
 
-- [ ] Миграция: `document_matching(license_id, iiko_doc_id, doc_type, data jsonb)`
+Документы (invoices, orders) — маленький XML (килобайты). Парсится **в Go-сервисе**.
+Это защищает лицензию: без валидного ключа документы не обрабатываются.
 
-### 1С-сторона
-
-- [x] Новый общий модуль `like_CoreAPI`: единственное место HTTP-вызовов к сервису, заголовок `License-Key`
-- [x] Константа `like_LicenseKey` для хранения ключа лицензии
-- [x] `like_CommonAtServer.GetIikoRawXML` — вариант `GetIIKOObject`, возвращающий сырой XML вместо XDTO
-- [x] `like_AdapterКА.WriteEntities` — запись объектов в справочники КА по структурам от сервиса
-- [x] `like_EntitiesAtServer.Update` — рефакторинг: IIKO → rawXML → `like_CoreAPI.SyncEntities` → `like_AdapterКА.WriteEntities`
 - [x] `POST /api/v1/invoices/parse-list` — список накладных из rawXML
 - [x] `POST /api/v1/invoices/parse` — одна накладная из rawXML
 - [x] `POST /api/v1/orders/parse` — производственный заказ из rawXML
-- [x] `like_InvoicesAtServer.GetInvoices` — рефакторинг: rawXML → CoreAPI.ParseInvoiceList
-- [x] `like_DocumentAtServer.GetDocumentRawXML` — новый метод, возвращает сырой XML
-- [x] `like_Orders.Order1CFromIiko` — рефакторинг: rawXML → CoreAPI.ParseOrder → AdapterКА
+
+### 1С-сторона
+
+- [x] Общий модуль `like_CoreAPI`: единственное место HTTP-вызовов к сервису, заголовок `License-Key`
+- [x] Константа `like_LicenseKey` для хранения ключа лицензии + ввод через форму "О программе"
+- [x] `like_AdapterКА.WriteEntities` — запись объектов в справочники КА
+- [x] `like_InvoicesAtServer.GetInvoices` — rawXML → CoreAPI.ParseInvoiceList
+- [x] `like_Orders.Order1CFromIiko` — rawXML → CoreAPI.ParseOrder → AdapterКА
 - [x] `like_AdapterКА.CreateMobileOrder` — создание мобильного заказа из структуры сервиса
 
-**Критерий:** все сценарии работают через сервис; без валидного `License-Key` — ничего не работает. ✅
+**Критерий:** справочники синхронизируются локально; документы через сервис; без `License-Key` — ничего не работает. ✅
 
 ---
 

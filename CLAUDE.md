@@ -4,9 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Лайка** — a 1С:Предприятие 8 extension (v0.4.1.4) that integrates 1С "Комплексная автоматизация" with the IIKO restaurant POS system. It syncs master data (products, stores, users) and documents (invoices, orders) bidirectionally.
+**Лайка** — a 1С:Предприятие 8 extension (v0.5) that integrates 1С "Комплексная автоматизация" with the IIKO restaurant POS system. It syncs master data (products, stores, users) and documents (invoices, orders) bidirectionally.
 
-The roadmap calls for extracting all IIKO/business logic into a Go web service, leaving 1С as a thin HTTP client. See the architecture plan discussed in the project for details.
+The system is split into two components:
+- **laika-ka** (this repo) — 1С extension, thin client
+- **laika-service** — Go web service: licensing, billing, document parsing, state tracking
 
 ## Development Environment
 
@@ -14,40 +16,86 @@ This is a **1С extension project** — there are no traditional build scripts o
 
 - Load the extension into Конфигуратор via *Файл → Открыть* (`.cfe`) or connect to a configuration database
 - Source files are XML metadata + `.bsl` modules — edit either in Конфигуратор or directly in the file system
-- The extension targets 1С:Предприятие **8.3.12+**
-- Test by running scenarios in the 1С Enterprise client against a live IIKO server (no automated test framework exists)
+- The extension targets 1С:Предприятие **8.3.17+**
+- Test by running scenarios in the 1С Enterprise client against a live IIKO server
 
 ## Architecture
+
+### What runs where
+
+| Component | Where | What it does |
+|-----------|-------|-------------|
+| **IIKO** | Customer LAN | Source of truth for products, stores, invoices, orders |
+| **1С extension** | Customer LAN | Collects data from IIKO, parses XML locally, writes to 1С catalogs/documents |
+| **Go service** | Cloud (`laika.ui99.ru`) | Licensing, billing, state tracking (revision), document parsing (invoices, orders) |
+
+### Key design principle: split by data size
+
+- **Entity sync (large XML, MBs)** — parsed **locally in 1С**. IIKO returns bulk entity data that stays in the LAN. Only a lightweight revision number is sent to the Go service.
+- **Document parsing (small XML, KBs)** — parsed **in the Go service**. Invoices and orders are small, and keeping parsing in the service protects the license (1С code is open).
+
+```
+Entity sync (catalogs):
+  IIKO (LAN) → XML → 1С parses XDTO → writes catalogs → POST /entities/persist {revision}
+                                                            ↓
+                                                        Go service saves revision
+
+Document processing (invoices, orders):
+  IIKO (LAN) → XML → 1С sends raw XML → POST /invoices/parse or /orders/parse
+                                            ↓
+                                        Go service parses, checks license → returns structured data
+                                            ↓
+                                        1С writes documents
+```
 
 ### Module Responsibilities
 
 | Module | Role |
 |---|---|
-| `like_Common` | Utility functions: GZIP decompression (manual ZIP construction), XML attribute injection, Russian→Latin translit |
-| `like_CommonAtServer` | Low-level primitives: SHA1 hashing for IIKO auth, XDTO↔XML conversion, `GetObjectFieldsStructure` (HTTP request descriptor) |
-| `like_ConnectionAtServer` | Connection catalog queries, entity version initialization, server info bootstrap |
-| `like_EntitiesAtServer` | Delta sync with IIKO: builds `entities_version`-based requests, parses entity response, updates `like_objectMatching` |
-| `like_DocumentAtServer` | Fetches IIKO documents by type/date range, returns raw XDTO structures |
-| `like_InvoicesAtServer` | Maps IIKO invoices → 1С `ПриобретениеТоваровУслуг` / `РеализацияТоваровУслуг` |
-| `like_Orders` | Creates 1С customer orders from IIKO production orders; calls the standard subsystem `МобильноеПриложениеЗаказыКлиентовПереопределяемый` |
-| `like_CreatingObjects` | Builds XDTO packages for writing back to IIKO (e.g. creating invoices) |
-| `like_HTTPConnector` | Full REST client (GET/POST/PUT/PATCH/DELETE/HEAD/OPTIONS) — external library by Vladimir Bondarevskiy (Apache 2.0) |
+| `like_CoreAPI` | **Single HTTP interface to Go service.** All requests go through here. Handles License-Key header, error codes (401/402/403). |
+| `like_Adapter` | Dispatcher: detects config type (КА/УТ), delegates to `like_AdapterКА` or `like_AdapterУТ` |
+| `like_AdapterКА` | КА-specific: `WriteEntities(upsertList)`, `CreateMobileOrder(order, settings)` |
+| `like_EntitiesAtServer` | Delta sync: requests IIKO with `fromRevision`, parses XDTO locally, writes catalogs via Adapter, persists revision to service |
+| `like_InvoicesAtServer` | Invoice sync: gets raw XML from IIKO, sends to service for parsing, writes documents |
+| `like_Orders` | Production orders: raw XML → service → Adapter.CreateMobileOrder |
+| `like_Common` | Utilities: GZIP decompression, XML attribute injection, translit |
+| `like_CommonAtServer` | Low-level: SHA1 for IIKO auth, XDTO↔XML, HTTP to IIKO (`GetIikoObject`, `GetIikoRawXML`) |
+| `like_ConnectionAtServer` | Connection catalog queries, entity version initialization |
+| `like_HTTPConnector` | REST client library (external, Apache 2.0) |
 
-### Key Data Flow
+### Go Service API (laika-service)
+
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /health` | Health check |
+| `GET /api/v1/entities/revision` | Current sync revision for license |
+| `POST /api/v1/entities/persist` | Save revision + object metadata after local sync |
+| `POST /api/v1/invoices/parse-list` | Parse IIKO invoice list XML |
+| `POST /api/v1/invoices/parse` | Parse single IIKO invoice XML |
+| `POST /api/v1/orders/parse` | Parse IIKO production order XML |
+| `GET /api/v1/license/status` | License plan, expiry, features |
+| `POST /api/v1/billing/payment` | Create SBP payment (YuKassa) |
+| `GET /api/v1/billing/payment/{id}/status` | Poll payment status |
+| `POST /api/v1/demo/activate` | Activate 14-day demo (no auth) |
+| `POST /webhook/yukassa` | YuKassa payment callback |
+
+### BSL Reserved Words
+
+1С reserves many English keywords. Avoid these as variable/function names in `.bsl`:
+- `Execute` → use `DoExecute`
+- `Activate` → use `DoActivate`
+- `Key` → use `licKey`, `fieldName`, etc.
+- `Value`, `Type`, `Name` — also reserved in some contexts
+
+### Entity Sync Data Flow
 
 ```
-IIKO Server ←→ like_CommonAtServer (auth, XDTO) ←→ domain modules ←→ 1С documents/catalogs
-                       ↑
-              like_HTTPConnector (transport)
+1. 1С calls GET /entities/revision → gets revision from service
+2. 1С builds XDTO request with fromRevision, sends to IIKO (LAN)
+3. IIKO returns XML with entities delta
+4. 1С parses XDTO locally (ExeItems → FillRefs → write catalogs)
+5. 1С calls POST /entities/persist {newRevision, objects: []} → service saves state
 ```
-
-**Authentication:** SHA1 hash of password sent as `X-Resto-*` headers on every IIKO request.
-
-**GZIP responses:** IIKO compresses responses. `like_Common.DecompressGZIP` manually reconstructs a valid ZIP structure from the raw GZIP stream so 1С's `ZipFileReader` can handle it.
-
-**Object matching:** All IIKO UUIDs are resolved to 1С references via `InformationRegister.like_objectMatching` (keyed on connection + UUID + matching type). Documents use `like_documentsMatching`.
-
-**Entity sync:** Incremental — `like_entititesVersions` stores the last known `entities_version` per connection. Requests include `fromRevision` so IIKO returns only the delta.
 
 ### XDTO Packages
 
@@ -56,14 +104,14 @@ Each IIKO API operation has a corresponding XDTO package under `XDTOPackages/` d
 ### Extension Structure Notes
 
 - Data processors (`DataProcessors/like_*`) are the user-facing entry points — each wraps one import/export scenario with a form
-- The extension adds commands to existing 1С document list forms (`Documents/*/Forms/ListForm`) rather than replacing them
-- `like_connections` catalog holds IIKO server credentials and is the root reference for all other registers
+- The extension adds commands to existing 1С document list forms rather than replacing them
+- `like_connections` catalog holds IIKO server credentials and is the root reference for all registers
+- License key stored in `Constants.like_LicenseKey`, manageable via the About form (`like_aboutForm`)
 
-## Planned Go Web Service
+## Infrastructure
 
-The next major milestone is a Go service that will own all IIKO API calls and business logic. The 1С side will become a thin adapter that:
-1. Reads/writes native 1С objects (via a config-specific adapter module)
-2. Delegates all IIKO communication to `POST/GET /api/v1/...` on the Go service
-3. Displays license/billing status returned by the service
-
-Infrastructure: Docker Compose on the existing home server (Go service + PostgreSQL + Redis + Nginx).
+- **Server:** Windows 10, Docker Desktop (WSL2)
+- **Proxy:** Traefik v3 (file provider), Let's Encrypt
+- **Domain:** `laika.ui99.ru` → Go service (port 8080 via Traefik)
+- **Admin panel:** port 8081, LAN-only (not through Traefik)
+- **Database:** PostgreSQL 16, migrations via goose

@@ -183,33 +183,22 @@ Function GetEntitiesRevision() Export
 
 EndFunction
 
-// Отправляет сырой XML-ответ IIKO на сервис для обработки.
-// Возвращает структуру:
-//   Success     — Булево
-//   NewRevision — Число
-//   Upsert      — Массив структур для записи в 1С (см. like_AdapterКА)
-Function SyncEntities(rawXML) Export
+// Сохраняет состояние синхронизации на сервисе после локального парсинга XML.
+// 1С разбирает XML и записывает справочники самостоятельно (в LAN — быстро),
+// затем отправляет на сервис только revision и список UUID для трекинга.
+//
+// objects — Массив Структур: {uuid, catalog, revision}
+// newRevision — Число (revision из ответа IIKO)
+//
+// Возвращает Булево (успех/неуспех).
+Function PersistEntities(newRevision, objects) Export
 
 	bodyMap = New Map;
-	bodyMap.Insert("licenseKey", LicenseKey());
-	bodyMap.Insert("rawXml",     rawXML);
+	bodyMap.Insert("newRevision", newRevision);
+	bodyMap.Insert("objects",     objects);
 
-	result = DoExecute("POST", "/api/v1/entities/sync", MapToJSON(bodyMap));
-
-	syncResult = New Structure("Success, NewRevision, Upsert", False, -1, New Array);
-	If Not result.Success Then
-		Return syncResult;
-	EndIf;
-
-	parsed = ParseJSON(result.Body);
-	If parsed = Undefined Then
-		Return syncResult;
-	EndIf;
-
-	syncResult.Success     = True;
-	syncResult.NewRevision = parsed["newRevision"];
-	syncResult.Upsert      = parsed["upsert"];
-	Return syncResult;
+	result = DoExecute("POST", "/api/v1/entities/persist", MapToJSON(bodyMap));
+	Return result.Success;
 
 EndFunction
 

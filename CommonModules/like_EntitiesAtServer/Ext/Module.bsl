@@ -484,24 +484,27 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
 	ObjectFields.Body        = XMLPackage;
 	ObjectFields.isGZIP      = True;
+	ObjectFields.Namespace   = "https://izi.cloud/iiko/reading/entitiesUpdate";
+	ObjectFields.TypeName    = "entitiesUpdateResponse";
 	Params = New Map;
 	Params.Insert("methodName", "waitEntitiesUpdate");
 	ObjectFields.Parameters  = Params;
 
-	// 3. Получить сырой XML-ответ от IIKO (не разбирать — передать сервису)
-	rawXML = like_CommonAtServer.GetIikoRawXML(ObjectFields);
-	If rawXML = Undefined Then
+	// 3. Получить XDTO-ответ от IIKO и разобрать локально (в LAN — быстро)
+	IIKOResponse = like_CommonAtServer.GetIikoObject(ObjectFields);
+	If IIKOResponse = Undefined Then
 		Return;
 	EndIf;
 
-	// 4. Сервис разбирает XML, применяет бизнес-логику, возвращает список объектов
-	syncResult = like_CoreAPI.SyncEntities(rawXML);
-	If Not syncResult.Success Then
-		Return;
-	EndIf;
+	newRevision = IIKOResponse.entitiesUpdate.revision;
+	updateItems = IIKOResponse.entitiesUpdate.items.i;
 
-	// 5. Адаптер записывает готовые объекты в справочники
-	like_Adapter.WriteEntities(syncResult.Upsert);
+	// 4. Разобрать сущности и записать в справочники 1С
+	ExeItems(updateItems, ActiveConnection, newRevision);
+
+	// 5. Сохранить состояние на сервисе (только revision + UUID для трекинга)
+	persistObjects = BuildPersistObjects(ActiveConnection, newRevision);
+	like_CoreAPI.PersistEntities(newRevision, persistObjects);
 
 EndProcedure
 
@@ -604,6 +607,18 @@ Procedure ExeItems(updateItems, connection, revision) Export
 	SetEntititesVersion(connection, revision);	
 	
 EndProcedure
+
+// Собирает массив объектов для отправки на сервис (трекинг состояния).
+// Вызывается после ExeItems — читает то, что было обработано.
+Function BuildPersistObjects(connection, revision)
+
+	// Для простоты — отправляем только revision без списка объектов.
+	// Сервис обновит entity_versions. Object_matching на сервисе
+	// используется только для фильтрации при облачном парсинге (sync),
+	// а при локальном парсинге фильтрация делается в 1С по revision в справочниках.
+	Return New Array;
+
+EndFunction
 
 Procedure BackgroundUpdate() Export
 	
