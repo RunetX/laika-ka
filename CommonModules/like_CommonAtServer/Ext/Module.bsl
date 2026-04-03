@@ -6,6 +6,29 @@
 // https://creativecommons.org/licenses/by/4.0/legalcode
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
+Procedure SetupCatalogListForm(List) Export
+
+	ActiveConnection = like_ConnectionAtServer.GetActiveConnecton();
+
+	ListFilter = List.Filter.Items.Add(Type("DataCompositionFilterItem"));
+	ListFilter.LeftValue = New DataCompositionField("connection");
+	ListFilter.ComparisonType = DataCompositionComparisonType.InHierarchy;
+	ListFilter.RightValue = ActiveConnection;
+
+	AppearanceItem = List.ConditionalAppearance.Items.Add();
+	AppearanceItem.Appearance.SetParameterValue("Visible", False);
+
+	AppearanceItem = List.ConditionalAppearance.Items.Add();
+	AppearanceItem.Appearance.SetParameterValue("Visible", True);
+	AppearanceItem.Appearance.SetParameterValue("Show", True);
+
+	VisibilityFilter = AppearanceItem.Filter.Items.Add(Type("DataCompositionFilterItem"));
+	VisibilityFilter.LeftValue = New DataCompositionField("connection");
+	VisibilityFilter.ComparisonType = DataCompositionComparisonType.InHierarchy;
+	VisibilityFilter.RightValue = ActiveConnection;
+
+EndProcedure
+
 Function GetHash(str) Export
 	Hash = New DataHashing(HashFunction.SHA1);
 	Hash.Append(Str);
