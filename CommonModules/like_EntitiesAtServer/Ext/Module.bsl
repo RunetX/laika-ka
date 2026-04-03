@@ -484,23 +484,30 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 	ObjectFields.Headers     = like_Common.getIIKOHeaders(ConnectionFields);
 	ObjectFields.Body        = XMLPackage;
 	ObjectFields.isGZIP      = True;
-	ObjectFields.Namespace   = "https://izi.cloud/iiko/reading/entitiesUpdate";
-	ObjectFields.TypeName    = "entitiesUpdateResponse";
+	If MajorVersion(ConnectionFields.version) < 9 Then
+		ObjectFields.Namespace = "https://izi.cloud/iiko/reading/entitiesUpdateResponse";
+	Else
+		ObjectFields.Namespace = "https://izi.cloud/iiko/reading/entitiesUpdateResponse9";
+	EndIf;
+	ObjectFields.TypeName    = "result";
 	Params = New Map;
 	Params.Insert("methodName", "waitEntitiesUpdate");
 	ObjectFields.Parameters  = Params;
 
 	// 3. Получить XDTO-ответ от IIKO и разобрать локально (в LAN — быстро)
-	IIKOResponse = like_CommonAtServer.GetIikoObject(ObjectFields);
-	If IIKOResponse = Undefined Then
+	IIKOObject = like_CommonAtServer.GetIikoObject(ObjectFields);
+	If IIKOObject = Undefined Then
 		Return;
 	EndIf;
 
-	newRevision = IIKOResponse.entitiesUpdate.revision;
-	updateItems = IIKOResponse.entitiesUpdate.items.i;
+	If Not IIKOObject.success Then
+		Return;
+	EndIf;
+
+	newRevision = IIKOObject.entitiesUpdate.revision;
 
 	// 4. Разобрать сущности и записать в справочники 1С
-	ExeItems(updateItems, ActiveConnection, newRevision);
+	ExeItems(IIKOObject.entitiesUpdate.items.i, ActiveConnection, newRevision);
 
 	// 5. Сохранить состояние на сервисе (только revision + UUID для трекинга)
 	persistObjects = BuildPersistObjects(ActiveConnection, newRevision);
