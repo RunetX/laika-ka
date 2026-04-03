@@ -6,25 +6,29 @@ EndProcedure
 &AtServer
 Procedure like_UpdateInvoicesListAtServer()
 
-	If Not (like_loadIncomingInvoices Or like_loadOutgoingInvoices) Then
+	loadIncoming = ThisObject["like_loadIncomingInvoices"];
+	loadOutgoing = ThisObject["like_loadOutgoingInvoices"];
+
+	If Not (loadIncoming Or loadOutgoing) Then
 		Message(NStr("en = 'Check any invoice type to load'; ru = 'Для загрузки выберите хотя бы один тип накладных'"));
 		Return;
 	EndIf;
 
+	periodVal = ThisObject["like_period"];
 	result = like_InvoicesAtServer.FetchInvoicesList(
-		like_period.НачалоПериода,
-		like_period.КонецПериода,
-		like_loadIncomingInvoices,
-		like_loadOutgoingInvoices);
+		periodVal.StartDate,
+		periodVal.EndDate,
+		loadIncoming,
+		loadOutgoing);
 
 	If result = Undefined Then
 		Return;
 	EndIf;
 
-	ЗначениеВРеквизитФормы(result.invoicesVT, "like_invoicesList");
-	like_sumSum          = result.sumSum;
-	like_sumSumWithoutNds = result.sumSumWithoutNds;
-	like_count           = result.count;
+	ValueToFormAttribute(result.invoicesVT, "like_invoicesList");
+	ThisObject["like_sumSum"]          = result.sumSum;
+	ThisObject["like_sumSumWithoutNds"] = result.sumSumWithoutNds;
+	ThisObject["like_count"]           = result.count;
 
 EndProcedure
 
