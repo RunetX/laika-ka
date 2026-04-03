@@ -18,7 +18,7 @@ Procedure RunTestsAtServer()
 		newRow = results.Add();
 		newRow.testName = testName;
 		Try
-			processor[testName]();
+			Execute("processor." + testName + "()");
 			newRow.result = "OK";
 			newRow.error  = "";
 			passed = passed + 1;
