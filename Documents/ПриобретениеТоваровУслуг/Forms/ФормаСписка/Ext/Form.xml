@@ -17,9 +17,6 @@
 	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
 		<Autofill>false</Autofill>
 	</AutoCommandBar>
-	<Events>
-		<Event name="NotificationProcessing" callType="After">like_NotificationProcessingAfter</Event>
-	</Events>
 	<ChildItems>
 		<UsualGroup name="InvoicesGroup" id="177">
 			<Title>
@@ -461,11 +458,6 @@
 								<Type>CommandBarButton</Type>
 								<CommandName>0</CommandName>
 								<ExtendedTooltip name="СписокДокументыПоступленияСправкаExtendedTooltip" id="113"/>
-							</Button>
-							<Button name="СписокДокументыПоступленияОтправитьВIIKO" id="175">
-								<Type>CommandBarButton</Type>
-								<CommandName>Form.Command.Send2IIKO</CommandName>
-								<ExtendedTooltip name="СписокДокументыПоступленияОтправитьВIIKOExtendedTooltip" id="176"/>
 							</Button>
 						</ChildItems>
 					</AutoCommandBar>
@@ -993,26 +985,6 @@
 		</Attribute>
 	</Attributes>
 	<Commands>
-		<Command name="Send2IIKO" id="1000000">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Отправить в IIKO</v8:content>
-				</v8:item>
-			</Title>
-			<ToolTip>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Send2 IIKO</v8:content>
-				</v8:item>
-			</ToolTip>
-			<Picture>
-				<xr:Ref>StdPicture.AppearanceUpArrowGreen</xr:Ref>
-				<xr:LoadTransparent>true</xr:LoadTransparent>
-			</Picture>
-			<Action callType="After">like_Send2IIKOAfter</Action>
-			<Representation>TextPicture</Representation>
-		</Command>
 		<Command name="UpdateInvoicesList" id="1000001">
 			<Title>
 				<v8:item>

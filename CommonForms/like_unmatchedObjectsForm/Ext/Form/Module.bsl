@@ -6,6 +6,10 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	documentsListRef = ThisForm.Parameters.documentsListRef;
 	documentsList    = GetFromTempStorage(ThisForm.Parameters.documentsListRef);
 
+	If Parameters.Property("sendAfterMatch") Then
+		sendAfterMatch = Parameters.sendAfterMatch;
+	EndIf;
+
 	If documentsList.Count() = 0 Then
 		Return;
 	EndIf;
@@ -121,6 +125,11 @@ Procedure SaveValues(Command)
 	EndIf;
 
 	SaveValuesAtServer();
+
+	If sendAfterMatch Then
+		SendInvoicesAfterMatchAtServer(documentsListRef);
+	EndIf;
+
 	ThisForm.Close();
 	Notify("EndOfMatching", documentsListRef);
 
@@ -184,6 +193,23 @@ EndProcedure
 #EndRegion
 
 #Region Private
+
+&AtServerNoContext
+Procedure SendInvoicesAfterMatchAtServer(documentsListRef)
+
+	documentsList = GetFromTempStorage(documentsListRef);
+
+	If documentsList.Count() = 0 Then
+		Return;
+	EndIf;
+
+	If TypeOf(documentsList[0]) = Type("DocumentRef.РеализацияТоваровУслуг") Then
+		like_InvoicesAtServer.SendSalesInvoices2IIKO(documentsList);
+	Else
+		like_InvoicesAtServer.SendInvoices2IIKO(documentsList);
+	EndIf;
+
+EndProcedure
 
 &AtServerNoContext
 Function GetUnmatchedItemsByType(unmatchedObjects, typeFilter, matchingType = Undefined)

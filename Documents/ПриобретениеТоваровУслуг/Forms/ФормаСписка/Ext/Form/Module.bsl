@@ -1,33 +1,4 @@
-﻿&AtClient
-Procedure like_Send2IIKOAfter(Command)
-	
-	invoicesArray = New Array;
-	For Each selectedRow In Items.СписокДокументыПоступления.SelectedRows Do 
-		invoicesArray.Add(selectedRow);
-	EndDo;
-	
-	unmatchedCount = like_DocumentAtServer.GetUnmatchedCount(invoicesArray);
-	
-	If unmatchedCount > 0 Then
-		invoicesListRef = PutToTempStorage(invoicesArray, ThisForm.UUID);
-		OpenForm("CommonForm.like_unmatchedObjectsForm", New Structure("documentsListRef", invoicesListRef));
-	Else
-		like_InvoicesAtServer.SendInvoices2IIKO(invoicesArray);
-	EndIf;
-	
-EndProcedure
-
-&AtClient
-Procedure like_NotificationProcessingAfter(EventName, Parameter, Source)
-	
-	If EventName = "EndOfMatching" And ValueIsFilled(Parameter) Then
-		invoicesArray = GetFromTempStorage(Parameter);
-		like_InvoicesAtServer.SendInvoices2IIKO(invoicesArray);
-	EndIf;
-	
-EndProcedure
-
-&AtServer
+﻿&AtServer
 Function GetInvoicesAndStores(incomingInvoicesValueTable, outgoingInvoicesValueTable)
 	
 	invoicesQuery = New Query("SELECT

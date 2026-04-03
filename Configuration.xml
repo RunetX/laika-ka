@@ -107,6 +107,8 @@
 			<CommonPicture>like_aboutPicture</CommonPicture>
 			<CommonPicture>ЗаполнитьПоШаблону</CommonPicture>
 			<CommonPicture>Отчеты</CommonPicture>
+			<CommonModule>МодификацияКонфигурацииПереопределяемый</CommonModule>
+			<CommonModule>МодификацияКонфигурацииКлиентПереопределяемый</CommonModule>
 			<CommonModule>like_Common</CommonModule>
 			<CommonModule>like_CommonAtServer</CommonModule>
 			<CommonModule>like_ConnectionAtServer</CommonModule>
