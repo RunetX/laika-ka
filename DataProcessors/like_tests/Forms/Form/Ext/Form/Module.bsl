@@ -7,7 +7,7 @@ EndProcedure
 Procedure RunTestsAtServer()
 
 	results.Clear();
-	processor = FormAttributeToValue("Object");
+	processor = DataProcessors.like_tests.Create();
 	testsList = New Array;
 	processor.ЗаполнитьНаборТестов(testsList);
 
