@@ -238,21 +238,39 @@ EndProcedure
 
 &AtServer
 Procedure GetInvoices(invoicesValueTable, invoicesType, invoicesTypeNumber)
-	
+
 	invoicesRequest = like_InvoicesAtServer.GetInvoices(period.StartDate, EndOfDay(period.EndDate), invoicesType);
 	If invoicesRequest.success Then
-		returnValue = invoicesRequest.returnValue;	
-		If TypeOf(returnValue) = Type("XDTOList") Then
-			For each iiko_invoice In returnValue Do
-				FillCurrentString(invoicesValueTable, iiko_invoice, invoicesTypeNumber);
-			EndDo;	
-		ElsIf TypeOf(returnValue) = Type("XDTODataObject") Then
-			FillCurrentString(invoicesValueTable, returnValue, invoicesTypeNumber);	
-		EndIf;
+		returnValue = invoicesRequest.returnValue;
+		For each invoiceData In returnValue Do
+			// Сервис возвращает массив Map из JSON с полем assignedStores (массив UUID складов).
+			// Для каждого склада создаём отдельную строку (как делал FillCurrentString для XDTO).
+			stores = like_CoreAPI.SafeGet(invoiceData, "assignedStores", New Array);
+			If stores.Count() = 0 Then
+				stores = New Array;
+				stores.Add("");
+			EndIf;
+			For each storeUUID In stores Do
+				row = invoicesValueTable.Add();
+				row.documentID            = like_CoreAPI.SafeGet(invoiceData, "documentID", "");
+				row.date                  = like_Common.iikoDateTimeTo1C(like_CoreAPI.SafeGet(invoiceData, "date", ""));
+				row.number                = like_CoreAPI.SafeGet(invoiceData, "number", "");
+				row.type                  = invoicesTypeNumber;
+				row.documentSummary       = like_CoreAPI.SafeGet(invoiceData, "documentSummary", "");
+				row.comment               = like_CoreAPI.SafeGet(invoiceData, "comment", "");
+				row.counteragent          = like_CoreAPI.SafeGet(invoiceData, "counteragent", "");
+				row.conception            = like_CoreAPI.SafeGet(invoiceData, "conception", "");
+				row.sum                   = Number(like_CoreAPI.SafeGet(invoiceData, "sum", "0"));
+				row.sumWithoutNds         = Number(like_CoreAPI.SafeGet(invoiceData, "sumWithoutNds", "0"));
+				row.processed             = like_CoreAPI.SafeGet(invoiceData, "processed", False);
+				row.invoiceIncomingNumber = like_CoreAPI.SafeGet(invoiceData, "invoiceIncomingNumber", "");
+				row.assignedStoreUUID     = storeUUID;
+			EndDo;
+		EndDo;
 	Else
 		Message(invoicesRequest.errorString);
 	EndIf;
-	
+
 EndProcedure
 
 &AtServer
