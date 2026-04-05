@@ -53,7 +53,7 @@
 			<Synonym>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Лайка</v8:content>
+					<v8:content>Лайка для КА</v8:content>
 				</v8:item>
 			</Synonym>
 			<Comment/>
@@ -67,7 +67,7 @@
 			</UsePurposes>
 			<ScriptVariant>English</ScriptVariant>
 			<Vendor>Тян Семен Сергеевич</Vendor>
-			<Version>0.4</Version>
+			<Version>0.4.1</Version>
 			<Caption/>
 			<ShortCaption/>
 			<DefaultLanguage>Language.Русский</DefaultLanguage>
@@ -96,7 +96,6 @@
 					<v8:content>https://mu7.ru/лайка/</v8:content>
 				</v8:item>
 			</ConfigurationInformationAddress>
-			<InterfaceCompatibilityMode>TaxiEnableVersion8_2</InterfaceCompatibilityMode>
 			<CompatibilityMode>Version8_3_17</CompatibilityMode>
 		</Properties>
 		<ChildObjects>
@@ -117,13 +116,13 @@
 			<CommonModule>like_EntitiesAtClient</CommonModule>
 			<CommonModule>like_EntitiesAtServer</CommonModule>
 			<CommonModule>like_GlobalAtClient</CommonModule>
+			<CommonModule>like_HTTPConnector</CommonModule>
 			<CommonModule>like_InvoicesAtServer</CommonModule>
 			<CommonModule>like_Orders</CommonModule>
 			<CommonModule>like_OrdersServerCall</CommonModule>
 			<CommonModule>like_SQLRequestsAtServer</CommonModule>
 			<CommonModule>like_StandartSubsystemsAtClient</CommonModule>
 			<CommonModule>like_TypesAndDescriptionsAtServer</CommonModule>
-			<CommonModule>like_HTTPConnector</CommonModule>
 			<XDTOPackage>like_commonTypes</XDTOPackage>
 			<XDTOPackage>like_customers</XDTOPackage>
 			<XDTOPackage>like_entitiesStore</XDTOPackage>
@@ -170,18 +169,18 @@
 			<Enum>like_productTypes</Enum>
 			<Enum>like_serverStates</Enum>
 			<Enum>like_supplierTypes</Enum>
+			<Enum>ВариантыОформленияПродажи</Enum>
 			<Enum>СтавкиНДС</Enum>
 			<Enum>СтатусыРеализацийТоваровУслуг</Enum>
-			<Enum>ВариантыОформленияПродажи</Enum>
 			<DataProcessor>like_clearData</DataProcessor>
+			<DataProcessor>like_downloadSalesAndPrepays</DataProcessor>
 			<DataProcessor>like_entititesUpdate</DataProcessor>
 			<DataProcessor>like_invoicesDownload</DataProcessor>
-			<DataProcessor>like_downloadSalesAndPrepays</DataProcessor>
 			<DataProcessor>like_productionOrdersDownload</DataProcessor>
 			<InformationRegister>like_customersRevisions</InformationRegister>
+			<InformationRegister>like_documentsMatching</InformationRegister>
 			<InformationRegister>like_entititesVersions</InformationRegister>
 			<InformationRegister>like_objectMatching</InformationRegister>
-			<InformationRegister>like_documentsMatching</InformationRegister>
 			<InformationRegister>like_ordersSettings</InformationRegister>
 		</ChildObjects>
 	</Configuration>

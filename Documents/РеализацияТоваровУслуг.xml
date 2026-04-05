@@ -139,7 +139,7 @@
 							</Type>
 						</Properties>
 					</Attribute>
-					<Attribute uuid="5ac990c5-4d6d-4e4f-adf8-9dc5e335d18f">
+					<Attribute uuid="b57d6e57-e1bb-46ef-868c-f732eba30ca5">
 						<InternalInfo/>
 						<Properties>
 							<ObjectBelonging>Adopted</ObjectBelonging>
@@ -147,7 +147,7 @@
 							<Comment/>
 							<ExtendedConfigurationObject>1015a569-f8d5-4124-8798-aa6a1da9811d</ExtendedConfigurationObject>
 							<Type>
-								<v8:TypeId>441782ef-91e5-4d8e-ab5c-305e4fac0f4f</v8:TypeId>
+								<v8:Type>cfg:CatalogRef.СтавкиНДС</v8:Type>
 							</Type>
 						</Properties>
 					</Attribute>

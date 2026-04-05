@@ -151,30 +151,6 @@
 							</Type>
 						</Properties>
 					</Attribute>
-					<Attribute uuid="1617cea4-7d07-4dd8-a0ca-904019731e9a">
-						<InternalInfo/>
-						<Properties>
-							<ObjectBelonging>Adopted</ObjectBelonging>
-							<Name>УдалитьСтавкаНДСНовая</Name>
-							<Comment/>
-							<ExtendedConfigurationObject>27536598-47cf-47e0-926e-862130f15e81</ExtendedConfigurationObject>
-							<Type>
-								<v8:Type>cfg:CatalogRef.СтавкиНДС</v8:Type>
-							</Type>
-						</Properties>
-					</Attribute>
-					<Attribute uuid="dc459788-9b04-4435-9c78-395917f6031c">
-						<InternalInfo/>
-						<Properties>
-							<ObjectBelonging>Adopted</ObjectBelonging>
-							<Name>УдалитьСуммаНДС</Name>
-							<Comment/>
-							<ExtendedConfigurationObject>dffff992-1436-493f-a7d9-f6d18eb31874</ExtendedConfigurationObject>
-							<Type>
-								<v8:TypeSet>cfg:DefinedType.ДенежнаяСуммаНеотрицательная</v8:TypeSet>
-							</Type>
-						</Properties>
-					</Attribute>
 				</ChildObjects>
 			</TabularSection>
 		</ChildObjects>
