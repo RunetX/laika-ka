@@ -80,7 +80,8 @@ Function GetDocument(documentId, namespace) Export
 			NStr("en = 'Error receiving document from IIKO'; ru = 'Ошибка получения документа из IIKO'"));
 	EndIf;
 
-	parseResult = like_CoreAPI.ParseInvoice(rawXML);
+	connectionID = String(ActiveConnection.UUID());
+	parseResult = like_CoreAPI.ParseInvoice(rawXML, connectionID);
 	If Not parseResult.Success Then
 		Return New Structure("success, errorString", False,
 			NStr("en = 'Error parsing invoice'; ru = 'Ошибка разбора накладной'"));

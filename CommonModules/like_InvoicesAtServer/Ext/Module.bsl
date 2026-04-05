@@ -54,7 +54,8 @@ Function GetInvoices(dateFrom, dateTo, docType) Export
 	EndIf;
 
 	// 2. Разобрать на сервисе — бизнес-логика там
-	parseResult = like_CoreAPI.ParseInvoiceList(rawXML);
+	connectionID = String(ActiveConnection.UUID());
+	parseResult = like_CoreAPI.ParseInvoiceList(rawXML, connectionID);
 	If Not parseResult.Success Then
 		Return New Structure("success, errorString", False,
 			NStr("en = 'No invoices '; ru = 'Нет накладных типа '") + docType);

@@ -32,12 +32,15 @@ EndFunction
 // НИЗКОУРОВНЕВЫЙ HTTP
 // ============================================================
 
-Function BuildRequest(resource, body = Undefined) Export
+Function BuildRequest(resource, body = Undefined, connectionID = "") Export
 
 	Headers = New Map;
 	Headers.Insert("Content-Type", "application/json");
 	Headers.Insert("Accept",       "application/json");
 	Headers.Insert("License-Key",  LicenseKey());
+	If ValueIsFilled(connectionID) Then
+		Headers.Insert("X-Connection-Id", connectionID);
+	EndIf;
 
 	Request = New HTTPRequest(resource, Headers);
 	If body <> Undefined Then
@@ -78,9 +81,9 @@ EndFunction
 //   StatusCode — Число
 //   Body       — Строка (JSON)
 //   Error      — Строка (если Success = Ложь)
-Function DoExecute(method, resource, body = Undefined) Export
+Function DoExecute(method, resource, body = Undefined, connectionID = "") Export
 
-	result = DoHTTPRequest(method, resource, body, True);
+	result = DoHTTPRequest(method, resource, body, True, connectionID);
 	If result.Success Then
 		Return result;
 	EndIf;
@@ -126,7 +129,7 @@ Function ExecuteNoAuth(method, resource, body = Undefined) Export
 
 EndFunction
 
-Function DoHTTPRequest(method, resource, body, includeAuth)
+Function DoHTTPRequest(method, resource, body, includeAuth, connectionID = "")
 
 	result = New Structure("Success, StatusCode, Body, Error", False, 0, "", "");
 
@@ -134,7 +137,7 @@ Function DoHTTPRequest(method, resource, body, includeAuth)
 		connection = BuildConnection();
 
 		If includeAuth Then
-			request = BuildRequest(resource, body);
+			request = BuildRequest(resource, body, connectionID);
 		Else
 			Headers = New Map;
 			Headers.Insert("Content-Type", "application/json");
@@ -172,9 +175,9 @@ EndFunction
 
 // Возвращает текущую revision с сервера.
 // Передаётся в тело запроса к IIKO (/resto/services/update, поле fromRevision).
-Function GetEntitiesRevision() Export
+Function GetEntitiesRevision(connectionID = "") Export
 
-	result = DoExecute("GET", "/api/v1/entities/revision?licenseKey=" + LicenseKey());
+	result = DoExecute("GET", "/api/v1/entities/revision?licenseKey=" + LicenseKey(),, connectionID);
 	If Not result.Success Then
 		Return -1;
 	EndIf;
@@ -192,13 +195,13 @@ EndFunction
 // newRevision — Число (revision из ответа IIKO)
 //
 // Возвращает Булево (успех/неуспех).
-Function PersistEntities(newRevision, objects) Export
+Function PersistEntities(newRevision, objects, connectionID = "") Export
 
 	bodyMap = New Map;
 	bodyMap.Insert("newRevision", newRevision);
 	bodyMap.Insert("objects",     objects);
 
-	result = DoExecute("POST", "/api/v1/entities/persist", MapToJSON(bodyMap));
+	result = DoExecute("POST", "/api/v1/entities/persist", MapToJSON(bodyMap), connectionID);
 	Return result.Success;
 
 EndFunction
@@ -213,13 +216,13 @@ EndFunction
 //   Invoices     — Массив Соответствий (строки для табличной части формы)
 //   NewRevision  — Число
 //   EntityUpsert — Массив (передать в like_AdapterКА.WriteEntities)
-Function ParseInvoiceList(rawXML) Export
+Function ParseInvoiceList(rawXML, connectionID = "") Export
 
 	bodyMap = New Map;
 	bodyMap.Insert("licenseKey", LicenseKey());
 	bodyMap.Insert("rawXml",     rawXML);
 
-	result = DoExecute("POST", "/api/v1/invoices/parse-list", MapToJSON(bodyMap));
+	result = DoExecute("POST", "/api/v1/invoices/parse-list", MapToJSON(bodyMap), connectionID);
 
 	empty = New Structure("Success, Invoices, NewRevision, EntityUpsert",
 		False, New Array, -1, New Array);
@@ -246,13 +249,13 @@ EndFunction
 //   Invoice      — Соответствие (поля накладной для like_AdapterКА.CreateIncomingInvoice)
 //   NewRevision  — Число
 //   EntityUpsert — Массив
-Function ParseInvoice(rawXML) Export
+Function ParseInvoice(rawXML, connectionID = "") Export
 
 	bodyMap = New Map;
 	bodyMap.Insert("licenseKey", LicenseKey());
 	bodyMap.Insert("rawXml",     rawXML);
 
-	result = DoExecute("POST", "/api/v1/invoices/parse", MapToJSON(bodyMap));
+	result = DoExecute("POST", "/api/v1/invoices/parse", MapToJSON(bodyMap), connectionID);
 
 	empty = New Structure("Success, Invoice, NewRevision, EntityUpsert",
 		False, New Map, -1, New Array);
@@ -281,13 +284,13 @@ EndFunction
 // Возвращает структуру:
 //   Success — Булево
 //   Order   — Соответствие (поля заказа для like_AdapterКА.CreateMobileOrder)
-Function ParseOrder(rawXML) Export
+Function ParseOrder(rawXML, connectionID = "") Export
 
 	bodyMap = New Map;
 	bodyMap.Insert("licenseKey", LicenseKey());
 	bodyMap.Insert("rawXml",     rawXML);
 
-	result = DoExecute("POST", "/api/v1/orders/parse", MapToJSON(bodyMap));
+	result = DoExecute("POST", "/api/v1/orders/parse", MapToJSON(bodyMap), connectionID);
 
 	empty = New Structure("Success, Order", False, New Map);
 	If Not result.Success Then

@@ -430,7 +430,8 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 	EndIf;
 
 	// 1. Получить текущую revision с сервиса (сервис хранит состояние синхронизации)
-	revision = like_CoreAPI.GetEntitiesRevision();
+	connectionID = String(ActiveConnection.UUID());
+	revision = like_CoreAPI.GetEntitiesRevision(connectionID);
 
 	// 2. Построить XML-запрос к IIKO с revision от сервиса
 	XMLPackage = GetXMLEntitiesUpdateWithRevision(ActiveConnection, revision);
@@ -469,7 +470,7 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 	ExeItems(IIKOObject.entitiesUpdate.items.i, ActiveConnection, newRevision);
 
 	// 5. Сохранить revision на сервисе (для следующего GET /entities/revision)
-	like_CoreAPI.PersistEntities(newRevision, New Array);
+	like_CoreAPI.PersistEntities(newRevision, New Array, connectionID);
 
 EndProcedure
 

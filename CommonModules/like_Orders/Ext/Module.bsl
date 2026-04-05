@@ -7,7 +7,8 @@
 	EndIf;
 
 	// 2. Разобрать на сервисе
-	parseResult = like_CoreAPI.ParseOrder(rawXML);
+	connectionID = String(like_ConnectionAtServer.GetActiveConnecton().UUID());
+	parseResult = like_CoreAPI.ParseOrder(rawXML, connectionID);
 	If Not parseResult.Success Then
 		Raise NStr("en = 'Failed to parse order'; ru = 'Не удалось разобрать заказ'");
 	EndIf;
