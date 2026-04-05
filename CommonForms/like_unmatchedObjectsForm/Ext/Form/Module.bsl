@@ -216,11 +216,9 @@ Procedure SetConnectionFilter(activeConnection)
 			Continue;
 		EndIf;
 		existingParams = New Array;
-		If formItem.ChoiceParameters <> Undefined Then
-			For Each param In formItem.ChoiceParameters Do
-				existingParams.Add(param);
-			EndDo;
-		EndIf;
+		For Each param In formItem.ChoiceParameters Do
+			existingParams.Add(param);
+		EndDo;
 		existingParams.Add(connectionParam);
 		formItem.ChoiceParameters = New FixedArray(existingParams);
 	EndDo;
