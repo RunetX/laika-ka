@@ -317,10 +317,28 @@ EndFunction
 // Если unmatchedOnly = True, возвращает только строки с found = false.
 Function LookupResultsToValueTable(lookupResults, unmatchedOnly = False)
 
+	// Составной тип для ref1C — как в оригинальном запросе к регистру
+	ref1CTypes = New Array;
+	ref1CTypes.Add(Type("CatalogRef.Номенклатура"));
+	ref1CTypes.Add(Type("CatalogRef.Партнеры"));
+	ref1CTypes.Add(Type("CatalogRef.Контрагенты"));
+	ref1CTypes.Add(Type("CatalogRef.Организации"));
+	ref1CTypes.Add(Type("CatalogRef.Склады"));
+	ref1CTypes.Add(Type("CatalogRef.УпаковкиЕдиницыИзмерения"));
+	ref1CTypeDescription = New TypeDescription(ref1CTypes);
+
+	likeRefTypes = New Array;
+	likeRefTypes.Add(Type("CatalogRef.like_products"));
+	likeRefTypes.Add(Type("CatalogRef.like_stores"));
+	likeRefTypes.Add(Type("CatalogRef.like_users"));
+	likeRefTypes.Add(Type("CatalogRef.like_measureUnits"));
+	likeRefTypes.Add(Type("CatalogRef.like_conceptions"));
+	likeRefTypeDescription = New TypeDescription(likeRefTypes);
+
 	resultVT = New ValueTable;
-	resultVT.Columns.Add("ref1C");
-	resultVT.Columns.Add("mType");
-	resultVT.Columns.Add("likeRef");
+	resultVT.Columns.Add("ref1C",   ref1CTypeDescription);
+	resultVT.Columns.Add("mType",   New TypeDescription("EnumRef.like_matchingTypes"));
+	resultVT.Columns.Add("likeRef", likeRefTypeDescription);
 
 	For Each lr In lookupResults Do
 		isFound = like_CoreAPI.SafeGet(lr, "found", False);

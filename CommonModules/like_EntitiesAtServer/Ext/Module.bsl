@@ -469,8 +469,10 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 	// 4. Разобрать сущности и записать в справочники 1С
 	ExeItems(IIKOObject.entitiesUpdate.items.i, ActiveConnection, newRevision);
 
-	// 5. Сохранить revision на сервисе (для следующего GET /entities/revision)
-	like_CoreAPI.PersistEntities(newRevision, New Array, connectionID);
+	// 5. Сохранить revision на сервисе, только если изменилась
+	If newRevision <> revision Then
+		like_CoreAPI.PersistEntities(newRevision, New Array, connectionID);
+	EndIf;
 
 EndProcedure
 
