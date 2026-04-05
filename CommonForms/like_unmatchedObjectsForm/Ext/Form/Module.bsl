@@ -16,6 +16,8 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 
 	activeConnection = like_ConnectionAtServer.GetActiveConnecton();
 	SetConnectionFilter(activeConnection);
+	showOnlyUnmatched = True;
+	ApplyUnmatchedFilter();
 
 	If TypeOf(documentsList[0]) = Type("DocumentRef.ПриобретениеТоваровУслуг") Then
 
@@ -106,6 +108,15 @@ EndProcedure
 
 #EndRegion
 
+#Region FormItemsEventHandlers
+
+&AtClient
+Procedure showOnlyUnmatchedOnChange(Item)
+	ApplyUnmatchedFilter();
+EndProcedure
+
+#EndRegion
+
 #Region FormCommandsEventHandlers
 
 &AtClient
@@ -189,6 +200,30 @@ EndProcedure
 #Region Private
 
 &AtServer
+Procedure ApplyUnmatchedFilter()
+	tableNames = New Array;
+	tableNames.Add("suppliers");
+	tableNames.Add("stores");
+	tableNames.Add("products");
+	tableNames.Add("measureUnits");
+	tableNames.Add("suppliersStores");
+	tableNames.Add("suppliersConceptions");
+	tableNames.Add("organizations");
+
+	For Each tableName In tableNames Do
+		tableItem = Items.Find(tableName);
+		If tableItem = Undefined Then
+			Continue;
+		EndIf;
+		If showOnlyUnmatched Then
+			tableItem.RowFilter = New FixedStructure("matched", False);
+		Else
+			tableItem.RowFilter = Undefined;
+		EndIf;
+	EndDo;
+EndProcedure
+
+&AtServer
 Procedure SetConnectionFilter(activeConnection)
 	connectionParam = New ChoiceParameter("Filter.connection", activeConnection);
 
@@ -258,7 +293,8 @@ Function GetItemsByType(unmatchedObjects, typeFilter, matchingType = Undefined)
    |////////////////////////////////////////////////////////////////////////////////
    |SELECT
    |	tmpUO.Ref1C AS Ref1C,
-   |	tmpUO.likeRef AS likeRef
+   |	tmpUO.likeRef AS likeRef,
+   |	CASE WHEN tmpUO.likeRef IS NULL OR tmpUO.likeRef = UNDEFINED THEN FALSE ELSE TRUE END AS matched
    |FROM
    |	tmpUO AS tmpUO
    |WHERE

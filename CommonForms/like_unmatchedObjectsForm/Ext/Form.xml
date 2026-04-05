@@ -15,6 +15,15 @@
 		<Event name="OnCreateAtServer">OnCreateAtServer</Event>
 	</Events>
 	<ChildItems>
+		<CheckBoxField name="showOnlyUnmatched" id="201">
+			<DataPath>showOnlyUnmatched</DataPath>
+			<TitleLocation>Right</TitleLocation>
+			<ContextMenu name="showOnlyUnmatchedContextMenu" id="202"/>
+			<ExtendedTooltip name="showOnlyUnmatchedExtendedTooltip" id="203"/>
+			<Events>
+				<Event name="OnChange">showOnlyUnmatchedOnChange</Event>
+			</Events>
+		</CheckBoxField>
 		<Pages name="GroupPages" id="1">
 			<Title>
 				<v8:item>
@@ -702,6 +711,11 @@
 						<v8:Type>cfg:CatalogRef.like_users</v8:Type>
 					</Type>
 				</Column>
+				<Column name="matched" id="99">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
 			</Columns>
 		</Attribute>
 		<Attribute name="stores" id="2">
@@ -735,6 +749,11 @@
 					</Title>
 					<Type>
 						<v8:Type>cfg:CatalogRef.like_stores</v8:Type>
+					</Type>
+				</Column>
+				<Column name="matched" id="99">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
 					</Type>
 				</Column>
 			</Columns>
@@ -772,6 +791,11 @@
 						<v8:Type>cfg:CatalogRef.like_products</v8:Type>
 					</Type>
 				</Column>
+				<Column name="matched" id="99">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
 			</Columns>
 		</Attribute>
 		<Attribute name="measureUnits" id="4">
@@ -805,6 +829,11 @@
 					</Title>
 					<Type>
 						<v8:Type>cfg:CatalogRef.like_measureUnits</v8:Type>
+					</Type>
+				</Column>
+				<Column name="matched" id="99">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
 					</Type>
 				</Column>
 			</Columns>
@@ -857,6 +886,11 @@
 						<v8:Type>cfg:CatalogRef.like_stores</v8:Type>
 					</Type>
 				</Column>
+				<Column name="matched" id="99">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
 			</Columns>
 		</Attribute>
 		<Attribute name="organizations" id="7">
@@ -890,6 +924,11 @@
 					</Title>
 					<Type>
 						<v8:Type>cfg:CatalogRef.like_users</v8:Type>
+					</Type>
+				</Column>
+				<Column name="matched" id="99">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
 					</Type>
 				</Column>
 			</Columns>
@@ -942,7 +981,23 @@
 						<v8:Type>cfg:CatalogRef.like_conceptions</v8:Type>
 					</Type>
 				</Column>
+				<Column name="matched" id="99">
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
+				</Column>
 			</Columns>
+		</Attribute>
+		<Attribute name="showOnlyUnmatched" id="200">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Только несопоставленные</v8:content>
+				</v8:item>
+			</Title>
+			<Type>
+				<v8:Type>xs:boolean</v8:Type>
+			</Type>
 		</Attribute>
 		<Attribute name="sendAfterMatch" id="10">
 			<Title>
