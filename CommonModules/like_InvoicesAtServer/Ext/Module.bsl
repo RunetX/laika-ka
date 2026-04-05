@@ -192,6 +192,16 @@ Function GetSaleOfGoodsDocumentRequisites(documentsList) Export
    |UNION
    |
    |SELECT DISTINCT
+   |	SaleOfGoods.Контрагент,
+   |	VALUE(Enum.like_matchingTypes.EmptyRef)
+   |FROM
+   |	Document.РеализацияТоваровУслуг AS SaleOfGoods
+   |WHERE
+   |	SaleOfGoods.Ref IN(&documentsList)
+   |
+   |UNION
+   |
+   |SELECT DISTINCT
    |	SaleOfGoods.Организация,
    |	VALUE(Enum.like_matchingTypes.EmptyRef)
    |FROM
@@ -363,7 +373,7 @@ Function IncomingInvoiceXDTOBySalesDocument(ref1C, documentStructure, matchedObj
 	document.cls 					= "IncomingInvoice";
 	document.eid 					= documentStructure.id;
 	document.supplier 				= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Организация).UUID;
-	document.defaultStore 			= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Партнер).UUID;
+	document.defaultStore 			= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Контрагент).UUID;
 	document.dateIncoming 			= Format(ref1C.Дата,"DF=yyyy-MM-ddTHH:mm:ss.000+03.00");
 	document.documentNumber			= documentStructure.number;
 	document.status 				= "NEW";

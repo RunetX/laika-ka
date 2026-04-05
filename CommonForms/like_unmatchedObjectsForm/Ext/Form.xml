@@ -844,7 +844,6 @@
 					</Title>
 					<Type>
 						<v8:Type>cfg:CatalogRef.Контрагенты</v8:Type>
-						<v8:Type>cfg:CatalogRef.Партнеры</v8:Type>
 					</Type>
 				</Column>
 				<Column name="likeRef" id="2">
