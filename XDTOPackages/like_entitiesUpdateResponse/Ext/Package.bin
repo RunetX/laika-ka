@@ -31,6 +31,7 @@
 	<objectType name="updateType">
 		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="serverInstanceId" type="d3p1:refType"/>
 		<property name="revision" type="xs:decimal"/>
+		<property name="localRevision" type="xs:decimal"/>
 		<property xmlns:d3p1="https://izi.cloud/iiko/reading/entitiesUpdateResponse" name="items" type="d3p1:itemsSeqType"/>
 		<property name="fullUpdate" type="xs:boolean"/>
 		<property xmlns:d3p1="https://izi.cloud/iiko/common" name="version" type="d3p1:nullableType"/>

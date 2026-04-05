@@ -88,7 +88,7 @@ Function GetIikoObject(objectFields) Export
 		Return Undefined;
 	EndIf;
 	                                                  
-	XMLResponse = ?(IIKOResponse.Headers.Get("Content-Encoding") = "gzip", 
+	XMLResponse = ?(IIKOResponse.Headers.Get("content-encoding") = "gzip", 
 	like_Common.DecompressGZIP(IIKOResponse.GetBodyAsBinaryData()), IIKOResponse.GetBodyAsString("UTF-8"));
 	Return XML2XDTO(XMLResponse, ObjectFields.Namespace, ObjectFields.TypeName);
 EndFunction
