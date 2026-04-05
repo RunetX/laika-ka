@@ -293,22 +293,34 @@ EndProcedure
 // Собирает массив запросов для lookup из временных таблиц реквизитов.
 Function BuildLookupItems(tableManager, docType)
 
-	q = New Query;
-	q.TempTablesManager = tableManager;
-	q.Text = "SELECT ref1C, mType FROM typeDependentRequisites
-	         |UNION ALL
-	         |SELECT ref1C, VALUE(Enum.like_matchingTypes.EmptyRef) FROM typeUndependentRequisites";
-	sel = q.Execute().Select();
-
 	items = New Array;
-	While sel.Next() Do
+
+	// typeDependentRequisites — склады, поставщики и т.п. Ищутся С docType.
+	qDep = New Query("SELECT ref1C, mType FROM typeDependentRequisites");
+	qDep.TempTablesManager = tableManager;
+	selDep = qDep.Execute().Select();
+	While selDep.Next() Do
 		item = New Map;
-		item.Insert("ref1C",        String(sel.ref1C.UUID()));
-		item.Insert("ref1CType",    like_Common.TypeNameShort(sel.ref1C));
-		item.Insert("docType",      ?(ValueIsFilled(sel.mType), docType, ""));
-		item.Insert("matchingType", String(sel.mType));
+		item.Insert("ref1C",        String(selDep.ref1C.UUID()));
+		item.Insert("ref1CType",    like_Common.TypeNameShort(selDep.ref1C));
+		item.Insert("docType",      docType);
+		item.Insert("matchingType", String(selDep.mType));
 		items.Add(item);
 	EndDo;
+
+	// typeUndependentRequisites — номенклатура, единицы. Ищутся БЕЗ docType.
+	qUndep = New Query("SELECT ref1C FROM typeUndependentRequisites");
+	qUndep.TempTablesManager = tableManager;
+	selUndep = qUndep.Execute().Select();
+	While selUndep.Next() Do
+		item = New Map;
+		item.Insert("ref1C",        String(selUndep.ref1C.UUID()));
+		item.Insert("ref1CType",    like_Common.TypeNameShort(selUndep.ref1C));
+		item.Insert("docType",      "");
+		item.Insert("matchingType", String(Enums.like_matchingTypes.EmptyRef()));
+		items.Add(item);
+	EndDo;
+
 	Return items;
 
 EndFunction
