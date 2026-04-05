@@ -180,12 +180,22 @@ Function GetSaleOfGoodsDocumentRequisites(documentsList) Export
    |
    |////////////////////////////////////////////////////////////////////////////////
    |SELECT DISTINCT
-   |	SaleOfGoods.Партнер AS ref1C,
+   |	SaleOfGoods.Контрагент AS ref1C,
    |	mTypes.mType AS mType
    |INTO typeDependentRequisites
    |FROM
    |	Document.РеализацияТоваровУслуг AS SaleOfGoods,
    |	tmpMatchingTypes AS mTypes
+   |WHERE
+   |	SaleOfGoods.Ref IN(&documentsList)
+   |
+   |UNION
+   |
+   |SELECT DISTINCT
+   |	SaleOfGoods.Партнер,
+   |	VALUE(Enum.like_matchingTypes.EmptyRef)
+   |FROM
+   |	Document.РеализацияТоваровУслуг AS SaleOfGoods
    |WHERE
    |	SaleOfGoods.Ref IN(&documentsList)
    |
@@ -363,7 +373,7 @@ Function IncomingInvoiceXDTOBySalesDocument(ref1C, documentStructure, matchedObj
 	document.cls 					= "IncomingInvoice";
 	document.eid 					= documentStructure.id;
 	document.supplier 				= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Организация).UUID;
-	document.defaultStore 			= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Партнер).UUID;
+	document.defaultStore 			= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Контрагент).UUID;
 	document.dateIncoming 			= Format(ref1C.Дата,"DF=yyyy-MM-ddTHH:mm:ss.000+03.00");
 	document.documentNumber			= documentStructure.number;
 	document.status 				= "NEW";

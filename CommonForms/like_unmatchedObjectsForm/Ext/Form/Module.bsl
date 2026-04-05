@@ -59,7 +59,7 @@ Function LoadUnmatchedSaleOfGoodsDocument(activeConnection, documentsList)
 	unmatchedObjects = like_DocumentAtServer.GetUnmatchedObjects(activeConnection, tableManager, docType);
 
 	organizations.Load(		GetUnmatchedItemsByType(unmatchedObjects, Type("CatalogRef.Организации")));
-	suppliersStores.Load(	GetUnmatchedItemsByType(unmatchedObjects, Type("CatalogRef.Партнеры")));
+	suppliersStores.Load(	GetUnmatchedItemsByType(unmatchedObjects, Type("CatalogRef.Контрагенты")));
 	
 	unmatchedConceptions = GetUnmatchedItemsByType(unmatchedObjects,
 		Type("CatalogRef.Партнеры"), 
@@ -144,24 +144,32 @@ Procedure MatchProductsByNumAtServer()
 	matchingQuery.SetParameter("productsList", productsList);
 	matchingQuery.SetParameter("Property", adCode);
 	matchingQuery.Text = "SELECT
-	|	NomenclatureAdditionalRequsities.Ссылка AS Ref,
+	|	Nomenclature.Ссылка AS Ref
+	|INTO tmpNomenclature
+	|FROM
+	|	Catalog.Номенклатура AS Nomenclature
+	|WHERE
+	|	Nomenclature.Ссылка IN(&productsList)
+	|;
+	|////////////////////////////////////////////////////////////////////////////////;
+	|SELECT
+	|	tmpNomenclature.Ref AS Ref,
 	|	NomenclatureAdditionalRequsities.Свойство AS Свойство,
 	|	NomenclatureAdditionalRequsities.Значение AS Value
 	|INTO tmpAdditionalRequsities
 	|FROM
-	|	Catalog.Номенклатура.ДополнительныеРеквизиты AS NomenclatureAdditionalRequsities
-	|WHERE
-	|	NomenclatureAdditionalRequsities.Ref IN(&productsList)
-	|	И NomenclatureAdditionalRequsities.Свойство = &Property
+	|	tmpNomenclature AS tmpNomenclature
+	|	LEFT JOIN Catalog.Номенклатура.ДополнительныеРеквизиты AS NomenclatureAdditionalRequsities
+	|		ON tmpNomenclature.Ref = NomenclatureAdditionalRequsities.Ссылка
+	|		AND (NomenclatureAdditionalRequsities.Свойство = &Property)
 	|;
-
 	|////////////////////////////////////////////////////////////////////////////////
 	|SELECT
 	|	tmpAdditionalRequsities.Ref AS ref1C,
 	|	like_products.Ref AS likeRef
 	|FROM
 	|	tmpAdditionalRequsities AS tmpAdditionalRequsities
-	|		INNER JOIN Catalog.like_products AS like_products
+	|		LEFT JOIN Catalog.like_products AS like_products
 	|		ON (like_products.num = tmpAdditionalRequsities.Value)";
 	matchingTable = matchingQuery.Execute().Unload();
 	products.Load(matchingTable);
