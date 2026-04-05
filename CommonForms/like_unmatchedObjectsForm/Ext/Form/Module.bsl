@@ -15,6 +15,7 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 	EndIf;
 
 	activeConnection = like_ConnectionAtServer.GetActiveConnecton();
+	SetConnectionFilter(activeConnection);
 
 	If TypeOf(documentsList[0]) = Type("DocumentRef.ПриобретениеТоваровУслуг") Then
 
@@ -179,7 +180,9 @@ Procedure MatchProductsByNumAtServer()
 	|FROM
 	|	tmpAdditionalRequsities AS tmpAdditionalRequsities
 	|		LEFT JOIN Catalog.like_products AS like_products
-	|		ON (like_products.num = tmpAdditionalRequsities.Value)";
+	|		ON (like_products.num = tmpAdditionalRequsities.Value)
+	|		AND like_products.connection = &connection";
+	matchingQuery.SetParameter("connection", like_ConnectionAtServer.GetActiveConnecton());
 	matchingTable = matchingQuery.Execute().Unload();
 	products.Load(matchingTable);
 	
@@ -193,6 +196,35 @@ EndProcedure
 #EndRegion
 
 #Region Private
+
+&AtServer
+Procedure SetConnectionFilter(activeConnection)
+	connectionParam = New ChoiceParameter("Filter.connection", activeConnection);
+
+	likeRefFields = New Array;
+	likeRefFields.Add("storeslikeRef");
+	likeRefFields.Add("productslikeRef");
+	likeRefFields.Add("measureUnitslikeRef");
+	likeRefFields.Add("supplierslikeRef");
+	likeRefFields.Add("suppliersStoreslikeRef");
+	likeRefFields.Add("suppliersConceptionslikeRef");
+	likeRefFields.Add("organizationslikeRef");
+
+	For Each fieldName In likeRefFields Do
+		formItem = Items.Find(fieldName);
+		If formItem = Undefined Then
+			Continue;
+		EndIf;
+		existingParams = New Array;
+		If formItem.ChoiceParameters <> Undefined Then
+			For Each param In formItem.ChoiceParameters Do
+				existingParams.Add(param);
+			EndDo;
+		EndIf;
+		existingParams.Add(connectionParam);
+		formItem.ChoiceParameters = New FixedArray(existingParams);
+	EndDo;
+EndProcedure
 
 &AtServerNoContext
 Procedure SendInvoicesAfterMatchAtServer(documentsListRef)
