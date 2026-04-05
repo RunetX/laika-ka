@@ -180,7 +180,7 @@ Function GetSaleOfGoodsDocumentRequisites(documentsList) Export
    |
    |////////////////////////////////////////////////////////////////////////////////
    |SELECT DISTINCT
-   |	SaleOfGoods.Контрагент AS ref1C,
+   |	SaleOfGoods.Партнер AS ref1C,
    |	mTypes.mType AS mType
    |INTO typeDependentRequisites
    |FROM
@@ -192,7 +192,7 @@ Function GetSaleOfGoodsDocumentRequisites(documentsList) Export
    |UNION
    |
    |SELECT DISTINCT
-   |	SaleOfGoods.Партнер,
+   |	SaleOfGoods.Контрагент,
    |	VALUE(Enum.like_matchingTypes.EmptyRef)
    |FROM
    |	Document.РеализацияТоваровУслуг AS SaleOfGoods
