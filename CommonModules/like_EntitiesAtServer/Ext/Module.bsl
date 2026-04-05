@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://mu7.ru
+// Copyright (c) 2021, ООО Изи Клауд, https://izi.cloud
 // All rights reserved. This program and accompanying materials 
 // are subject to license terms Attribution 4.0 International (CC BY 4.0)
 // The license text is available here:
@@ -89,7 +89,6 @@ Function GetEntititesTableDefinition()
 	entitiesTable.Columns.Add("ref",					Description("catalogs"));
 	entitiesTable.Columns.Add("deleted", 				Description("boolean"));
 	entitiesTable.Columns.Add("code", 					Description("shortString"));
-	entitiesTable.Columns.Add("num",					Description("shortString"));
 	entitiesTable.Columns.Add("description",			Description("longString"));
 	entitiesTable.Columns.Add("parentID", 				Description("UUID"));
 	entitiesTable.Columns.Add("parent", 				Description("parent"));
@@ -189,14 +188,8 @@ Procedure ExeItem(connection, item, ecTable, entitiesTable)
 			newEntity.isCash = True;
 		EndIf;
 		
-		If foundType.type = "PRODUCT" OR
-		   foundType.type = "PRODUCTGROUP" Then
-		   
-			newEntity.accountingCategoryID = GetStringValue(r.accountingCategory);
-			newEntity.num				   = GetStringValue(r.num);
-		EndIf;
-		
 		If foundType.type = "PRODUCT" Then
+			newEntity.accountingCategoryID = GetStringValue(r.accountingCategory);
 			newEntity.mainUnitID		   = GetStringValue(r.mainUnit);
 			newEntity.productType          = Enums.like_productTypes[r.type];
 		EndIf;
@@ -240,7 +233,6 @@ Function FillRefs(entitiesTable)
 	                   |	entitiesTable.id AS id,
 	                   |	entitiesTable.deleted AS deleted,
 	                   |	entitiesTable.code AS code,
-					   |	entitiesTable.num AS num,
 	                   |	entitiesTable.description AS description,
 	                   |	entitiesTable.parentID AS parentID,
 	                   |	entitiesTable.accountingCategoryID AS accountingCategoryID,
@@ -425,7 +417,6 @@ Function FillRefs(entitiesTable)
 	                   |	tmpRefs.Ref AS Ref,
 	                   |	eT.deleted AS DeletionMark,
 	                   |	eT.code AS Code,
-					   |	eT.num AS Num,
 	                   |	eT.description AS Description,
 	                   |	eT.parentID AS parentID,
 	                   |	eT.accountingCategoryID AS accountingCategoryID,
@@ -447,18 +438,6 @@ Function FillRefs(entitiesTable)
 	
 EndFunction
 
-Function MajorVersion(connectionVersion)
-
-	versionParts = StrSplit(connectionVersion, ".");
-	
-	If Not versionParts.Count() > 0 Then
-		Raise NStr("ru = 'Не удалось получить части версии'");
-	EndIf;
-	
-	Return Number(versionParts[0]);
-	
-EndFunction
-
 Procedure Update(parameters, resultLink, interactive = False) Export
 	
 	ActiveConnection = like_ConnectionAtServer.GetActiveConnecton();
@@ -473,16 +452,10 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 	XMLPackage = getXMLEntitiesUpdate(ActiveConnection);	
 	ConnectionFields = like_ConnectionAtServer.GetConnectionFields(ActiveConnection);
 	
-	If MajorVersion(ConnectionFields.version) < 9 Then
-		namespace = "https://izi.cloud/iiko/reading/entitiesUpdateResponse";
-	Else
-		namespace = "https://izi.cloud/iiko/reading/entitiesUpdateResponse9";
-	EndIf;
-	
 	ObjectFields = like_CommonAtServer.GetObjectFieldsStructure();
 	ObjectFields.ConProps  	 = ConnectionFields;
 	ObjectFields.Resource 	 = "/resto/services/update";
-	ObjectFields.Namespace 	 = namespace;
+	ObjectFields.Namespace 	 = "https://izi.cloud/iiko/reading/entitiesUpdateResponse";
 	ObjectFields.TypeName 	 = "result";
 	ObjectFields.RequestType = "POST";
 	Params = New Map;
@@ -538,7 +511,7 @@ Procedure ExeItems(updateItems, connection, revision) Export
 			EndIf;
 
 			If entityItem.revision > entity.revision Then
-				excludeFields = ?(entityItem.isContainer, "accountingCategoryID,mainUnitID,num,type", "");
+				excludeFields = ?(entityItem.isContainer, "accountingCategoryID,mainUnitID,type", "");
 				FillPropertyValues(entity, entityItem,, excludeFields);
 				
 				If entityItem.Ref = Null Then
@@ -571,8 +544,6 @@ Procedure ExeItems(updateItems, connection, revision) Export
 			If TransactionActive() Then
 				RollbackTransaction();
 			EndIf;
-			
-			WriteLogEvent("Object writing", EventLogLevel.Error, entity, entityItem, ErrorDescription()); 
 			
 		EndTry;
 			

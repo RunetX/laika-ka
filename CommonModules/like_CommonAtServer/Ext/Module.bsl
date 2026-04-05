@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://mu7.ru
+// Copyright (c) 2021, ООО Изи Клауд, https://izi.cloud
 // All rights reserved. This program and accompanying materials 
 // are subject to license terms Attribution 4.0 International (CC BY 4.0)
 // The license text is available here:
@@ -85,20 +85,10 @@ Function GetIikoObject(objectFields) Export
 	IIKOResponse = IIKOConnection.CallHTTPMethod(ObjectFields.RequestType, IIKORequest);
 	
 	If IIKOResponse.StatusCode <> 200 Then
-		
-		If IIKOResponse.StatusCode = 403 Then
-			logString = NStr("en = 'Access error:'; ru = 'Ошибка доступа: '") + IIKOResponse.StatusCode;
-			WriteLogEvent("IIKO. transport", EventLogLevel.Error,, IIKOResponse, logString);	
-		Else 	
-			logString = NStr("en = 'The server returned an HTTP code other than HTTP_OK:'; 
-|ru = 'Сервер вернул код HTTP, отличный от успешного: '") + IIKOResponse.StatusCode;
-			WriteLogEvent("IIKO. transport", EventLogLevel.Error,, IIKOResponse, logString);	
-		EndIf;
-		
 		Return Undefined;
 	EndIf;
 	                                                  
-	XMLResponse = ?(IIKOResponse.Headers.Get("content-encoding") = "gzip", 
+	XMLResponse = ?(IIKOResponse.Headers.Get("Content-Encoding") = "gzip", 
 	like_Common.DecompressGZIP(IIKOResponse.GetBodyAsBinaryData()), IIKOResponse.GetBodyAsString("UTF-8"));
 	Return XML2XDTO(XMLResponse, ObjectFields.Namespace, ObjectFields.TypeName);
 EndFunction
@@ -119,20 +109,15 @@ Function GetIikoDate(date1C, ms) Export
 	
 EndFunction
 
-Function GetMatchedObject(matchedObjects, ref1C, matchingType = Undefined) Export
+Function GetMatchedObject(matchedObjects, ref1C) Export
 	           
-	If Not ValueIsFilled(matchingType) Then
-		matchingType = Enums.like_matchingTypes.EmptyRef();
-	EndIf;
+	foundRow = matchedObjects.Find(ref1C, "ref1C");
 	
-	filter = New Structure("ref1C,mType", ref1C, matchingType);
-	foundRows = matchedObjects.FindRows(filter);
-	
-	If foundRows.Count() = 0 Then
+	If foundRow = Undefined Then
 		Return Undefined;
 	EndIf;
 	
-	Return foundRows[0].likeRef;
+	Return foundRow.likeRef;
 	
 EndFunction
 

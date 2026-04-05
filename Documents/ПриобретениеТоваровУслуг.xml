@@ -31,18 +31,6 @@
 			<RegisterRecords/>
 		</Properties>
 		<ChildObjects>
-			<Attribute uuid="b90d663a-db58-4113-b9b0-ccb1ef205a4a">
-				<InternalInfo/>
-				<Properties>
-					<ObjectBelonging>Adopted</ObjectBelonging>
-					<Name>Партнер</Name>
-					<Comment/>
-					<ExtendedConfigurationObject>5290731f-624a-4cf6-acc4-fbae69309b60</ExtendedConfigurationObject>
-					<Type>
-						<v8:Type>cfg:CatalogRef.Партнеры</v8:Type>
-					</Type>
-				</Properties>
-			</Attribute>
 			<Attribute uuid="46b60d1f-28d4-4f66-a0ad-6bb300748cc4">
 				<InternalInfo/>
 				<Properties>

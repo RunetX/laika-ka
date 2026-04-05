@@ -31,18 +31,6 @@
 			<RegisterRecords/>
 		</Properties>
 		<ChildObjects>
-			<Attribute uuid="04e6490b-4093-49e1-a098-1fafff029049">
-				<InternalInfo/>
-				<Properties>
-					<ObjectBelonging>Adopted</ObjectBelonging>
-					<Name>Партнер</Name>
-					<Comment/>
-					<ExtendedConfigurationObject>202e098b-a22d-49b7-9b80-261deffd2e47</ExtendedConfigurationObject>
-					<Type>
-						<v8:Type>cfg:CatalogRef.Партнеры</v8:Type>
-					</Type>
-				</Properties>
-			</Attribute>
 			<Attribute uuid="67ce690f-79ec-4675-9e93-95548c71d44d">
 				<InternalInfo/>
 				<Properties>
@@ -146,6 +134,30 @@
 							<Name>Сумма</Name>
 							<Comment/>
 							<ExtendedConfigurationObject>e49ddbda-5158-4527-bff9-ae6eeb26ca97</ExtendedConfigurationObject>
+							<Type>
+								<v8:TypeSet>cfg:DefinedType.ДенежнаяСуммаНеотрицательная</v8:TypeSet>
+							</Type>
+						</Properties>
+					</Attribute>
+					<Attribute uuid="1617cea4-7d07-4dd8-a0ca-904019731e9a">
+						<InternalInfo/>
+						<Properties>
+							<ObjectBelonging>Adopted</ObjectBelonging>
+							<Name>УдалитьСтавкаНДСНовая</Name>
+							<Comment/>
+							<ExtendedConfigurationObject>27536598-47cf-47e0-926e-862130f15e81</ExtendedConfigurationObject>
+							<Type>
+								<v8:Type>cfg:CatalogRef.СтавкиНДС</v8:Type>
+							</Type>
+						</Properties>
+					</Attribute>
+					<Attribute uuid="dc459788-9b04-4435-9c78-395917f6031c">
+						<InternalInfo/>
+						<Properties>
+							<ObjectBelonging>Adopted</ObjectBelonging>
+							<Name>УдалитьСуммаНДС</Name>
+							<Comment/>
+							<ExtendedConfigurationObject>dffff992-1436-493f-a7d9-f6d18eb31874</ExtendedConfigurationObject>
 							<Type>
 								<v8:TypeSet>cfg:DefinedType.ДенежнаяСуммаНеотрицательная</v8:TypeSet>
 							</Type>

@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://mu7.ru
+// Copyright (c) 2021, ООО Изи Клауд, https://izi.cloud
 // All rights reserved. This program and accompanying materials 
 // are subject to license terms Attribution 4.0 International (CC BY 4.0)
 // The license text is available here:
@@ -54,7 +54,6 @@ Function GetDescriptionMap() Export
 	descriptions.Insert("store",				New TypeDescription("CatalogRef.like_stores"));
 	descriptions.Insert("productType", 			New TypeDescription("EnumRef.like_productTypes"));
 	descriptions.Insert("userSupplierType", 	New TypeDescription("EnumRef.like_supplierTypes"));
-	descriptions.Insert("matchingTypes",		New TypeDescription("EnumRef.like_matchingTypes"));
 	
 	Return descriptions;
 	

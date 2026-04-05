@@ -35,7 +35,7 @@
 					<Title>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Поставщики</v8:content>
+							<v8:content>Контрагенты</v8:content>
 						</v8:item>
 					</Title>
 					<ToolTip>
@@ -203,7 +203,7 @@
 					<Title>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Партнер -&gt; Склад</v8:content>
+							<v8:content>Контрагент -&gt; Склад</v8:content>
 						</v8:item>
 					</Title>
 					<ToolTip>
@@ -260,7 +260,7 @@
 									<Title>
 										<v8:item>
 											<v8:lang>ru</v8:lang>
-											<v8:content>Партнер 1С</v8:content>
+											<v8:content>Контрагент 1С</v8:content>
 										</v8:item>
 									</Title>
 									<EditMode>EnterOnInput</EditMode>
@@ -280,86 +280,6 @@
 									<AutoEditMode>true</AutoEditMode>
 									<ContextMenu name="suppliersStoreslikeRefContextMenu" id="114"/>
 									<ExtendedTooltip name="suppliersStoreslikeRefExtendedTooltip" id="115"/>
-								</InputField>
-							</ChildItems>
-						</Table>
-					</ChildItems>
-				</Page>
-				<Page name="GroupSuppliersConceptions" id="135">
-					<Title>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Партнер -&gt; Концепция</v8:content>
-						</v8:item>
-					</Title>
-					<ToolTip>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Group suppliers conceptions</v8:content>
-						</v8:item>
-					</ToolTip>
-					<Group>Vertical</Group>
-					<ScrollOnCompress>false</ScrollOnCompress>
-					<ExtendedTooltip name="GroupSuppliersConceptionsExtendedTooltip" id="136"/>
-					<ChildItems>
-						<Table name="suppliersConceptions" id="137">
-							<Representation>List</Representation>
-							<RowSelectionMode>Cell</RowSelectionMode>
-							<UseAlternationRowColorBWA>false</UseAlternationRowColorBWA>
-							<AutoInsertNewRow>true</AutoInsertNewRow>
-							<EnableStartDrag>true</EnableStartDrag>
-							<EnableDrag>true</EnableDrag>
-							<DataPath>suppliersConceptions</DataPath>
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Партнер -&gt; Концепция</v8:content>
-								</v8:item>
-							</Title>
-							<RowFilter xsi:nil="true"/>
-							<ContextMenu name="suppliersConceptionsContextMenu" id="138"/>
-							<AutoCommandBar name="suppliersConceptionsCommandBar" id="139">
-								<Autofill>false</Autofill>
-							</AutoCommandBar>
-							<ExtendedTooltip name="suppliersConceptionsExtendedTooltip" id="140"/>
-							<SearchStringAddition name="suppliersConceptionsSearchString" id="141">
-								<AdditionSource>
-									<Item>suppliersConceptions</Item>
-									<Type>SearchStringRepresentation</Type>
-								</AdditionSource>
-								<ContextMenu name="suppliersConceptionsSearchStringContextMenu" id="142"/>
-								<ExtendedTooltip name="suppliersConceptionsSearchStringExtendedTooltip" id="143"/>
-							</SearchStringAddition>
-							<ViewStatusAddition name="suppliersConceptionsViewStatus" id="144">
-								<AdditionSource>
-									<Item>suppliersConceptions</Item>
-									<Type>ViewStatusRepresentation</Type>
-								</AdditionSource>
-								<ContextMenu name="suppliersConceptionsViewStatusContextMenu" id="145"/>
-								<ExtendedTooltip name="suppliersConceptionsViewStatusExtendedTooltip" id="146"/>
-							</ViewStatusAddition>
-							<SearchControlAddition name="suppliersConceptionsSearchControl" id="147">
-								<AdditionSource>
-									<Item>suppliersConceptions</Item>
-									<Type>SearchControl</Type>
-								</AdditionSource>
-								<ContextMenu name="suppliersConceptionsSearchControlContextMenu" id="148"/>
-								<ExtendedTooltip name="suppliersConceptionsSearchControlExtendedTooltip" id="149"/>
-							</SearchControlAddition>
-							<ChildItems>
-								<InputField name="suppliersConceptionsref1C" id="150">
-									<DataPath>suppliersConceptions.ref1C</DataPath>
-									<EditMode>EnterOnInput</EditMode>
-									<AutoEditMode>true</AutoEditMode>
-									<ContextMenu name="suppliersConceptionsref1CContextMenu" id="151"/>
-									<ExtendedTooltip name="suppliersConceptionsref1CExtendedTooltip" id="152"/>
-								</InputField>
-								<InputField name="suppliersConceptionslikeRef" id="153">
-									<DataPath>suppliersConceptions.likeRef</DataPath>
-									<EditMode>EnterOnInput</EditMode>
-									<AutoEditMode>true</AutoEditMode>
-									<ContextMenu name="suppliersConceptionslikeRefContextMenu" id="154"/>
-									<ExtendedTooltip name="suppliersConceptionslikeRefExtendedTooltip" id="155"/>
 								</InputField>
 							</ChildItems>
 						</Table>
@@ -452,109 +372,65 @@
 							<v8:content>Group products</v8:content>
 						</v8:item>
 					</ToolTip>
-					<Group>HorizontalIfPossible</Group>
+					<Group>Vertical</Group>
 					<ScrollOnCompress>false</ScrollOnCompress>
 					<ExtendedTooltip name="GroupProductsExtendedTooltip" id="27"/>
 					<ChildItems>
-						<UsualGroup name="GroupTable" id="156">
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Group table</v8:content>
-								</v8:item>
-							</Title>
-							<ToolTip>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Group table</v8:content>
-								</v8:item>
-							</ToolTip>
-							<Group>HorizontalIfPossible</Group>
-							<Representation>None</Representation>
-							<ShowTitle>false</ShowTitle>
-							<ExtendedTooltip name="GroupTableExtendedTooltip" id="157"/>
+						<Table name="products" id="49">
+							<Representation>List</Representation>
+							<RowSelectionMode>Cell</RowSelectionMode>
+							<UseAlternationRowColorBWA>false</UseAlternationRowColorBWA>
+							<AutoInsertNewRow>true</AutoInsertNewRow>
+							<EnableStartDrag>true</EnableStartDrag>
+							<EnableDrag>true</EnableDrag>
+							<DataPath>products</DataPath>
+							<RowFilter xsi:nil="true"/>
+							<ContextMenu name="productsContextMenu" id="50"/>
+							<AutoCommandBar name="productsCommandBar" id="51">
+								<Autofill>false</Autofill>
+							</AutoCommandBar>
+							<ExtendedTooltip name="productsExtendedTooltip" id="52"/>
+							<SearchStringAddition name="productsSearchString" id="53">
+								<AdditionSource>
+									<Item>products</Item>
+									<Type>SearchStringRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="productsSearchStringContextMenu" id="54"/>
+								<ExtendedTooltip name="productsSearchStringExtendedTooltip" id="55"/>
+							</SearchStringAddition>
+							<ViewStatusAddition name="productsViewStatus" id="56">
+								<AdditionSource>
+									<Item>products</Item>
+									<Type>ViewStatusRepresentation</Type>
+								</AdditionSource>
+								<ContextMenu name="productsViewStatusContextMenu" id="57"/>
+								<ExtendedTooltip name="productsViewStatusExtendedTooltip" id="58"/>
+							</ViewStatusAddition>
+							<SearchControlAddition name="productsSearchControl" id="59">
+								<AdditionSource>
+									<Item>products</Item>
+									<Type>SearchControl</Type>
+								</AdditionSource>
+								<ContextMenu name="productsSearchControlContextMenu" id="60"/>
+								<ExtendedTooltip name="productsSearchControlExtendedTooltip" id="61"/>
+							</SearchControlAddition>
 							<ChildItems>
-								<Table name="products" id="49">
-									<Representation>List</Representation>
-									<RowSelectionMode>Cell</RowSelectionMode>
-									<UseAlternationRowColorBWA>false</UseAlternationRowColorBWA>
-									<AutoInsertNewRow>true</AutoInsertNewRow>
-									<EnableStartDrag>true</EnableStartDrag>
-									<EnableDrag>true</EnableDrag>
-									<DataPath>products</DataPath>
-									<RowFilter xsi:nil="true"/>
-									<ContextMenu name="productsContextMenu" id="50"/>
-									<AutoCommandBar name="productsCommandBar" id="51">
-										<Autofill>false</Autofill>
-									</AutoCommandBar>
-									<ExtendedTooltip name="productsExtendedTooltip" id="52"/>
-									<SearchStringAddition name="productsSearchString" id="53">
-										<AdditionSource>
-											<Item>products</Item>
-											<Type>SearchStringRepresentation</Type>
-										</AdditionSource>
-										<ContextMenu name="productsSearchStringContextMenu" id="54"/>
-										<ExtendedTooltip name="productsSearchStringExtendedTooltip" id="55"/>
-									</SearchStringAddition>
-									<ViewStatusAddition name="productsViewStatus" id="56">
-										<AdditionSource>
-											<Item>products</Item>
-											<Type>ViewStatusRepresentation</Type>
-										</AdditionSource>
-										<ContextMenu name="productsViewStatusContextMenu" id="57"/>
-										<ExtendedTooltip name="productsViewStatusExtendedTooltip" id="58"/>
-									</ViewStatusAddition>
-									<SearchControlAddition name="productsSearchControl" id="59">
-										<AdditionSource>
-											<Item>products</Item>
-											<Type>SearchControl</Type>
-										</AdditionSource>
-										<ContextMenu name="productsSearchControlContextMenu" id="60"/>
-										<ExtendedTooltip name="productsSearchControlExtendedTooltip" id="61"/>
-									</SearchControlAddition>
-									<ChildItems>
-										<InputField name="productsref1C" id="62">
-											<DataPath>products.ref1C</DataPath>
-											<EditMode>EnterOnInput</EditMode>
-											<AutoEditMode>true</AutoEditMode>
-											<ContextMenu name="productsref1CContextMenu" id="63"/>
-											<ExtendedTooltip name="productsref1CExtendedTooltip" id="64"/>
-										</InputField>
-										<InputField name="productslikeRef" id="65">
-											<DataPath>products.likeRef</DataPath>
-											<EditMode>EnterOnInput</EditMode>
-											<AutoEditMode>true</AutoEditMode>
-											<ContextMenu name="productslikeRefContextMenu" id="66"/>
-											<ExtendedTooltip name="productslikeRefExtendedTooltip" id="67"/>
-										</InputField>
-									</ChildItems>
-								</Table>
+								<InputField name="productsref1C" id="62">
+									<DataPath>products.ref1C</DataPath>
+									<EditMode>EnterOnInput</EditMode>
+									<AutoEditMode>true</AutoEditMode>
+									<ContextMenu name="productsref1CContextMenu" id="63"/>
+									<ExtendedTooltip name="productsref1CExtendedTooltip" id="64"/>
+								</InputField>
+								<InputField name="productslikeRef" id="65">
+									<DataPath>products.likeRef</DataPath>
+									<EditMode>EnterOnInput</EditMode>
+									<AutoEditMode>true</AutoEditMode>
+									<ContextMenu name="productslikeRefContextMenu" id="66"/>
+									<ExtendedTooltip name="productslikeRefExtendedTooltip" id="67"/>
+								</InputField>
 							</ChildItems>
-						</UsualGroup>
-						<UsualGroup name="GroupActions" id="158">
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Сопоставить:</v8:content>
-								</v8:item>
-							</Title>
-							<ToolTip>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Group actions</v8:content>
-								</v8:item>
-							</ToolTip>
-							<Group>Vertical</Group>
-							<Representation>WeakSeparation</Representation>
-							<ExtendedTooltip name="GroupActionsExtendedTooltip" id="159"/>
-							<ChildItems>
-								<Button name="MatchProductsByNum" id="160">
-									<Type>UsualButton</Type>
-									<CommandName>Form.Command.MatchProductsByNum</CommandName>
-									<ExtendedTooltip name="MatchProductsByNumExtendedTooltip" id="161"/>
-								</Button>
-							</ChildItems>
-						</UsualGroup>
+						</Table>
 					</ChildItems>
 				</Page>
 				<Page name="GroupMeasureUnits" id="28">
@@ -683,12 +559,11 @@
 					<Title>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Партнер 1С</v8:content>
+							<v8:content>Контрагент 1С</v8:content>
 						</v8:item>
 					</Title>
 					<Type>
 						<v8:Type>cfg:CatalogRef.Контрагенты</v8:Type>
-						<v8:Type>cfg:CatalogRef.Партнеры</v8:Type>
 					</Type>
 				</Column>
 				<Column name="likeRef" id="2">
@@ -839,7 +714,7 @@
 					<Title>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Партнер 1С</v8:content>
+							<v8:content>Ref1 C</v8:content>
 						</v8:item>
 					</Title>
 					<Type>
@@ -894,11 +769,11 @@
 				</Column>
 			</Columns>
 		</Attribute>
-		<Attribute name="docType" id="8">
+		<Attribute name="matchingType" id="8">
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Document type</v8:content>
+					<v8:content>Matching type</v8:content>
 				</v8:item>
 			</Title>
 			<Type>
@@ -908,41 +783,6 @@
 					<v8:AllowedLength>Variable</v8:AllowedLength>
 				</v8:StringQualifiers>
 			</Type>
-		</Attribute>
-		<Attribute name="suppliersConceptions" id="9">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Партнер -&gt; Концепция</v8:content>
-				</v8:item>
-			</Title>
-			<Type>
-				<v8:Type>v8:ValueTable</v8:Type>
-			</Type>
-			<Columns>
-				<Column name="ref1C" id="1">
-					<Title>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Партнер 1С</v8:content>
-						</v8:item>
-					</Title>
-					<Type>
-						<v8:Type>cfg:CatalogRef.Партнеры</v8:Type>
-					</Type>
-				</Column>
-				<Column name="likeRef" id="2">
-					<Title>
-						<v8:item>
-							<v8:lang>ru</v8:lang>
-							<v8:content>Концепция IIKO</v8:content>
-						</v8:item>
-					</Title>
-					<Type>
-						<v8:Type>cfg:CatalogRef.like_conceptions</v8:Type>
-					</Type>
-				</Column>
-			</Columns>
 		</Attribute>
 	</Attributes>
 	<Commands>
@@ -975,21 +815,6 @@
 				</v8:item>
 			</ToolTip>
 			<Action>CancelChanges</Action>
-		</Command>
-		<Command name="MatchProductsByNum" id="3">
-			<Title>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>По артикулу</v8:content>
-				</v8:item>
-			</Title>
-			<ToolTip>
-				<v8:item>
-					<v8:lang>ru</v8:lang>
-					<v8:content>Match products by num</v8:content>
-				</v8:item>
-			</ToolTip>
-			<Action>MatchProductsByNum</Action>
 		</Command>
 	</Commands>
 </Form>

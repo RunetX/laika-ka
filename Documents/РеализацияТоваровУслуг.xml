@@ -55,18 +55,6 @@
 					</Type>
 				</Properties>
 			</Attribute>
-			<Attribute uuid="8fc4b7f3-e2c6-468b-a445-c8a6b0375270">
-				<InternalInfo/>
-				<Properties>
-					<ObjectBelonging>Adopted</ObjectBelonging>
-					<Name>Партнер</Name>
-					<Comment/>
-					<ExtendedConfigurationObject>50c9ead0-2833-4f57-86bb-47fa6ffdc8aa</ExtendedConfigurationObject>
-					<Type>
-						<v8:Type>cfg:CatalogRef.Партнеры</v8:Type>
-					</Type>
-				</Properties>
-			</Attribute>
 			<Form>ФормаСписка</Form>
 			<TabularSection uuid="dff4fa76-af2c-4b6e-80b7-054e977003d8">
 				<InternalInfo>
@@ -139,7 +127,7 @@
 							</Type>
 						</Properties>
 					</Attribute>
-					<Attribute uuid="b57d6e57-e1bb-46ef-868c-f732eba30ca5">
+					<Attribute uuid="5ac990c5-4d6d-4e4f-adf8-9dc5e335d18f">
 						<InternalInfo/>
 						<Properties>
 							<ObjectBelonging>Adopted</ObjectBelonging>
@@ -147,7 +135,7 @@
 							<Comment/>
 							<ExtendedConfigurationObject>1015a569-f8d5-4124-8798-aa6a1da9811d</ExtendedConfigurationObject>
 							<Type>
-								<v8:Type>cfg:CatalogRef.СтавкиНДС</v8:Type>
+								<v8:TypeId>441782ef-91e5-4d8e-ab5c-305e4fac0f4f</v8:TypeId>
 							</Type>
 						</Properties>
 					</Attribute>

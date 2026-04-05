@@ -1,5 +1,5 @@
 ﻿///////////////////////////////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2019-2023, Tian Semen Sergeevich (semen@tyan.pw), https://mu7.ru
+// Copyright (c) 2021, ООО Изи Клауд, https://izi.cloud
 // All rights reserved. This program and accompanying materials 
 // are subject to license terms Attribution 4.0 International (CC BY 4.0)
 // The license text is available here:
@@ -148,19 +148,17 @@ Function GetDocumentXDTO(connection, ref1C, matchedObjects)
 
 EndFunction
 
-Function GetMatchedObjects(connection, tableManager, docType) Export
+Function GetMatchedObjects(connection, tableManager, matchingType) Export
 
 	matchedObjectsQuery = New Query;
 	matchedObjectsQuery.TempTablesManager = tableManager;
 	matchedObjectsQuery.Text = "SELECT
 	                           |	typeDependentRequisites.ref1C AS ref1C,
-							   |	typeDependentRequisites.mType AS mType,
 	                           |	like_objectMatching.likeRef AS likeRef
 	                           |FROM
 	                           |	typeDependentRequisites AS typeDependentRequisites
 	                           |		LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
 	                           |		ON typeDependentRequisites.ref1C = like_objectMatching.ref1C
-							   |			AND typeDependentRequisites.mType = like_objectMatching.matchingType
 	                           |			AND (like_objectMatching.connection = &connection)
 	                           |			AND (like_objectMatching.docType = &docType)
 	                           |
@@ -168,7 +166,6 @@ Function GetMatchedObjects(connection, tableManager, docType) Export
 	                           |
 	                           |SELECT
 	                           |	typeUndependentRequisites.ref1C,
-							   |  	VALUE(Enum.like_matchingTypes.EmptyRef),
 	                           |	like_objectMatching.likeRef
 	                           |FROM
 	                           |	typeUndependentRequisites AS typeUndependentRequisites
@@ -176,24 +173,22 @@ Function GetMatchedObjects(connection, tableManager, docType) Export
 	                           |		ON typeUndependentRequisites.ref1C = like_objectMatching.ref1C
 	                           |			AND (like_objectMatching.connection = &connection)";
 	matchedObjectsQuery.SetParameter("connection", connection);
-	matchedObjectsQuery.SetParameter("docType", docType);
+	matchedObjectsQuery.SetParameter("docType", matchingType);
 	Return matchedObjectsQuery.Execute().Unload();
 
 EndFunction
 
-Function GetUnmatchedObjects(connection, tableManager, docType) Export
+Function GetUnmatchedObjects(connection, tableManager, matchingType) Export
 	
 	unmatchedObjectsQuery = New Query;
 	unmatchedObjectsQuery.TempTablesManager = tableManager;
 	unmatchedObjectsQuery.Text = "SELECT
 	                             |	typeDependentRequisites.ref1C AS ref1C,
-								 |	typeDependentRequisites.mType AS mType,
 	                             |	like_objectMatching.likeRef AS likeRef
 	                             |FROM
 	                             |	typeDependentRequisites AS typeDependentRequisites
 	                             |		LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
 	                             |		ON typeDependentRequisites.ref1C = like_objectMatching.ref1C
-								 |			AND typeDependentRequisites.mType = like_objectMatching.matchingType
 	                             |			AND (like_objectMatching.connection = &connection)
 	                             |			AND (like_objectMatching.docType = &docType)
 	                             |WHERE
@@ -203,7 +198,6 @@ Function GetUnmatchedObjects(connection, tableManager, docType) Export
 	                             |
 	                             |SELECT
 	                             |	typeUndependentRequisites.ref1C,
-								 |  VALUE(Enum.like_matchingTypes.EmptyRef),
 	                             |	like_objectMatching.likeRef
 	                             |FROM
 	                             |	typeUndependentRequisites AS typeUndependentRequisites
@@ -213,7 +207,7 @@ Function GetUnmatchedObjects(connection, tableManager, docType) Export
 	                             |WHERE
 	                             |	like_objectMatching.likeRef IS NULL";
 	unmatchedObjectsQuery.SetParameter("connection", connection);
-	unmatchedObjectsQuery.SetParameter("docType", docType);
+	unmatchedObjectsQuery.SetParameter("docType", matchingType);
 	Return unmatchedObjectsQuery.Execute().Unload();
 	
 EndFunction
@@ -223,23 +217,50 @@ Function GetUnmatchedCount(documentsList) Export
 	If documentsList.Count() = 0 Then
 		Return 0;
 	EndIf;
-
+	
 	If TypeOf(documentsList[0]) = Type("DocumentRef.ПриобретениеТоваровУслуг") Then
 		tableManager = like_InvoicesAtServer.GetIncomingInvoicesRequisites(documentsList);
-		docType = "Приобретение";
+		matchingType = "Приобретение";
 	ElsIf TypeOf(documentsList[0]) = Type("DocumentRef.РеализацияТоваровУслуг") Then
 		tableManager = like_InvoicesAtServer.GetSaleOfGoodsDocumentRequisites(documentsList);
-		docType = "Реализация";
+		matchingType = "Реализация";
 	ElsIf TypeOf(documentsList[0]) = Type("DocumentRef.ОтгрузкаТоваровСХранения") Then
 		tableManager = like_InvoicesAtServer.ShipmentOfGoodsFromStorageRequisites(documentsList);
-		docType = "Отгрузка";
+		matchingType = "Отгрузка";
 	EndIf;
 	
-	connection = like_ConnectionAtServer.GetActiveConnecton();
-
-	unmatchedObjects = GetUnmatchedObjects(connection, tableManager, docType);
-	
-	Return unmatchedObjects.Count();
+	unmatchedObjectsQuery = New Query;
+	unmatchedObjectsQuery.TempTablesManager = tableManager;
+	unmatchedObjectsQuery.Text = "SELECT
+	                             |	SUM(unmatchedCounts.unmatchedCount) AS unmatchedCount
+	                             |FROM
+	                             |	(SELECT
+	                             |		COUNT(typeDependentRequisites.ref1C) AS unmatchedCount
+	                             |	FROM
+	                             |		typeDependentRequisites AS typeDependentRequisites
+	                             |			LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
+	                             |			ON typeDependentRequisites.ref1C = like_objectMatching.ref1C
+	                             |				AND (like_objectMatching.connection = &connection)
+	                             |				AND (like_objectMatching.docType = &docType)
+	                             |	WHERE
+	                             |		like_objectMatching.likeRef IS NULL
+	                             |	
+	                             |	UNION
+	                             |	
+	                             |	SELECT
+	                             |		COUNT(typeUndependentRequisites.ref1C)
+	                             |	FROM
+	                             |		typeUndependentRequisites AS typeUndependentRequisites
+	                             |			LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
+	                             |			ON typeUndependentRequisites.ref1C = like_objectMatching.ref1C
+	                             |				AND (like_objectMatching.connection = &connection)
+	                             |	WHERE
+	                             |		like_objectMatching.likeRef IS NULL) AS unmatchedCounts";
+	unmatchedObjectsQuery.SetParameter("connection", like_ConnectionAtServer.GetActiveConnecton());
+	unmatchedObjectsQuery.SetParameter("docType", matchingType);
+	unmatchedSelection = unmatchedObjectsQuery.Execute().Select();
+	unmatchedSelection.Next();
+	Return unmatchedSelection.unmatchedCount;
 	
 EndFunction
 
@@ -266,17 +287,7 @@ Procedure SaveOrUpdateDocument(connection, ref1C, matchedObjects) Export
 	EndTry;
 	
 	result = like_CreatingObjects.SendPackage2IIKO(connection, XMLParameters, like_CommonAtServer.XDTO2XML(iikoPackage));
-	
-	If result = Undefined Then
-		
-		logString = NStr("en = 'Error creating/modifying document. See the log for details.'; 
-|ru = 'Ошибка создания/изменения документа. См. детали в журнале регистрации'");
-		like_Common.UsrMessage(logString);
-		
-		Return;
-		
-	EndIf;
-	
+
 	If result.success = "true" Then
 		// AddDocumentMatching
 		InformationRegisters.like_documentsMatching.MatchingAdd(connection, 
@@ -286,14 +297,14 @@ Procedure SaveOrUpdateDocument(connection, ref1C, matchedObjects) Export
 																	result.returnValue.documentNumber,
 																	GetDocumentTypeMatching(ref1C)));
 		logString = NStr("en = 'Document successfully created'; ru = 'Документ успешно изменен'") + " №" + result.returnValue.documentNumber;	
-		WriteLogEvent(NStr("en = 'IIKO. document creating'; ru = 'Создание(изменение) документа IIKO'"),
+		WriteLogEvent(NStr("en = 'IIKO document creating'; ru = 'Создание(изменение) документа IIKO'"),
 						EventLogLevel.Information,
 						ref1C,,
 						logString);
 		like_Common.UsrMessage(logString);
 	Else
 		logString = NStr("en = 'Failed to create IIKO document'; ru = 'Не удалось изменить документ IIKO'") + " " + result.errorString;
-		WriteLogEvent(NStr("en = 'IIKO. document creating'; ru = 'Создание(изменение) документа IIKO'"),
+		WriteLogEvent(NStr("en = 'IIKO document creating'; ru = 'Создание(изменение) документа IIKO'"),
 						EventLogLevel.Error,
 						ref1C,,
 						logString);	

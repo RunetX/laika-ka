@@ -79,12 +79,6 @@
 						<Button name="UpdateInvoicesList" id="318">
 							<Type>UsualButton</Type>
 							<CommandName>Form.Command.UpdateInvoicesList</CommandName>
-							<Title>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Обновить</v8:content>
-								</v8:item>
-							</Title>
 							<ExtendedTooltip name="UpdateInvoicesListExtendedTooltip" id="319"/>
 						</Button>
 					</ChildItems>
