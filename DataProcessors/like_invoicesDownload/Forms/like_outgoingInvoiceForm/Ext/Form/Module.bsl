@@ -1,4 +1,4 @@
-&AtServer
+﻿&AtServer
 Function FillInvoiceData(invoiceVT)
 
 	fQuery = New Query("SELECT

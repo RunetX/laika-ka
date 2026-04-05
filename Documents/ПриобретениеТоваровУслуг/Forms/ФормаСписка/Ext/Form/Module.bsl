@@ -1,4 +1,4 @@
-&AtClient
+﻿&AtClient
 Procedure like_PeriodOnChange(Item)
 	like_UpdateInvoicesListAtServer();
 EndProcedure

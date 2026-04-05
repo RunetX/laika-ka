@@ -1,4 +1,4 @@
-&AtClient
+﻿&AtClient
 Procedure RunTests(Command)
 	RunTestsAtServer();
 EndProcedure

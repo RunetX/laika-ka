@@ -1,4 +1,4 @@
-&AtServer
+﻿&AtServer
 Procedure GetInvoices(invoicesValueTable, invoicesType, invoicesTypeNumber)
 
 	invoicesRequest = like_InvoicesAtServer.GetInvoices(period.StartDate, EndOfDay(period.EndDate), invoicesType);

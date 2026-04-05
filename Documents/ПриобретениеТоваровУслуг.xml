@@ -159,11 +159,11 @@
 						<InternalInfo/>
 						<Properties>
 							<ObjectBelonging>Adopted</ObjectBelonging>
-							<Name>УдалитьСтавкаНДС</Name>
+							<Name>СтавкаНДС</Name>
 							<Comment/>
-							<ExtendedConfigurationObject>d28548c6-5c5b-4810-aa0c-d796cb57d685</ExtendedConfigurationObject>
+							<ExtendedConfigurationObject>6b024007-efad-421d-a44b-ffd3354f9f83</ExtendedConfigurationObject>
 							<Type>
-								<v8:Type>cfg:EnumRef.СтавкиНДС</v8:Type>
+								<v8:Type>cfg:CatalogRef.СтавкиНДС</v8:Type>
 							</Type>
 						</Properties>
 					</Attribute>
