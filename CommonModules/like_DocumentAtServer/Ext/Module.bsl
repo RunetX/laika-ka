@@ -225,9 +225,14 @@ Function GetUnmatchedCount(documentsList) Export
 	
 	connection = like_ConnectionAtServer.GetActiveConnecton();
 
-	unmatchedObjects = GetUnmatchedObjects(connection, tableManager, docType);
-	
-	Return unmatchedObjects.Count();
+	allObjects = GetMatchedObjects(connection, tableManager, docType);
+	count = 0;
+	For Each row In allObjects Do
+		If Not ValueIsFilled(row.likeRef) Then
+			count = count + 1;
+		EndIf;
+	EndDo;
+	Return count;
 	
 EndFunction
 

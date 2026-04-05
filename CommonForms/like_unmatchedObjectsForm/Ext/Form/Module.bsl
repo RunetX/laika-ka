@@ -19,84 +19,75 @@ Procedure OnCreateAtServer(Cancel, StandardProcessing)
 
 	If TypeOf(documentsList[0]) = Type("DocumentRef.ПриобретениеТоваровУслуг") Then
 
-		unmatchedObjects = LoadUnmatchedIncomingInvoices(activeConnection, documentsList);	
+		allObjects = LoadIncomingInvoiceObjects(activeConnection, documentsList);
 
 	ElsIf TypeOf(documentsList[0]) = Type("DocumentRef.РеализацияТоваровУслуг") Then
 
-		unmatchedObjects = LoadUnmatchedSaleOfGoodsDocument(activeConnection, documentsList);
-		
+		allObjects = LoadSaleOfGoodsObjects(activeConnection, documentsList);
+
 	ElsIf TypeOf(documentsList[0]) = Type("DocumentRef.ОтгрузкаТоваровСХранения") Then
 
-		unmatchedObjects = LoadUnmatchedShipmentOfGoodsFromStorage(activeConnection, documentsList);
-		
+		allObjects = LoadShipmentOfGoodsObjects(activeConnection, documentsList);
+
 	EndIf;
 
 	measureUnits.Load(
-		GetUnmatchedItemsByType(unmatchedObjects, 
+		GetItemsByType(allObjects,
 			Type("CatalogRef.УпаковкиЕдиницыИзмерения")));
 	products.Load(
-		GetUnmatchedItemsByType(unmatchedObjects, 
+		GetItemsByType(allObjects,
 			Type("CatalogRef.Номенклатура")));
 
 EndProcedure
 
 &AtServer
-Function LoadUnmatchedIncomingInvoices(activeConnection, documentsList)
-	
+Function LoadIncomingInvoiceObjects(activeConnection, documentsList)
+
 	tableManager = like_InvoicesAtServer.GetIncomingInvoicesRequisites(documentsList);
 	docType = "Приобретение";
 
-	unmatchedObjects = like_DocumentAtServer.GetUnmatchedObjects(activeConnection, tableManager, docType);
+	allObjects = like_DocumentAtServer.GetMatchedObjects(activeConnection, tableManager, docType);
 
-	stores.Load(		GetUnmatchedItemsByType(unmatchedObjects, Type("CatalogRef.Склады")));
-	suppliers.Load(		GetUnmatchedItemsByType(unmatchedObjects, Type("CatalogRef.Партнеры")));
-	
-	Return unmatchedObjects;
+	stores.Load(    GetItemsByType(allObjects, Type("CatalogRef.Склады")));
+	suppliers.Load( GetItemsByType(allObjects, Type("CatalogRef.Партнеры")));
+
+	Return allObjects;
 	
 EndFunction
 
 &AtServer
-Function LoadUnmatchedSaleOfGoodsDocument(activeConnection, documentsList)
+Function LoadSaleOfGoodsObjects(activeConnection, documentsList)
 
 	tableManager = like_InvoicesAtServer.GetSaleOfGoodsDocumentRequisites(documentsList);
 	docType = "Реализация";
 
-	unmatchedObjects = like_DocumentAtServer.GetUnmatchedObjects(activeConnection, tableManager, docType);
+	allObjects = like_DocumentAtServer.GetMatchedObjects(activeConnection, tableManager, docType);
 
-	organizations.Load(		GetUnmatchedItemsByType(unmatchedObjects, Type("CatalogRef.Организации")));
-	suppliersStores.Load(	GetUnmatchedItemsByType(unmatchedObjects, Type("CatalogRef.Контрагенты")));
-	
-	unmatchedConceptions = GetUnmatchedItemsByType(unmatchedObjects,
-		Type("CatalogRef.Партнеры"), 
-		Enums.like_matchingTypes.partnerConception);
-	suppliersConceptions.Load(unmatchedConceptions);
-	
-	Return unmatchedObjects;
+	organizations.Load(      GetItemsByType(allObjects, Type("CatalogRef.Организации")));
+	suppliersStores.Load(    GetItemsByType(allObjects, Type("CatalogRef.Контрагенты")));
+	suppliersConceptions.Load(GetItemsByType(allObjects,
+		Type("CatalogRef.Партнеры"),
+		Enums.like_matchingTypes.partnerConception));
+
+	Return allObjects;
 	
 EndFunction
 
 &AtServer
-Function LoadUnmatchedShipmentOfGoodsFromStorage(activeConnection, documentsList)
-	
+Function LoadShipmentOfGoodsObjects(activeConnection, documentsList)
+
 	tableManager = like_InvoicesAtServer.ShipmentOfGoodsFromStorageRequisites(documentsList);
 	docType = "Отгрузка";
-	
-	unmatchedObjects = like_DocumentAtServer.GetUnmatchedObjects(activeConnection,
-		tableManager,
-		docType);
 
-	unmatchedStores = GetUnmatchedItemsByType(unmatchedObjects, Type("CatalogRef.Склады"));	
-	stores.Load(unmatchedStores);
-	
-	unmatchedSuppliers = GetUnmatchedItemsByType(unmatchedObjects, Type("CatalogRef.Партнеры"));
-	suppliers.Load(unmatchedSuppliers);
-	
-	unmatchedConceptions = GetUnmatchedItemsByType(unmatchedObjects,
-		Type("CatalogRef.Партнеры"), 
-		Enums.like_matchingTypes.partnerConception);
-	suppliersConceptions.Load(unmatchedConceptions);
-	
-	Return unmatchedObjects;
+	allObjects = like_DocumentAtServer.GetMatchedObjects(activeConnection, tableManager, docType);
+
+	stores.Load(    GetItemsByType(allObjects, Type("CatalogRef.Склады")));
+	suppliers.Load( GetItemsByType(allObjects, Type("CatalogRef.Партнеры")));
+	suppliersConceptions.Load(GetItemsByType(allObjects,
+		Type("CatalogRef.Партнеры"),
+		Enums.like_matchingTypes.partnerConception));
+
+	Return allObjects;
 	
 EndFunction
 
@@ -249,7 +240,7 @@ Procedure SendInvoicesAfterMatchAtServer(documentsListRef)
 EndProcedure
 
 &AtServerNoContext
-Function GetUnmatchedItemsByType(unmatchedObjects, typeFilter, matchingType = Undefined)
+Function GetItemsByType(unmatchedObjects, typeFilter, matchingType = Undefined)
 	
 	If Not ValueIsFilled(matchingType) Then
 		matchingType = Enums.like_matchingTypes.EmptyRef();
