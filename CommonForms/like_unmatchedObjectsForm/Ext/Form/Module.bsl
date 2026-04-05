@@ -220,12 +220,14 @@ Procedure SetConnectionFilter(activeConnection)
 		EndDo;
 		existingParams.Add(connectionParam);
 		formItem.ChoiceParameters = New FixedArray(existingParams);
+		formItem.ChoiceHistoryOnInput = ChoiceHistoryOnInput.DontUse;
 	EndDo;
 
 	// products — ChoiceForm = ListForm, т.к. ChoiceParameters не фильтрует автоформу выбора
 	productsField = Items.Find("productslikeRef");
 	If productsField <> Undefined Then
 		productsField.ChoiceForm = "Catalog.like_products.Form.ListForm";
+		productsField.ChoiceHistoryOnInput = ChoiceHistoryOnInput.DontUse;
 	EndIf;
 EndProcedure
 
@@ -279,14 +281,35 @@ Function GetUnmatchedItemsByType(unmatchedObjects, typeFilter, matchingType = Un
 EndFunction
 
 &AtServer
-Procedure SaveTableValuesToRegister(connection, table, docType = "", matchingType = Undefined)
+Procedure CollectMatchingsFromTable(allItems, connection, table, docType = "", matchingType = Undefined)
 
 	If Not ValueIsFilled(matchingType) Then
 		matchingType = Enums.like_matchingTypes.EmptyRef();
 	EndIf;
-	
+
 	For Each Row In table Do
-		InformationRegisters.like_objectMatching.MatchingAdd(connection, Row.ref1C, Row.likeRef, docType, matchingType);	
+		If Not ValueIsFilled(Row.likeRef) Then
+			Continue;
+		EndIf;
+
+		// Валидация: позиция IIKO не помечена на удаление
+		likeObject = Row.likeRef.GetObject();
+		If likeObject <> Undefined And likeObject.DeletionMark Then
+			Message(NStr("ru = 'Позиция помечена на удаление в IIKO: '") + String(Row.likeRef));
+			Continue;
+		EndIf;
+
+		item = New Map;
+		item.Insert("ref1C",        String(Row.ref1C.UUID()));
+		item.Insert("ref1CType",    like_Common.TypeNameShort(Row.ref1C));
+		item.Insert("docType",      docType);
+		item.Insert("matchingType", String(matchingType));
+		item.Insert("likeRef",      String(Row.likeRef.UUID()));
+		item.Insert("likeRefType",  like_Common.TypeNameShort(Row.likeRef));
+		allItems.Add(item);
+
+		// Локальный регистр (fallback)
+		InformationRegisters.like_objectMatching.MatchingAdd(connection, Row.ref1C, Row.likeRef, docType, matchingType);
 	EndDo;
 
 EndProcedure
@@ -295,21 +318,28 @@ EndProcedure
 Procedure SaveValuesAtServer()
 
 	connection = like_ConnectionAtServer.GetActiveConnecton();
+	connectionID = String(connection.UUID());
+	allItems = New Array;
 
-	SaveTableValuesToRegister(connection, measureUnits);
-	SaveTableValuesToRegister(connection, products);
+	CollectMatchingsFromTable(allItems, connection, measureUnits);
+	CollectMatchingsFromTable(allItems, connection, products);
 
 	If docType = "Приобретение" Then
-		SaveTableValuesToRegister(connection, stores,	 docType);
-		SaveTableValuesToRegister(connection, suppliers, docType);
+		CollectMatchingsFromTable(allItems, connection, stores, docType);
+		CollectMatchingsFromTable(allItems, connection, suppliers, docType);
 	ElsIf docType = "Отгрузка" Then
-		SaveTableValuesToRegister(connection, stores,	 docType);
-		SaveTableValuesToRegister(connection, suppliers, docType);
-		SaveTableValuesToRegister(connection, suppliersConceptions, docType, Enums.like_matchingTypes.partnerConception);
+		CollectMatchingsFromTable(allItems, connection, stores, docType);
+		CollectMatchingsFromTable(allItems, connection, suppliers, docType);
+		CollectMatchingsFromTable(allItems, connection, suppliersConceptions, docType, Enums.like_matchingTypes.partnerConception);
 	ElsIf docType = "Реализация" Then
-		SaveTableValuesToRegister(connection, organizations,   docType);
-		SaveTableValuesToRegister(connection, suppliersStores, docType);
-		SaveTableValuesToRegister(connection, suppliersConceptions, docType, Enums.like_matchingTypes.partnerConception);
+		CollectMatchingsFromTable(allItems, connection, organizations, docType);
+		CollectMatchingsFromTable(allItems, connection, suppliersStores, docType);
+		CollectMatchingsFromTable(allItems, connection, suppliersConceptions, docType, Enums.like_matchingTypes.partnerConception);
+	EndIf;
+
+	// Один батч-запрос на Go сервис
+	If allItems.Count() > 0 Then
+		like_CoreAPI.SaveRefMatchings(connectionID, allItems);
 	EndIf;
 
 EndProcedure
