@@ -532,6 +532,21 @@ Function DeleteRefMatching(connectionID, item) Export
 
 EndFunction
 
+// Запрашивает сопоставления для конкретных позиций.
+// items — Массив Соответствий с ключами: ref1C, ref1CType, docType, matchingType
+// Возвращает Массив Соответствий с ключами: ref1C, ref1CType, docType, matchingType, likeRef, likeRefType, found
+Function LookupMatchings(connectionID, items) Export
+
+	result = DoExecute("POST", "/api/v1/matchings/lookup", MapToJSON(items), connectionID);
+	If Not result.Success Then
+		Return New Array;
+	EndIf;
+
+	parsed = ParseJSON(result.Body);
+	Return ?(parsed <> Undefined, parsed, New Array);
+
+EndFunction
+
 // ============================================================
 // СОПОСТАВЛЕНИЯ ДОКУМЕНТОВ (document_matching)
 // ============================================================

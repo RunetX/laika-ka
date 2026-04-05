@@ -186,72 +186,24 @@ EndFunction
 
 Function GetMatchedObjects(connection, tableManager, docType) Export
 
-	matchedObjectsQuery = New Query;
-	matchedObjectsQuery.TempTablesManager = tableManager;
-	matchedObjectsQuery.Text = "SELECT
-	                           |	typeDependentRequisites.ref1C AS ref1C,
-							   |	typeDependentRequisites.mType AS mType,
-	                           |	like_objectMatching.likeRef AS likeRef
-	                           |FROM
-	                           |	typeDependentRequisites AS typeDependentRequisites
-	                           |		LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
-	                           |		ON typeDependentRequisites.ref1C = like_objectMatching.ref1C
-							   |			AND typeDependentRequisites.mType = like_objectMatching.matchingType
-	                           |			AND (like_objectMatching.connection = &connection)
-	                           |			AND (like_objectMatching.docType = &docType)
-	                           |
-	                           |UNION
-	                           |
-	                           |SELECT
-	                           |	typeUndependentRequisites.ref1C,
-							   |  	VALUE(Enum.like_matchingTypes.EmptyRef),
-	                           |	like_objectMatching.likeRef
-	                           |FROM
-	                           |	typeUndependentRequisites AS typeUndependentRequisites
-	                           |		LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
-	                           |		ON typeUndependentRequisites.ref1C = like_objectMatching.ref1C
-	                           |			AND (like_objectMatching.connection = &connection)";
-	matchedObjectsQuery.SetParameter("connection", connection);
-	matchedObjectsQuery.SetParameter("docType", docType);
-	Return matchedObjectsQuery.Execute().Unload();
+	connectionID = String(connection.UUID());
+	lookupItems = BuildLookupItems(tableManager, docType);
+	lookupResults = like_CoreAPI.LookupMatchings(connectionID, lookupItems);
+
+	Return LookupResultsToValueTable(lookupResults);
 
 EndFunction
 
 Function GetUnmatchedObjects(connection, tableManager, docType) Export
-	
-	unmatchedObjectsQuery = New Query;
-	unmatchedObjectsQuery.TempTablesManager = tableManager;
-	unmatchedObjectsQuery.Text = "SELECT
-	                             |	typeDependentRequisites.ref1C AS ref1C,
-								 |	typeDependentRequisites.mType AS mType,
-	                             |	like_objectMatching.likeRef AS likeRef
-	                             |FROM
-	                             |	typeDependentRequisites AS typeDependentRequisites
-	                             |		LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
-	                             |		ON typeDependentRequisites.ref1C = like_objectMatching.ref1C
-								 |			AND typeDependentRequisites.mType = like_objectMatching.matchingType
-	                             |			AND (like_objectMatching.connection = &connection)
-	                             |			AND (like_objectMatching.docType = &docType)
-	                             |WHERE
-	                             |	like_objectMatching.likeRef IS NULL
-	                             |
-	                             |UNION
-	                             |
-	                             |SELECT
-	                             |	typeUndependentRequisites.ref1C,
-								 |  VALUE(Enum.like_matchingTypes.EmptyRef),
-	                             |	like_objectMatching.likeRef
-	                             |FROM
-	                             |	typeUndependentRequisites AS typeUndependentRequisites
-	                             |		LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
-	                             |		ON typeUndependentRequisites.ref1C = like_objectMatching.ref1C
-	                             |			AND (like_objectMatching.connection = &connection)
-	                             |WHERE
-	                             |	like_objectMatching.likeRef IS NULL";
-	unmatchedObjectsQuery.SetParameter("connection", connection);
-	unmatchedObjectsQuery.SetParameter("docType", docType);
-	Return unmatchedObjectsQuery.Execute().Unload();
-	
+
+	connectionID = String(connection.UUID());
+	lookupItems = BuildLookupItems(tableManager, docType);
+	lookupResults = like_CoreAPI.LookupMatchings(connectionID, lookupItems);
+
+	// Фильтруем: только те, что не найдены (found = false)
+	resultVT = LookupResultsToValueTable(lookupResults, True);
+	Return resultVT;
+
 EndFunction
 
 Function GetUnmatchedCount(documentsList) Export
@@ -337,3 +289,109 @@ Procedure SaveOrUpdateDocument(connection, ref1C, matchedObjects) Export
 	EndIf;
 	
 EndProcedure
+
+// Собирает массив запросов для lookup из временных таблиц реквизитов.
+Function BuildLookupItems(tableManager, docType)
+
+	q = New Query;
+	q.TempTablesManager = tableManager;
+	q.Text = "SELECT ref1C, mType FROM typeDependentRequisites
+	         |UNION ALL
+	         |SELECT ref1C, VALUE(Enum.like_matchingTypes.EmptyRef) FROM typeUndependentRequisites";
+	sel = q.Execute().Select();
+
+	items = New Array;
+	While sel.Next() Do
+		item = New Map;
+		item.Insert("ref1C",        String(sel.ref1C.UUID()));
+		item.Insert("ref1CType",    like_Common.TypeNameShort(sel.ref1C));
+		item.Insert("docType",      ?(ValueIsFilled(sel.mType), docType, ""));
+		item.Insert("matchingType", String(sel.mType));
+		items.Add(item);
+	EndDo;
+	Return items;
+
+EndFunction
+
+// Преобразует ответ LookupMatchings в таблицу значений {ref1C, mType, likeRef}.
+// Если unmatchedOnly = True, возвращает только строки с found = false.
+Function LookupResultsToValueTable(lookupResults, unmatchedOnly = False)
+
+	resultVT = New ValueTable;
+	resultVT.Columns.Add("ref1C");
+	resultVT.Columns.Add("mType");
+	resultVT.Columns.Add("likeRef");
+
+	For Each lr In lookupResults Do
+		isFound = like_CoreAPI.SafeGet(lr, "found", False);
+		If unmatchedOnly And isFound Then
+			Continue;
+		EndIf;
+
+		row = resultVT.Add();
+		// Восстанавливаем ссылки из UUID
+		ref1CUUID  = like_CoreAPI.SafeGet(lr, "ref1C", "");
+		ref1CType  = like_CoreAPI.SafeGet(lr, "ref1CType", "");
+		row.ref1C  = RestoreRefFromUUID(ref1CUUID, ref1CType);
+
+		matchingTypeStr = like_CoreAPI.SafeGet(lr, "matchingType", "");
+		If ValueIsFilled(matchingTypeStr) Then
+			row.mType = Enums.like_matchingTypes[matchingTypeStr];
+		Else
+			row.mType = Enums.like_matchingTypes.EmptyRef();
+		EndIf;
+
+		likeRefUUID  = like_CoreAPI.SafeGet(lr, "likeRef", "");
+		likeRefType  = like_CoreAPI.SafeGet(lr, "likeRefType", "");
+		If ValueIsFilled(likeRefUUID) Then
+			row.likeRef = RestoreRefFromUUID(likeRefUUID, likeRefType);
+		Else
+			row.likeRef = Undefined;
+		EndIf;
+	EndDo;
+
+	Return resultVT;
+
+EndFunction
+
+// Восстанавливает ссылку 1С из UUID-строки и краткого имени типа.
+Function RestoreRefFromUUID(uuidStr, typeName)
+
+	If Not ValueIsFilled(uuidStr) Or Not ValueIsFilled(typeName) Then
+		Return Undefined;
+	EndIf;
+
+	manager = Undefined;
+	// Типовые справочники КА
+	If typeName = "Номенклатура" Then
+		manager = Catalogs.Номенклатура;
+	ElsIf typeName = "Партнеры" Then
+		manager = Catalogs.Партнеры;
+	ElsIf typeName = "Контрагенты" Then
+		manager = Catalogs.Контрагенты;
+	ElsIf typeName = "Организации" Then
+		manager = Catalogs.Организации;
+	ElsIf typeName = "Склады" Then
+		manager = Catalogs.Склады;
+	ElsIf typeName = "УпаковкиЕдиницыИзмерения" Then
+		manager = Catalogs.УпаковкиЕдиницыИзмерения;
+	// like_* справочники
+	ElsIf typeName = "like_products" Then
+		manager = Catalogs.like_products;
+	ElsIf typeName = "like_stores" Then
+		manager = Catalogs.like_stores;
+	ElsIf typeName = "like_users" Then
+		manager = Catalogs.like_users;
+	ElsIf typeName = "like_measureUnits" Then
+		manager = Catalogs.like_measureUnits;
+	ElsIf typeName = "like_conceptions" Then
+		manager = Catalogs.like_conceptions;
+	EndIf;
+
+	If manager = Undefined Then
+		Return Undefined;
+	EndIf;
+
+	Return manager.GetRef(New UUID(uuidStr));
+
+EndFunction
