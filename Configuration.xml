@@ -67,7 +67,7 @@
 			</UsePurposes>
 			<ScriptVariant>English</ScriptVariant>
 			<Vendor>izi.cloud</Vendor>
-			<Version>0.3.9.2</Version>
+			<Version>0.3.9.3</Version>
 			<Caption/>
 			<ShortCaption/>
 			<DefaultLanguage>Language.Русский</DefaultLanguage>
@@ -118,6 +118,8 @@
 			<CommonModule>like_EntitiesAtServer</CommonModule>
 			<CommonModule>like_GlobalAtClient</CommonModule>
 			<CommonModule>like_InvoicesAtServer</CommonModule>
+			<CommonModule>like_Orders</CommonModule>
+			<CommonModule>like_OrdersServerCall</CommonModule>
 			<CommonModule>like_SQLRequestsAtServer</CommonModule>
 			<CommonModule>like_StandartSubsystemsAtClient</CommonModule>
 			<CommonModule>like_TypesAndDescriptionsAtServer</CommonModule>
@@ -139,6 +141,8 @@
 			<CommonCommand>like_OpenAbout</CommonCommand>
 			<CommonForm>like_aboutForm</CommonForm>
 			<CommonForm>like_unmatchedObjectsForm</CommonForm>
+			<Catalog>Валюты</Catalog>
+			<Catalog>ВидыЦен</Catalog>
 			<Catalog>Контрагенты</Catalog>
 			<Catalog>Номенклатура</Catalog>
 			<Catalog>Организации</Catalog>
@@ -158,6 +162,7 @@
 			<Catalog>like_products</Catalog>
 			<Catalog>like_stores</Catalog>
 			<Catalog>like_users</Catalog>
+			<Document>ЗаказКлиента</Document>
 			<Document>ОтгрузкаТоваровСХранения</Document>
 			<Document>ПриобретениеТоваровУслуг</Document>
 			<Document>РеализацияТоваровУслуг</Document>
@@ -172,10 +177,12 @@
 			<DataProcessor>like_entititesUpdate</DataProcessor>
 			<DataProcessor>like_invoicesDownload</DataProcessor>
 			<DataProcessor>like_downloadSalesAndPrepays</DataProcessor>
+			<DataProcessor>like_productionOrdersDownload</DataProcessor>
 			<InformationRegister>like_customersRevisions</InformationRegister>
 			<InformationRegister>like_entititesVersions</InformationRegister>
 			<InformationRegister>like_objectMatching</InformationRegister>
 			<InformationRegister>like_documentsMatching</InformationRegister>
+			<InformationRegister>like_ordersSettings</InformationRegister>
 		</ChildObjects>
 	</Configuration>
 </MetaDataObject>
