@@ -308,7 +308,7 @@
 			<DefaultObjectForm/>
 			<DefaultFolderForm/>
 			<DefaultListForm>Catalog.like_products.Form.ListForm</DefaultListForm>
-			<DefaultChoiceForm>Catalog.like_products.Form.ListForm</DefaultChoiceForm>
+			<DefaultChoiceForm/>
 			<DefaultFolderChoiceForm/>
 			<AuxiliaryObjectForm/>
 			<AuxiliaryFolderForm/>

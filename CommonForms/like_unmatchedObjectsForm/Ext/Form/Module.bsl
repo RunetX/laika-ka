@@ -115,6 +115,40 @@ EndProcedure
 
 #EndRegion
 
+#Region FormItemsEventHandlers
+
+&AtClient
+Procedure productslikeRefStartChoice(Item, ChoiceData, StandardProcessing)
+	StandardProcessing = False;
+
+	CurrentData = Items.products.CurrentData;
+	If CurrentData = Undefined Then
+		Return;
+	EndIf;
+
+	FormParameters = New Structure;
+	FormParameters.Insert("ChoiceMode", True);
+	FormParameters.Insert("CloseOnChoice", True);
+	FormParameters.Insert("CurrentRow", CurrentData.likeRef);
+
+	NotifyDescription = New NotifyDescription("productslikeRefChoiceComplete", ThisObject);
+	OpenForm("Catalog.like_products.Form.ListForm", FormParameters, Item,,,, NotifyDescription);
+EndProcedure
+
+&AtClient
+Procedure productslikeRefChoiceComplete(SelectedValue, AdditionalParameters) Export
+	If SelectedValue = Undefined Then
+		Return;
+	EndIf;
+
+	CurrentData = Items.products.CurrentData;
+	If CurrentData <> Undefined Then
+		CurrentData.likeRef = SelectedValue;
+	EndIf;
+EndProcedure
+
+#EndRegion
+
 #Region FormCommandsEventHandlers
 
 &AtClient
@@ -203,7 +237,6 @@ Procedure SetConnectionFilter(activeConnection)
 
 	likeRefFields = New Array;
 	likeRefFields.Add("storeslikeRef");
-	likeRefFields.Add("productslikeRef");
 	likeRefFields.Add("measureUnitslikeRef");
 	likeRefFields.Add("supplierslikeRef");
 	likeRefFields.Add("suppliersStoreslikeRef");
@@ -222,6 +255,12 @@ Procedure SetConnectionFilter(activeConnection)
 		existingParams.Add(connectionParam);
 		formItem.ChoiceParameters = New FixedArray(existingParams);
 	EndDo;
+
+	// products — через StartChoice, т.к. ChoiceParameters не фильтрует автоформу выбора
+	productsField = Items.Find("productslikeRef");
+	If productsField <> Undefined Then
+		productsField.SetAction("StartChoice", "productslikeRefStartChoice");
+	EndIf;
 EndProcedure
 
 &AtServerNoContext
