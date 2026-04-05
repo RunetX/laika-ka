@@ -172,61 +172,65 @@ Function GetSaleOfGoodsDocumentRequisites(documentsList) Export
 	requisitesQuery.SetParameter("documentsList", documentsList);
 	requisitesQuery.SetParameter("matchingTypes", matchingTypes);
 	requisitesQuery.Text = "SELECT
-   |	mTypes.matchingType AS mType
-   |INTO tmpMatchingTypes
-   |FROM
-   |	&matchingTypes AS mTypes
-   |;
-   |
-   |////////////////////////////////////////////////////////////////////////////////
-   |SELECT DISTINCT
-   |	SaleOfGoods.Партнер AS ref1C,
-   |	mTypes.mType AS mType
-   |INTO typeDependentRequisites
-   |FROM
-   |	Document.РеализацияТоваровУслуг AS SaleOfGoods,
-   |	tmpMatchingTypes AS mTypes
-   |WHERE
-   |	SaleOfGoods.Ref IN(&documentsList)
-   |
-   |UNION
-   |
-   |SELECT DISTINCT
-   |	SaleOfGoods.Контрагент,
-   |	VALUE(Enum.like_matchingTypes.EmptyRef)
-   |FROM
-   |	Document.РеализацияТоваровУслуг AS SaleOfGoods
-   |WHERE
-   |	SaleOfGoods.Ref IN(&documentsList)
-   |
-   |UNION
-   |
-   |SELECT DISTINCT
-   |	SaleOfGoods.Организация,
-   |	VALUE(Enum.like_matchingTypes.EmptyRef)
-   |FROM
-   |	Document.РеализацияТоваровУслуг AS SaleOfGoods
-   |WHERE
-   |	SaleOfGoods.Ref IN(&documentsList)
-   |;
-   |
-   |////////////////////////////////////////////////////////////////////////////////
-   |SELECT DISTINCT
-   |	Goods.Номенклатура AS ref1C
-   |INTO typeUndependentRequisites
-   |FROM
-   |	Document.РеализацияТоваровУслуг.Товары AS Goods
-   |WHERE
-   |	Goods.Ref IN(&documentsList)
-   |
-   |UNION
-   |
-   |SELECT DISTINCT
-   |	Goods.Номенклатура.ЕдиницаИзмерения
-   |FROM
-   |	Document.РеализацияТоваровУслуг.Товары AS Goods
-   |WHERE
-   |	Goods.Ref IN(&documentsList)";
+	|	mTypes.matchingType AS mType
+	|INTO tmpMatchingTypes
+	|FROM
+	|	&matchingTypes AS mTypes
+	|;
+	|
+	|////////////////////////////////////////////////////////////////////////////////
+	|SELECT DISTINCT
+	|	SaleOfGoods.Партнер AS ref1C,
+	|	mTypes.mType AS mType
+	|INTO typeDependentRequisites
+	|FROM
+	|	Document.РеализацияТоваровУслуг AS SaleOfGoods,
+	|	tmpMatchingTypes AS mTypes
+	|WHERE
+	|	SaleOfGoods.Ref IN(&documentsList)
+	|
+	|UNION
+	|
+	|SELECT DISTINCT
+	|	SaleOfGoods.Контрагент,
+	|	VALUE(Enum.like_matchingTypes.EmptyRef)
+	|FROM
+	|	Document.РеализацияТоваровУслуг AS SaleOfGoods
+	|WHERE
+	|	SaleOfGoods.Ref IN(&documentsList)
+	|
+	|UNION
+	|
+	|SELECT DISTINCT
+	|	SaleOfGoods.Организация,
+	|	VALUE(Enum.like_matchingTypes.EmptyRef)
+	|FROM
+	|	Document.РеализацияТоваровУслуг AS SaleOfGoods
+	|WHERE
+	|	SaleOfGoods.Ref IN(&documentsList)
+	|;
+	|
+	|////////////////////////////////////////////////////////////////////////////////
+	|SELECT DISTINCT
+	|	Goods.Номенклатура AS ref1C
+	|INTO typeUndependentRequisites
+	|FROM
+	|	Document.РеализацияТоваровУслуг.Товары AS Goods
+	|WHERE
+	|	Goods.Ref IN(&documentsList)
+	|
+	|UNION
+	|
+	|SELECT DISTINCT
+	|	CASE
+	|		WHEN Goods.Номенклатура.ВесИспользовать
+	|			THEN Goods.Номенклатура.ВесЕдиницаИзмерения
+	|		ELSE Goods.Номенклатура.ЕдиницаИзмерения
+	|	END
+	|FROM
+	|	Document.РеализацияТоваровУслуг.Товары AS Goods
+	|WHERE
+	|	Goods.Ref IN(&documentsList)";
 	requisitesQuery.Execute();
 	
 	Return tableManager;
@@ -404,8 +408,20 @@ Function IncomingInvoiceXDTOBySalesDocument(ref1C, documentStructure, matchedObj
 		note.sum			 = product.СуммаСНДС;
 		note.ndsPercent 	 = УчетНДСПереопределяемый.ПолучитьСтавкуНДС(product.СтавкаНДС);
 		note.sumWithoutNds 	 = product.Сумма;
-		note.price		 	 = product.Цена;
-		note.priceWithoutNds = Round(note.sumWithoutNds/product.Количество, 2);
+		
+		If product.Номенклатура.ВесИспользовать Then	
+			note.amount = (product.Количество * product.Номенклатура.ВесЧислитель) / product.Номенклатура.ВесЗнаменатель;
+			productAmountUnit = product.Номенклатура.ВесЕдиницаИзмерения; 	
+		Else	
+			note.amount 	  = product.Количество;
+			productAmountUnit = product.Номенклатура.ЕдиницаИзмерения;	
+		EndIf;
+		
+		note.actualAmount = note.amount;
+		note.amountUnit   = like_CommonAtServer.GetMatchedObject(matchedObjects, productAmountUnit).UUID;
+		
+		note.price		 	 = Round(note.sum / note.amount, 2);
+		note.priceWithoutNds = Round(note.sumWithoutNds / note.amount, 2);
 
 		incomingInvoiceRef 	 	= like_CreatingObjects.CreateXDTOObject("invoiceItemInvoiceType");
 		incomingInvoiceRef.cls 	= "IncomingInvoice";
@@ -413,11 +429,8 @@ Function IncomingInvoiceXDTOBySalesDocument(ref1C, documentStructure, matchedObj
 
 		note.invoice 		= incomingInvoiceRef;
 		note.discountSum	= 0;
-		note.actualAmount 	= product.Количество;
-		note.amountUnit 	= like_CommonAtServer.GetMatchedObject(matchedObjects, product.Номенклатура.ЕдиницаИзмерения).UUID;
 		note.num 			= ppNumber;
 		note.product 		= likeProduct.UUID;
-		note.amount 		= product.Количество;
 		note.id 			= elementID;
 
 		tsNotes.i.Add(note);
