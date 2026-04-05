@@ -1,9 +1,10 @@
 ﻿Procedure MatchingAdd(connection,
-	ref1C, 
-	likeRef, 
-	docType, 
+	ref1C,
+	likeRef,
+	docType,
 	matchingType) Export
-	
+
+	// Запись в локальный регистр (fallback)
 	newMathing = InformationRegisters.like_objectMatching.CreateRecordManager();
 	newMathing.connection	= connection;
 	newMathing.ref1C 		= ref1C;
@@ -11,7 +12,20 @@
 	newMathing.likeRef		= likeRef;
 	newMathing.matchingType = matchingType;
 	newMathing.Write();
-	
+
+	// Dual-write: дублируем на Go сервис (primary storage)
+	connectionID = String(connection.UUID());
+	items = New Array;
+	item = New Map;
+	item.Insert("ref1C",        String(ref1C.UUID()));
+	item.Insert("ref1CType",    like_Common.TypeNameShort(ref1C));
+	item.Insert("docType",      docType);
+	item.Insert("matchingType", String(matchingType));
+	item.Insert("likeRef",      String(likeRef.UUID()));
+	item.Insert("likeRefType",  like_Common.TypeNameShort(likeRef));
+	items.Add(item);
+	like_CoreAPI.SaveRefMatchings(connectionID, items);
+
 EndProcedure
 
 Procedure ClearLikeObjectMatchingDuplicates() Export

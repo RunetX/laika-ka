@@ -179,6 +179,17 @@ Function Translit(input) Export
 	
 EndFunction
 
+// Возвращает краткое имя типа ссылки для сериализации.
+// CatalogRef.Номенклатура → "Номенклатура", DocumentRef.ПриобретениеТоваровУслуг → "ПриобретениеТоваровУслуг"
+Function TypeNameShort(ref) Export
+	fullName = ref.Metadata().FullName(); // "Catalog.Номенклатура" или "Document.ПриобретениеТоваровУслуг"
+	dotPos = StrFind(fullName, ".");
+	If dotPos > 0 Then
+		Return Mid(fullName, dotPos + 1);
+	EndIf;
+	Return fullName;
+EndFunction
+
 Procedure UsrMessage(message) Export
 	
 	userMessage = New UserMessage;

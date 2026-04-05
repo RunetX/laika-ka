@@ -7,34 +7,19 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Function GetCustomersRevision(connection) Export
-	
-	customersQuery = New Query("SELECT
-	                          |	like_customersRevisions.customersRevision AS customersRevision,
-	                          |	like_customersRevisions.streetsRevision AS streetsRevision
-	                          |FROM
-	                          |	InformationRegister.like_customersRevisions AS like_customersRevisions
-	                          |WHERE
-	                          |	like_customersRevisions.connection = &connection");
-	customersQuery.SetParameter("connection", connection);
-	customersSelection = customersQuery.Execute().Select();
-	customersSelection.Next();
-	Return New Structure("customersRevision, streetsRevision", customersSelection.customersRevision, customersSelection.streetsRevision);
-	
+
+	connectionID = String(connection.UUID());
+	Return like_CoreAPI.GetCustomersRevision(connectionID);
+
 EndFunction
 
 Procedure SetCustomersRevision(connection, customersRevision)
-	
-	manager = InformationRegisters.like_customersRevisions.CreateRecordSet();
-	filter = manager.Filter;
-	filter.connection.Set(connection);
-	manager.Read();
-	                  
-	If manager.Count() = 1 Then
-		manager[0].customersRevision = customersRevision.customersRevision;	
-		manager[0].streetsRevision	 = customersRevision.streetsRevision;
-		manager.Write();
-	EndIf;	
-	
+
+	connectionID = String(connection.UUID());
+	like_CoreAPI.SaveCustomersRevision(connectionID,
+		customersRevision.customersRevision,
+		customersRevision.streetsRevision);
+
 EndProcedure
 
 Function GetXMLCustomers(connection)

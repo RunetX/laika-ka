@@ -496,3 +496,99 @@ Function SafeGet(collection, fieldName, defaultValue) Export
 	Return defaultValue;
 
 EndFunction
+
+// ============================================================
+// СОПОСТАВЛЕНИЯ ОБЪЕКТОВ (ref_matching)
+// ============================================================
+
+// Сохраняет одно или несколько сопоставлений объектов на сервисе.
+// items — Массив Соответствий с ключами: ref1C, ref1CType, docType, matchingType, likeRef, likeRefType
+Function SaveRefMatchings(connectionID, items) Export
+
+	result = DoExecute("POST", "/api/v1/matchings/save", MapToJSON(items), connectionID);
+	Return result.Success;
+
+EndFunction
+
+// Возвращает массив сопоставлений объектов для текущего подключения.
+Function GetRefMatchings(connectionID) Export
+
+	result = DoExecute("GET", "/api/v1/matchings?licenseKey=" + LicenseKey(),, connectionID);
+	If Not result.Success Then
+		Return New Array;
+	EndIf;
+
+	parsed = ParseJSON(result.Body);
+	Return ?(parsed <> Undefined, parsed, New Array);
+
+EndFunction
+
+// Удаляет одно сопоставление объектов.
+// item — Соответствие с ключами: ref1C, ref1CType, docType, matchingType
+Function DeleteRefMatching(connectionID, item) Export
+
+	result = DoExecute("POST", "/api/v1/matchings/delete", MapToJSON(item), connectionID);
+	Return result.Success;
+
+EndFunction
+
+// ============================================================
+// СОПОСТАВЛЕНИЯ ДОКУМЕНТОВ (document_matching)
+// ============================================================
+
+// Сохраняет одно или несколько сопоставлений документов на сервисе.
+// items — Массив Соответствий с ключами: ref1C, ref1CType, yearCreated, docNumber, docType
+Function SaveDocumentMatchings(connectionID, items) Export
+
+	result = DoExecute("POST", "/api/v1/document-matchings/save", MapToJSON(items), connectionID);
+	Return result.Success;
+
+EndFunction
+
+// Возвращает массив сопоставлений документов для текущего подключения.
+Function GetDocumentMatchings(connectionID) Export
+
+	result = DoExecute("GET", "/api/v1/document-matchings?licenseKey=" + LicenseKey(),, connectionID);
+	If Not result.Success Then
+		Return New Array;
+	EndIf;
+
+	parsed = ParseJSON(result.Body);
+	Return ?(parsed <> Undefined, parsed, New Array);
+
+EndFunction
+
+// ============================================================
+// РЕВИЗИИ КЛИЕНТОВ/УЛИЦ (customer_revisions)
+// ============================================================
+
+// Возвращает структуру: {customersRevision, streetsRevision}
+Function GetCustomersRevision(connectionID) Export
+
+	result = DoExecute("GET", "/api/v1/customers/revision?licenseKey=" + LicenseKey(),, connectionID);
+	If Not result.Success Then
+		Return New Structure("customersRevision, streetsRevision", -1, -1);
+	EndIf;
+
+	parsed = ParseJSON(result.Body);
+	If parsed = Undefined Then
+		Return New Structure("customersRevision, streetsRevision", -1, -1);
+	EndIf;
+
+	Return New Structure("customersRevision, streetsRevision",
+		SafeGet(parsed, "customersRevision", -1),
+		SafeGet(parsed, "streetsRevision", -1));
+
+EndFunction
+
+// Сохраняет ревизии клиентов/улиц.
+Function SaveCustomersRevision(connectionID, customersRevision, streetsRevision) Export
+
+	bodyMap = New Map;
+	bodyMap.Insert("customersRevision", customersRevision);
+	bodyMap.Insert("streetsRevision",   streetsRevision);
+
+	result = DoExecute("POST", "/api/v1/customers/revision", MapToJSON(bodyMap), connectionID);
+	Return result.Success;
+
+EndFunction
