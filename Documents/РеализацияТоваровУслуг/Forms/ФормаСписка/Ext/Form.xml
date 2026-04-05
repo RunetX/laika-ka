@@ -168,6 +168,7 @@
 			<AllowRootChoice>false</AllowRootChoice>
 			<UpdateOnDataChange>Auto</UpdateOnDataChange>
 			<UserSettingsGroup>ГруппаПользовательскихНастроек</UserSettingsGroup>
+			<AllowGettingCurrentRowURL>true</AllowGettingCurrentRowURL>
 			<ContextMenu name="СписокРеализацииТоваровУслугКонтекстноеМеню" id="2"/>
 			<AutoCommandBar name="СписокРеализацииТоваровУслугКоманднаяПанель" id="3">
 				<ChildItems>
@@ -613,7 +614,7 @@
 				<Group>Horizontal</Group>
 				<Representation>None</Representation>
 				<ShowTitle>false</ShowTitle>
-				<ExtendedTooltip name="СтраницаРеализацииТоваровУслугБыстрыеОтборыExtendedTooltip" id="219"/>
+				<ExtendedTooltip name="СтраницаРеализацииТоваровУслугБыстрыеОтборыРасширеннаяПодсказка" id="219"/>
 				<ChildItems>
 					<InputField name="МенеджерРеализация" id="220">
 						<AutoMaxWidth>false</AutoMaxWidth>
@@ -623,7 +624,7 @@
 						<OpenButton>false</OpenButton>
 						<ChoiceListButton>true</ChoiceListButton>
 						<ContextMenu name="МенеджерРеализацияКонтекстноеМеню" id="221"/>
-						<ExtendedTooltip name="МенеджерРеализацияExtendedTooltip" id="222"/>
+						<ExtendedTooltip name="МенеджерРеализацияРасширеннаяПодсказка" id="222"/>
 					</InputField>
 					<InputField name="Статус" id="223">
 						<AutoMaxWidth>false</AutoMaxWidth>
@@ -670,7 +671,7 @@
 							</xr:Item>
 						</ChoiceList>
 						<ContextMenu name="СтатусКонтекстноеМеню" id="224"/>
-						<ExtendedTooltip name="СтатусExtendedTooltip" id="225"/>
+						<ExtendedTooltip name="СтатусРасширеннаяПодсказка" id="225"/>
 					</InputField>
 					<InputField name="ВариантОформленияПродажи" id="229">
 						<AutoMaxWidth>false</AutoMaxWidth>
@@ -743,6 +744,7 @@
 				<AllowRootChoice>false</AllowRootChoice>
 				<UpdateOnDataChange>Auto</UpdateOnDataChange>
 				<UserSettingsGroup>ГруппаПользовательскихНастроек</UserSettingsGroup>
+				<AllowGettingCurrentRowURL>true</AllowGettingCurrentRowURL>
 				<ContextMenu name="СписокРеализацииТоваровУслугКонтекстноеМеню" id="2"/>
 				<AutoCommandBar name="СписокРеализацииТоваровУслугКоманднаяПанель" id="3">
 					<ChildItems>
@@ -797,7 +799,7 @@
 								</v8:item>
 							</Title>
 							<CommandSource>FormCommandPanelGlobalCommands</CommandSource>
-							<ExtendedTooltip name="ГруппаГлобальныеКомандыExtendedTooltip" id="189"/>
+							<ExtendedTooltip name="ГруппаГлобальныеКомандыРасширеннаяПодсказка" id="189"/>
 						</ButtonGroup>
 						<ButtonGroup name="ГруппаКомандыФормы" id="190">
 							<Title>
@@ -806,7 +808,7 @@
 									<v8:content>Команды формы</v8:content>
 								</v8:item>
 							</Title>
-							<ExtendedTooltip name="ГруппаКомандыФормыExtendedTooltip" id="191"/>
+							<ExtendedTooltip name="ГруппаКомандыФормыРасширеннаяПодсказка" id="191"/>
 							<ChildItems>
 								<Button name="ФормаЗагрузитьНастройкиДинамическогоСписка" id="236">
 									<Type>CommandBarButton</Type>
@@ -838,7 +840,7 @@
 						<Button name="СписокРеализацииТоваровУслугСправка" id="127">
 							<Type>CommandBarButton</Type>
 							<CommandName>0</CommandName>
-							<ExtendedTooltip name="СписокРеализацииТоваровУслугСправкаExtendedTooltip" id="130"/>
+							<ExtendedTooltip name="СписокРеализацииТоваровУслугСправкаРасширеннаяПодсказка" id="130"/>
 						</Button>
 						<Popup name="ПодменюЭДО" id="257">
 							<Title>
@@ -931,7 +933,7 @@
 						</Popup>
 					</ChildItems>
 				</AutoCommandBar>
-				<ExtendedTooltip name="СписокРеализацииТоваровУслугExtendedTooltip" id="131"/>
+				<ExtendedTooltip name="СписокРеализацииТоваровУслугРасширеннаяПодсказка" id="131"/>
 				<SearchStringAddition name="СписокРеализацииТоваровУслугСтрокаПоиска" id="149">
 					<AdditionSource>
 						<Item>СписокРеализацииТоваровУслуг</Item>
@@ -969,7 +971,7 @@
 						<HorizontalStretch>false</HorizontalStretch>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугНомерКонтекстноеМеню" id="7"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугНомерExtendedTooltip" id="132"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугНомерРасширеннаяПодсказка" id="132"/>
 					</InputField>
 					<InputField name="СписокРеализацииТоваровУслугДата" id="246">
 						<DefaultItem>true</DefaultItem>
@@ -982,11 +984,11 @@
 						<Width>9</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугДатаКонтекстноеМеню" id="247"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугДатаExtendedTooltip" id="248"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугДатаРасширеннаяПодсказка" id="248"/>
 					</InputField>
 					<LabelField name="СписокРеализацииТоваровУслугСтатус" id="113">
 						<ContextMenu name="СписокРеализацииТоваровУслугСтатусКонтекстноеМеню" id="114"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугСтатусExtendedTooltip" id="134"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугСтатусРасширеннаяПодсказка" id="134"/>
 					</LabelField>
 					<InputField name="СписокРеализацииТоваровУслугСуммаДокумента" id="14">
 						<Title>
@@ -998,12 +1000,12 @@
 						<Width>9</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугСуммаДокументаКонтекстноеМеню" id="15"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугСуммаДокументаExtendedTooltip" id="135"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугСуммаДокументаРасширеннаяПодсказка" id="135"/>
 					</InputField>
 					<LabelField name="СписокРеализацииТоваровУслугХозяйственнаяОперация" id="115">
 						<Width>16</Width>
 						<ContextMenu name="СписокРеализацииТоваровУслугХозяйственнаяОперацияКонтекстноеМеню" id="116"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугХозяйственнаяОперацияExtendedTooltip" id="136"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугХозяйственнаяОперацияРасширеннаяПодсказка" id="136"/>
 					</LabelField>
 					<LabelField name="СписокРеализацииТоваровУслугВариантОформленияПродажи" id="226">
 						<Title>
@@ -1026,7 +1028,7 @@
 						<HorizontalStretch>false</HorizontalStretch>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугВалютаКонтекстноеМеню" id="13"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугВалютаExtendedTooltip" id="137"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугВалютаРасширеннаяПодсказка" id="137"/>
 					</InputField>
 					<InputField name="СписокРеализацииТоваровУслугПартнер" id="8">
 						<Title>
@@ -1038,44 +1040,44 @@
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугПартнерКонтекстноеМеню" id="9"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугПартнерExtendedTooltip" id="138"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугПартнерРасширеннаяПодсказка" id="138"/>
 					</InputField>
 					<InputField name="СписокРеализацииТоваровУслугКонтрагент" id="18">
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугКонтрагентКонтекстноеМеню" id="19"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугКонтрагентExtendedTooltip" id="139"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугКонтрагентРасширеннаяПодсказка" id="139"/>
 					</InputField>
 					<InputField name="СписокРеализацииТоваровУслугОрганизация" id="20">
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугОрганизацияКонтекстноеМеню" id="21"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугОрганизацияExtendedTooltip" id="140"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугОрганизацияРасширеннаяПодсказка" id="140"/>
 					</InputField>
 					<LabelField name="СписокРеализацииТоваровУслугСчетФактура" id="97">
 						<UserVisible>
 							<xr:Common>false</xr:Common>
 						</UserVisible>
 						<ContextMenu name="СписокРеализацииТоваровУслугСчетФактураКонтекстноеМеню" id="98"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугСчетФактураExtendedTooltip" id="141"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугСчетФактураРасширеннаяПодсказка" id="141"/>
 					</LabelField>
 					<InputField name="СписокРеализацииТоваровУслугВидЦен" id="22">
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугВидЦенКонтекстноеМеню" id="23"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугВидЦенExtendedTooltip" id="142"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугВидЦенРасширеннаяПодсказка" id="142"/>
 					</InputField>
 					<InputField name="СписокРеализацииТоваровУслугГрафикОплаты" id="24">
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугГрафикОплатыКонтекстноеМеню" id="25"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугГрафикОплатыExtendedTooltip" id="143"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугГрафикОплатыРасширеннаяПодсказка" id="143"/>
 					</InputField>
 					<InputField name="СписокРеализацииТоваровУслугСклад" id="26">
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугСкладКонтекстноеМеню" id="27"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугСкладExtendedTooltip" id="144"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугСкладРасширеннаяПодсказка" id="144"/>
 					</InputField>
 					<InputField name="СписокРеализацииТоваровУслугМенеджер" id="28">
 						<UserVisible>
@@ -1084,13 +1086,13 @@
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокРеализацииТоваровУслугМенеджерКонтекстноеМеню" id="29"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровУслугМенеджерExtendedTooltip" id="145"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровУслугМенеджерРасширеннаяПодсказка" id="145"/>
 					</InputField>
 					<LabelField name="СпособДоставки" id="128">
 						<Width>15</Width>
 						<HorizontalStretch>false</HorizontalStretch>
 						<ContextMenu name="СпособДоставкиКонтекстноеМеню" id="129"/>
-						<ExtendedTooltip name="СпособДоставкиExtendedTooltip" id="146"/>
+						<ExtendedTooltip name="СпособДоставкиРасширеннаяПодсказка" id="146"/>
 					</LabelField>
 					<LabelField name="ПредставлениеСостояния" id="268">
 						<Title>
@@ -1099,8 +1101,8 @@
 								<v8:content>Состояние ЭДО</v8:content>
 							</v8:item>
 						</Title>
-						<ContextMenu name="СписокПоле1КонтекстноеМеню" id="269"/>
-						<ExtendedTooltip name="СписокПоле1РасширеннаяПодсказка" id="270"/>
+						<ContextMenu name="ПредставлениеСостоянияКонтекстноеМеню" id="269"/>
+						<ExtendedTooltip name="ПредставлениеСостоянияРасширеннаяПодсказка" id="270"/>
 					</LabelField>
 					<LabelField name="СписокРеализацииТоваровКомментарий" id="122">
 						<UserVisible>
@@ -1108,7 +1110,7 @@
 						</UserVisible>
 						<Height>1</Height>
 						<ContextMenu name="СписокРеализацииТоваровКомментарийКонтекстноеМеню" id="123"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровКомментарийExtendedTooltip" id="147"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровКомментарийРасширеннаяПодсказка" id="147"/>
 					</LabelField>
 					<InputField name="СписокРеализацииТоваровАвтор" id="271">
 						<ContextMenu name="СписокРеализацииТоваровАвторКонтекстноеМеню" id="272"/>
@@ -1119,7 +1121,7 @@
 							<xr:Common>false</xr:Common>
 						</UserVisible>
 						<ContextMenu name="СписокРеализацииТоваровСсылкаКонтекстноеМеню" id="126"/>
-						<ExtendedTooltip name="СписокРеализацииТоваровСсылкаExtendedTooltip" id="148"/>
+						<ExtendedTooltip name="СписокРеализацииТоваровСсылкаРасширеннаяПодсказка" id="148"/>
 					</LabelField>
 				</ChildItems>
 			</Table>

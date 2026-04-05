@@ -3,7 +3,7 @@
 Procedure ClearMatchingDuplicatesAtServer()
 	
 	Try
-		InformationRegisters.like_objectMatching.ClearLikeObjectMatchingDuplicates();
+		InformationRegisters.like_objectMatching.RefillMatchings();
 	Except
 		errorTemplate = NStr("en = 'An error occurred while clearing duplicate matches: %1'; ru = 'Произошла ошибка при очитске дублей соответствий: %1'");
 		errorDescription = ErrorDescription();

@@ -3,42 +3,20 @@
 	likeRef, 
 	docType, 
 	matchingType) Export
-
-	selection = InformationRegisters.like_objectMatching.Select(,
-		New Structure("connection, ref1C, docType, matchingType",
-			connection,
-			ref1C,
-			docType,
-			matchingType));
-
-	recordSet = InformationRegisters.like_objectMatching.CreateRecordSet();
-
-	While selection.Next() Do
-		row = recordSet.Add();
-		row.Ref = selection.Ref;
-		row.RecordDeletion = True;
-	EndDo;
-
-	If recordSet.Count() > 0 Then
-		recordSet.Write();
-	EndIf;
-
-	newMatching = InformationRegisters.like_objectMatching.CreateRecordManager();
-	newMatching.connection   = connection;
-	newMatching.ref1C        = ref1C;
-	newMatching.docType      = docType;
-	newMatching.likeRef      = likeRef;
-	newMatching.matchingType = matchingType;
-	newMatching.Write();
-
+	
+	newMathing = InformationRegisters.like_objectMatching.CreateRecordManager();
+	newMathing.connection	= connection;
+	newMathing.ref1C 		= ref1C;
+	newMathing.docType		= docType;
+	newMathing.likeRef		= likeRef;
+	newMathing.matchingType = matchingType;
+	newMathing.Write();
+	
 EndProcedure
 
 Procedure ClearLikeObjectMatchingDuplicates() Export
 
-    // Перед запуском обязательно сделайте копию базы!
-
-    // Отберём все записи с сортировкой по ключу и Ref
-    Query = New Query(
+	Query = New Query(
         "SELECT
         |   lom.connection,
         |   lom.ref1C,
@@ -67,8 +45,6 @@ Procedure ClearLikeObjectMatchingDuplicates() Export
             Selection.docType,
             Selection.matchingType);
 
-        // Первую запись по комбинации ключа оставляем (она с минимальным Ref),
-        // все последующие по этой же комбинации помечаем на удаление.
         If lastKey <> Undefined And currentKey = lastKey Then
             
             row = RecordSet.Add();
@@ -85,4 +61,28 @@ Procedure ClearLikeObjectMatchingDuplicates() Export
         RecordSet.Write();
     EndIf;
 
+EndProcedure
+
+Procedure RefillMatchings() Export
+	
+	// Select all unique key combinations
+	Query = New Query("SELECT DISTINCT * FROM InformationRegister.like_objectMatching");
+	ExportData = Query.Execute().Unload();
+
+	// Completely clear the register
+	RecordSet = InformationRegisters.like_objectMatching.CreateRecordSet();
+	RecordSet.Write(); 
+
+	// Write data back
+	For Each Row In ExportData Do
+	    NewRecord = RecordSet.Add();
+	    FillPropertyValues(NewRecord, Row);
+	    Try
+	        RecordSet.Write(False); // Write one record at a time
+	    Except
+	        Message("Duplicate found! " + Row.ref1C);
+	    EndTry;
+	    RecordSet.Clear();
+	EndDo;
+	
 EndProcedure

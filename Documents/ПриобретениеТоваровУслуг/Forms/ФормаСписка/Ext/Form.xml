@@ -299,6 +299,7 @@
 					<AllowRootChoice>false</AllowRootChoice>
 					<UpdateOnDataChange>Auto</UpdateOnDataChange>
 					<UserSettingsGroup>ГруппаПользовательскихНастроек</UserSettingsGroup>
+					<AllowGettingCurrentRowURL>true</AllowGettingCurrentRowURL>
 					<ContextMenu name="СписокДокументыПоступленияКонтекстноеМеню" id="2"/>
 					<AutoCommandBar name="СписокДокументыПоступленияКоманднаяПанель" id="3">
 						<ChildItems>
@@ -1057,7 +1058,7 @@
 				<Group>Horizontal</Group>
 				<Representation>None</Representation>
 				<ShowTitle>false</ShowTitle>
-				<ExtendedTooltip name="БыстрыеОтборыExtendedTooltip" id="103"/>
+				<ExtendedTooltip name="БыстрыеОтборыРасширеннаяПодсказка" id="103"/>
 				<ChildItems>
 					<InputField name="Менеджер" id="76">
 						<AutoMaxWidth>false</AutoMaxWidth>
@@ -1067,7 +1068,7 @@
 						<OpenButton>false</OpenButton>
 						<ChoiceListButton>true</ChoiceListButton>
 						<ContextMenu name="МенеджерКонтекстноеМеню" id="77"/>
-						<ExtendedTooltip name="МенеджерExtendedTooltip" id="104"/>
+						<ExtendedTooltip name="МенеджерРасширеннаяПодсказка" id="104"/>
 					</InputField>
 				</ChildItems>
 			</UsualGroup>
@@ -1108,6 +1109,7 @@
 				<AllowRootChoice>false</AllowRootChoice>
 				<UpdateOnDataChange>Auto</UpdateOnDataChange>
 				<UserSettingsGroup>ГруппаПользовательскихНастроек</UserSettingsGroup>
+				<AllowGettingCurrentRowURL>true</AllowGettingCurrentRowURL>
 				<ContextMenu name="СписокДокументыПоступленияКонтекстноеМеню" id="2"/>
 				<AutoCommandBar name="СписокДокументыПоступленияКоманднаяПанель" id="3">
 					<ChildItems>
@@ -1217,7 +1219,7 @@
 								</v8:item>
 							</Title>
 							<CommandSource>FormCommandPanelGlobalCommands</CommandSource>
-							<ExtendedTooltip name="ГруппаГлобальныеКомандыExtendedTooltip" id="111"/>
+							<ExtendedTooltip name="ГруппаГлобальныеКомандыРасширеннаяПодсказка" id="111"/>
 							<ChildItems>
 								<Popup name="ПодменюЭДО" id="161">
 									<Title>
@@ -1263,16 +1265,16 @@
 								</v8:item>
 							</Title>
 							<CommandSource>Form</CommandSource>
-							<ExtendedTooltip name="ГруппаКомандыФормыExtendedTooltip" id="112"/>
+							<ExtendedTooltip name="ГруппаКомандыФормыРасширеннаяПодсказка" id="112"/>
 						</ButtonGroup>
 						<Button name="СписокДокументыПоступленияСправка" id="102">
 							<Type>CommandBarButton</Type>
 							<CommandName>0</CommandName>
-							<ExtendedTooltip name="СписокДокументыПоступленияСправкаExtendedTooltip" id="113"/>
+							<ExtendedTooltip name="СписокДокументыПоступленияСправкаРасширеннаяПодсказка" id="113"/>
 						</Button>
 					</ChildItems>
 				</AutoCommandBar>
-				<ExtendedTooltip name="СписокДокументыПоступленияExtendedTooltip" id="114"/>
+				<ExtendedTooltip name="СписокДокументыПоступленияРасширеннаяПодсказка" id="114"/>
 				<SearchStringAddition name="СписокДокументыПоступленияСтрокаПоиска" id="129">
 					<AdditionSource>
 						<Item>СписокДокументыПоступления</Item>
@@ -1310,7 +1312,7 @@
 						<HorizontalStretch>false</HorizontalStretch>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокДокументыПоступленияНомерКонтекстноеМеню" id="7"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияНомерExtendedTooltip" id="115"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияНомерРасширеннаяПодсказка" id="115"/>
 					</InputField>
 					<InputField name="СписокДокументыПоступленияДата" id="158">
 						<DefaultItem>true</DefaultItem>
@@ -1323,7 +1325,7 @@
 						<Width>9</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокДокументыПоступленияДатаКонтекстноеМеню" id="159"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияДатаExtendedTooltip" id="160"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияДатаРасширеннаяПодсказка" id="160"/>
 					</InputField>
 					<InputField name="СписокДокументыПоступленияСуммаДокумента" id="18">
 						<Title>
@@ -1335,7 +1337,7 @@
 						<Width>9</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокДокументыПоступленияСуммаДокументаКонтекстноеМеню" id="19"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияСуммаДокументаExtendedTooltip" id="117"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияСуммаДокументаРасширеннаяПодсказка" id="117"/>
 					</InputField>
 					<InputField name="СписокДокументыПоступленияВалюта" id="16">
 						<Title>
@@ -1348,12 +1350,12 @@
 						<HorizontalStretch>false</HorizontalStretch>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокДокументыПоступленияВалютаКонтекстноеМеню" id="17"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияВалютаExtendedTooltip" id="118"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияВалютаРасширеннаяПодсказка" id="118"/>
 					</InputField>
 					<LabelField name="СписокДокументыХозяйственнаяОперация" id="85">
 						<Width>16</Width>
 						<ContextMenu name="СписокДокументыХозяйственнаяОперацияКонтекстноеМеню" id="86"/>
-						<ExtendedTooltip name="СписокДокументыХозяйственнаяОперацияExtendedTooltip" id="119"/>
+						<ExtendedTooltip name="СписокДокументыХозяйственнаяОперацияРасширеннаяПодсказка" id="119"/>
 					</LabelField>
 					<InputField name="СписокДокументыПоступленияПартнер" id="8">
 						<Title>
@@ -1365,7 +1367,7 @@
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокДокументыПоступленияПартнерКонтекстноеМеню" id="9"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияПартнерExtendedTooltip" id="120"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияПартнерРасширеннаяПодсказка" id="120"/>
 					</InputField>
 					<InputField name="СписокДокументыПоступленияКонтрагент" id="10">
 						<Title>
@@ -1377,7 +1379,7 @@
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокДокументыПоступленияКонтрагентКонтекстноеМеню" id="11"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияКонтрагентExtendedTooltip" id="121"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияКонтрагентРасширеннаяПодсказка" id="121"/>
 					</InputField>
 					<InputField name="СписокДокументыПоступленияОрганизация" id="12">
 						<Title>
@@ -1389,7 +1391,7 @@
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокДокументыПоступленияОрганизацияКонтекстноеМеню" id="13"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияОрганизацияExtendedTooltip" id="122"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияОрганизацияРасширеннаяПодсказка" id="122"/>
 					</InputField>
 					<InputField name="СписокДокументыПоступленияСклад" id="14">
 						<Title>
@@ -1401,7 +1403,7 @@
 						<Width>16</Width>
 						<Wrap>false</Wrap>
 						<ContextMenu name="СписокДокументыПоступленияСкладКонтекстноеМеню" id="15"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияСкладExtendedTooltip" id="123"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияСкладРасширеннаяПодсказка" id="123"/>
 					</InputField>
 					<LabelField name="СписокДокументыПоступленияСоглашение" id="98">
 						<UserVisible>
@@ -1409,7 +1411,7 @@
 						</UserVisible>
 						<Width>16</Width>
 						<ContextMenu name="СписокДокументыПоступленияСоглашениеКонтекстноеМеню" id="99"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияСоглашениеExtendedTooltip" id="124"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияСоглашениеРасширеннаяПодсказка" id="124"/>
 					</LabelField>
 					<LabelField name="СписокДокументыПоступленияДоговор" id="100">
 						<UserVisible>
@@ -1417,7 +1419,7 @@
 						</UserVisible>
 						<Width>16</Width>
 						<ContextMenu name="СписокДокументыПоступленияДоговорКонтекстноеМеню" id="101"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияДоговорExtendedTooltip" id="125"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияДоговорРасширеннаяПодсказка" id="125"/>
 					</LabelField>
 					<LabelField name="СписокДокументыПоступленияМенеджер" id="96">
 						<UserVisible>
@@ -1425,7 +1427,7 @@
 						</UserVisible>
 						<Width>16</Width>
 						<ContextMenu name="СписокДокументыПоступленияМенеджерКонтекстноеМеню" id="97"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияМенеджерExtendedTooltip" id="126"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияМенеджерРасширеннаяПодсказка" id="126"/>
 					</LabelField>
 					<LabelField name="ПредставлениеСостояния" id="172">
 						<Title>
@@ -1434,8 +1436,8 @@
 								<v8:content>Состояние ЭДО</v8:content>
 							</v8:item>
 						</Title>
-						<ContextMenu name="СписокПоле1КонтекстноеМеню" id="173"/>
-						<ExtendedTooltip name="СписокПоле1РасширеннаяПодсказка" id="174"/>
+						<ContextMenu name="ПредставлениеСостоянияКонтекстноеМеню" id="173"/>
+						<ExtendedTooltip name="ПредставлениеСостоянияРасширеннаяПодсказка" id="174"/>
 					</LabelField>
 					<LabelField name="СписокДокументыПоступленияКомментарий" id="89">
 						<UserVisible>
@@ -1443,7 +1445,7 @@
 						</UserVisible>
 						<Height>1</Height>
 						<ContextMenu name="СписокДокументыПоступленияКомментарийКонтекстноеМеню" id="90"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияКомментарийExtendedTooltip" id="127"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияКомментарийРасширеннаяПодсказка" id="127"/>
 					</LabelField>
 					<LabelField name="СписокДокументыПоступленияАвтор" id="175">
 						<ContextMenu name="СписокДокументыПоступленияАвторКонтекстноеМеню" id="176"/>
@@ -1454,7 +1456,7 @@
 							<xr:Common>false</xr:Common>
 						</UserVisible>
 						<ContextMenu name="СписокДокументыПоступленияСсылкаКонтекстноеМеню" id="94"/>
-						<ExtendedTooltip name="СписокДокументыПоступленияСсылкаExtendedTooltip" id="128"/>
+						<ExtendedTooltip name="СписокДокументыПоступленияСсылкаРасширеннаяПодсказка" id="128"/>
 					</LabelField>
 				</ChildItems>
 			</Table>
