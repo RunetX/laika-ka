@@ -133,6 +133,46 @@ Procedure CancelChanges(Command)
 
 EndProcedure
 
+&AtServer
+Procedure MatchProductsByNumAtServer()
+	
+	adCode = ChartsOfCharacteristicTypes.ДополнительныеРеквизитыИСведения.FindByAttribute("ИдентификаторДляФормул", 
+		"ДополнительныйКод2");
+	productsList = products.Unload(, "ref1C");
+	
+	matchingQuery = New Query;
+	matchingQuery.SetParameter("productsList", productsList);
+	matchingQuery.SetParameter("Property", adCode);
+	matchingQuery.Text = "SELECT
+	|	NomenclatureAdditionalRequsities.Ссылка AS Ref,
+	|	NomenclatureAdditionalRequsities.Свойство AS Свойство,
+	|	NomenclatureAdditionalRequsities.Значение AS Value
+	|INTO tmpAdditionalRequsities
+	|FROM
+	|	Catalog.Номенклатура.ДополнительныеРеквизиты AS NomenclatureAdditionalRequsities
+	|WHERE
+	|	NomenclatureAdditionalRequsities.Ref IN(&productsList)
+	|	И NomenclatureAdditionalRequsities.Свойство = &Property
+	|;
+
+	|////////////////////////////////////////////////////////////////////////////////
+	|SELECT
+	|	tmpAdditionalRequsities.Ref AS ref1C,
+	|	like_products.Ref AS likeRef
+	|FROM
+	|	tmpAdditionalRequsities AS tmpAdditionalRequsities
+	|		INNER JOIN Catalog.like_products AS like_products
+	|		ON (like_products.num = tmpAdditionalRequsities.Value)";
+	matchingTable = matchingQuery.Execute().Unload();
+	products.Load(matchingTable);
+	
+EndProcedure
+
+&AtClient
+Procedure MatchProductsByNum(Command)
+	MatchProductsByNumAtServer();
+EndProcedure
+
 #EndRegion
 
 #Region Private

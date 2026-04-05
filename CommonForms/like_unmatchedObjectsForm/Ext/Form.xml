@@ -452,65 +452,109 @@
 							<v8:content>Group products</v8:content>
 						</v8:item>
 					</ToolTip>
-					<Group>Vertical</Group>
+					<Group>HorizontalIfPossible</Group>
 					<ScrollOnCompress>false</ScrollOnCompress>
 					<ExtendedTooltip name="GroupProductsExtendedTooltip" id="27"/>
 					<ChildItems>
-						<Table name="products" id="49">
-							<Representation>List</Representation>
-							<RowSelectionMode>Cell</RowSelectionMode>
-							<UseAlternationRowColorBWA>false</UseAlternationRowColorBWA>
-							<AutoInsertNewRow>true</AutoInsertNewRow>
-							<EnableStartDrag>true</EnableStartDrag>
-							<EnableDrag>true</EnableDrag>
-							<DataPath>products</DataPath>
-							<RowFilter xsi:nil="true"/>
-							<ContextMenu name="productsContextMenu" id="50"/>
-							<AutoCommandBar name="productsCommandBar" id="51">
-								<Autofill>false</Autofill>
-							</AutoCommandBar>
-							<ExtendedTooltip name="productsExtendedTooltip" id="52"/>
-							<SearchStringAddition name="productsSearchString" id="53">
-								<AdditionSource>
-									<Item>products</Item>
-									<Type>SearchStringRepresentation</Type>
-								</AdditionSource>
-								<ContextMenu name="productsSearchStringContextMenu" id="54"/>
-								<ExtendedTooltip name="productsSearchStringExtendedTooltip" id="55"/>
-							</SearchStringAddition>
-							<ViewStatusAddition name="productsViewStatus" id="56">
-								<AdditionSource>
-									<Item>products</Item>
-									<Type>ViewStatusRepresentation</Type>
-								</AdditionSource>
-								<ContextMenu name="productsViewStatusContextMenu" id="57"/>
-								<ExtendedTooltip name="productsViewStatusExtendedTooltip" id="58"/>
-							</ViewStatusAddition>
-							<SearchControlAddition name="productsSearchControl" id="59">
-								<AdditionSource>
-									<Item>products</Item>
-									<Type>SearchControl</Type>
-								</AdditionSource>
-								<ContextMenu name="productsSearchControlContextMenu" id="60"/>
-								<ExtendedTooltip name="productsSearchControlExtendedTooltip" id="61"/>
-							</SearchControlAddition>
+						<UsualGroup name="GroupTable" id="156">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Group table</v8:content>
+								</v8:item>
+							</Title>
+							<ToolTip>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Group table</v8:content>
+								</v8:item>
+							</ToolTip>
+							<Group>HorizontalIfPossible</Group>
+							<Representation>None</Representation>
+							<ShowTitle>false</ShowTitle>
+							<ExtendedTooltip name="GroupTableExtendedTooltip" id="157"/>
 							<ChildItems>
-								<InputField name="productsref1C" id="62">
-									<DataPath>products.ref1C</DataPath>
-									<EditMode>EnterOnInput</EditMode>
-									<AutoEditMode>true</AutoEditMode>
-									<ContextMenu name="productsref1CContextMenu" id="63"/>
-									<ExtendedTooltip name="productsref1CExtendedTooltip" id="64"/>
-								</InputField>
-								<InputField name="productslikeRef" id="65">
-									<DataPath>products.likeRef</DataPath>
-									<EditMode>EnterOnInput</EditMode>
-									<AutoEditMode>true</AutoEditMode>
-									<ContextMenu name="productslikeRefContextMenu" id="66"/>
-									<ExtendedTooltip name="productslikeRefExtendedTooltip" id="67"/>
-								</InputField>
+								<Table name="products" id="49">
+									<Representation>List</Representation>
+									<RowSelectionMode>Cell</RowSelectionMode>
+									<UseAlternationRowColorBWA>false</UseAlternationRowColorBWA>
+									<AutoInsertNewRow>true</AutoInsertNewRow>
+									<EnableStartDrag>true</EnableStartDrag>
+									<EnableDrag>true</EnableDrag>
+									<DataPath>products</DataPath>
+									<RowFilter xsi:nil="true"/>
+									<ContextMenu name="productsContextMenu" id="50"/>
+									<AutoCommandBar name="productsCommandBar" id="51">
+										<Autofill>false</Autofill>
+									</AutoCommandBar>
+									<ExtendedTooltip name="productsExtendedTooltip" id="52"/>
+									<SearchStringAddition name="productsSearchString" id="53">
+										<AdditionSource>
+											<Item>products</Item>
+											<Type>SearchStringRepresentation</Type>
+										</AdditionSource>
+										<ContextMenu name="productsSearchStringContextMenu" id="54"/>
+										<ExtendedTooltip name="productsSearchStringExtendedTooltip" id="55"/>
+									</SearchStringAddition>
+									<ViewStatusAddition name="productsViewStatus" id="56">
+										<AdditionSource>
+											<Item>products</Item>
+											<Type>ViewStatusRepresentation</Type>
+										</AdditionSource>
+										<ContextMenu name="productsViewStatusContextMenu" id="57"/>
+										<ExtendedTooltip name="productsViewStatusExtendedTooltip" id="58"/>
+									</ViewStatusAddition>
+									<SearchControlAddition name="productsSearchControl" id="59">
+										<AdditionSource>
+											<Item>products</Item>
+											<Type>SearchControl</Type>
+										</AdditionSource>
+										<ContextMenu name="productsSearchControlContextMenu" id="60"/>
+										<ExtendedTooltip name="productsSearchControlExtendedTooltip" id="61"/>
+									</SearchControlAddition>
+									<ChildItems>
+										<InputField name="productsref1C" id="62">
+											<DataPath>products.ref1C</DataPath>
+											<EditMode>EnterOnInput</EditMode>
+											<AutoEditMode>true</AutoEditMode>
+											<ContextMenu name="productsref1CContextMenu" id="63"/>
+											<ExtendedTooltip name="productsref1CExtendedTooltip" id="64"/>
+										</InputField>
+										<InputField name="productslikeRef" id="65">
+											<DataPath>products.likeRef</DataPath>
+											<EditMode>EnterOnInput</EditMode>
+											<AutoEditMode>true</AutoEditMode>
+											<ContextMenu name="productslikeRefContextMenu" id="66"/>
+											<ExtendedTooltip name="productslikeRefExtendedTooltip" id="67"/>
+										</InputField>
+									</ChildItems>
+								</Table>
 							</ChildItems>
-						</Table>
+						</UsualGroup>
+						<UsualGroup name="GroupActions" id="158">
+							<Title>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Сопоставить:</v8:content>
+								</v8:item>
+							</Title>
+							<ToolTip>
+								<v8:item>
+									<v8:lang>ru</v8:lang>
+									<v8:content>Group actions</v8:content>
+								</v8:item>
+							</ToolTip>
+							<Group>Vertical</Group>
+							<Representation>WeakSeparation</Representation>
+							<ExtendedTooltip name="GroupActionsExtendedTooltip" id="159"/>
+							<ChildItems>
+								<Button name="MatchProductsByNum" id="160">
+									<Type>UsualButton</Type>
+									<CommandName>Form.Command.MatchProductsByNum</CommandName>
+									<ExtendedTooltip name="MatchProductsByNumExtendedTooltip" id="161"/>
+								</Button>
+							</ChildItems>
+						</UsualGroup>
 					</ChildItems>
 				</Page>
 				<Page name="GroupMeasureUnits" id="28">
@@ -932,6 +976,21 @@
 				</v8:item>
 			</ToolTip>
 			<Action>CancelChanges</Action>
+		</Command>
+		<Command name="MatchProductsByNum" id="3">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>По артикулу</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Match products by num</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>MatchProductsByNum</Action>
 		</Command>
 	</Commands>
 </Form>
