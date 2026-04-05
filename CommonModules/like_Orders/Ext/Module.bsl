@@ -15,8 +15,8 @@
 	// 3. Создать мобильный заказ в 1С через адаптер
 	activeConnection = like_ConnectionAtServer.GetActiveConnecton();
 	settings = OrdersSettings(activeConnection);
-	If Not ValueIsFilled(settings.Организация) Then
-		Raise NStr("ru = 'Не удалось получить настройку загрузки заказов'");
+	If settings = Undefined Or Not ValueIsFilled(settings.Организация) Then
+		Raise NStr("ru = 'Не заполнены настройки загрузки заказов (регистр like_ordersSettings)'");
 	EndIf;
 
 	messages = New Array;
