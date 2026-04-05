@@ -85,6 +85,16 @@ Function GetIikoObject(objectFields) Export
 	IIKOResponse = IIKOConnection.CallHTTPMethod(ObjectFields.RequestType, IIKORequest);
 	
 	If IIKOResponse.StatusCode <> 200 Then
+		
+		If IIKOResponse.StatusCode = 403 Then
+			logString = NStr("en = 'Access error:'; ru = 'Ошибка доступа: '") + IIKOResponse.StatusCode;
+			WriteLogEvent("IIKO. transport", EventLogLevel.Error,, IIKOResponse, logString);	
+		Else 	
+			logString = NStr("en = 'The server returned an HTTP code other than HTTP_OK:'; 
+|ru = 'Сервер вернул код HTTP, отличный от успешного: '") + IIKOResponse.StatusCode;
+			WriteLogEvent("IIKO. transport", EventLogLevel.Error,, IIKOResponse, logString);	
+		EndIf;
+		
 		Return Undefined;
 	EndIf;
 	                                                  

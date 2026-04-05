@@ -31,6 +31,7 @@
 				<xr:Item xsi:type="xr:MDObjectRef">Enum.like_productTypes</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">InformationRegister.like_documentsMatching</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">Enum.like_matchingTypes</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">DataProcessor.like_clearObjectMatchingDuplicates</xr:Item>
 			</Content>
 		</Properties>
 		<ChildObjects>

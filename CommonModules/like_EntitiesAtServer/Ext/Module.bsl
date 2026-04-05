@@ -447,6 +447,18 @@ Function FillRefs(entitiesTable)
 	
 EndFunction
 
+Function MajorVersion(connectionVersion)
+
+	versionParts = StrSplit(connectionVersion, ".");
+	
+	If Not versionParts.Count() > 0 Then
+		Raise NStr("ru = 'Не удалось получить части версии'");
+	EndIf;
+	
+	Return Number(versionParts[0]);
+	
+EndFunction
+
 Procedure Update(parameters, resultLink, interactive = False) Export
 	
 	ActiveConnection = like_ConnectionAtServer.GetActiveConnecton();
@@ -461,10 +473,16 @@ Procedure Update(parameters, resultLink, interactive = False) Export
 	XMLPackage = getXMLEntitiesUpdate(ActiveConnection);	
 	ConnectionFields = like_ConnectionAtServer.GetConnectionFields(ActiveConnection);
 	
+	If MajorVersion(ConnectionFields.version) < 9 Then
+		namespace = "https://izi.cloud/iiko/reading/entitiesUpdateResponse";
+	Else
+		namespace = "https://izi.cloud/iiko/reading/entitiesUpdateResponse9";
+	EndIf;
+	
 	ObjectFields = like_CommonAtServer.GetObjectFieldsStructure();
 	ObjectFields.ConProps  	 = ConnectionFields;
 	ObjectFields.Resource 	 = "/resto/services/update";
-	ObjectFields.Namespace 	 = "https://izi.cloud/iiko/reading/entitiesUpdateResponse";
+	ObjectFields.Namespace 	 = namespace;
 	ObjectFields.TypeName 	 = "result";
 	ObjectFields.RequestType = "POST";
 	Params = New Map;
