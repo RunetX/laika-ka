@@ -54,6 +54,7 @@ Function GetDescriptionMap() Export
 	descriptions.Insert("store",				New TypeDescription("CatalogRef.like_stores"));
 	descriptions.Insert("productType", 			New TypeDescription("EnumRef.like_productTypes"));
 	descriptions.Insert("userSupplierType", 	New TypeDescription("EnumRef.like_supplierTypes"));
+	descriptions.Insert("matchingTypes",		New TypeDescription("EnumRef.like_matchingTypes"));
 	
 	Return descriptions;
 	

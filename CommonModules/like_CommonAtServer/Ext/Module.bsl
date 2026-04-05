@@ -109,15 +109,20 @@ Function GetIikoDate(date1C, ms) Export
 	
 EndFunction
 
-Function GetMatchedObject(matchedObjects, ref1C) Export
+Function GetMatchedObject(matchedObjects, ref1C, matchingType = Undefined) Export
 	           
-	foundRow = matchedObjects.Find(ref1C, "ref1C");
+	If Not ValueIsFilled(matchingType) Then
+		matchingType = Enums.like_matchingTypes.EmptyRef();
+	EndIf;
 	
-	If foundRow = Undefined Then
+	filter = New Structure("ref1C,mType", ref1C, matchingType);
+	foundRows = matchedObjects.FindRows(filter);
+	
+	If foundRows.Count() = 0 Then
 		Return Undefined;
 	EndIf;
 	
-	Return foundRow.likeRef;
+	Return foundRows[0].likeRef;
 	
 EndFunction
 

@@ -62,6 +62,7 @@
 		<property name="status" type="xs:string"/>
 		<property name="dateIncoming" type="xs:string"/>
 		<property name="comment" type="xs:string"/>
+		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="conception" type="d3p1:refType"/>
 		<property xmlns:d3p1="https://izi.cloud/iiko/package" name="id" type="d3p1:refType"/>
 	</objectType>
 	<objectType name="nameType">

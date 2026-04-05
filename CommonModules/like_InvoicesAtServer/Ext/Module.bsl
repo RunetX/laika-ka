@@ -119,40 +119,42 @@ Function GetIncomingInvoicesRequisites(documentsList) Export
 	requisitesQuery = New Query;
 	requisitesQuery.TempTablesManager = tableManager;
 	requisitesQuery.Text = "SELECT DISTINCT
-	                       |	PurchaseGoodsServices.Контрагент AS ref1C
-	                       |INTO typeDependentRequisites
-	                       |FROM
-	                       |	Document.ПриобретениеТоваровУслуг AS PurchaseGoodsServices
-	                       |WHERE
-	                       |	PurchaseGoodsServices.Ref IN(&invoicesList)
-	                       |
-	                       |UNION
-	                       |
-	                       |SELECT DISTINCT
-	                       |	PurchaseGoodsServices.Склад
-	                       |FROM
-	                       |	Document.ПриобретениеТоваровУслуг AS PurchaseGoodsServices
-	                       |WHERE
-	                       |	PurchaseGoodsServices.Ref IN(&invoicesList)
-	                       |;
-	                       |
-	                       |////////////////////////////////////////////////////////////////////////////////
-	                       |SELECT DISTINCT
-	                       |	Goods.Номенклатура AS ref1C
-	                       |INTO typeUndependentRequisites
-	                       |FROM
-	                       |	Document.ПриобретениеТоваровУслуг.Товары AS Goods
-	                       |WHERE
-	                       |	Goods.Ref IN(&invoicesList)
-	                       |
-	                       |UNION
-	                       |
-	                       |SELECT DISTINCT
-	                       |	Goods.Номенклатура.ЕдиницаИзмерения
-	                       |FROM
-	                       |	Document.ПриобретениеТоваровУслуг.Товары AS Goods
-	                       |WHERE
-	                       |	Goods.Ref IN(&invoicesList)";
+   |	PurchaseGoodsServices.Партнер AS ref1C,
+   |	VALUE(Enum.like_matchingTypes.EmptyRef) AS mType
+   |INTO typeDependentRequisites
+   |FROM
+   |	Document.ПриобретениеТоваровУслуг AS PurchaseGoodsServices
+   |WHERE
+   |	PurchaseGoodsServices.Ref IN(&invoicesList)
+   |
+   |UNION
+   |
+   |SELECT DISTINCT
+   |	PurchaseGoodsServices.Склад,
+   |	VALUE(Enum.like_matchingTypes.EmptyRef)
+   |FROM
+   |	Document.ПриобретениеТоваровУслуг AS PurchaseGoodsServices
+   |WHERE
+   |	PurchaseGoodsServices.Ref IN(&invoicesList)
+   |;
+   |
+   |////////////////////////////////////////////////////////////////////////////////
+   |SELECT DISTINCT
+   |	Goods.Номенклатура AS ref1C
+   |INTO typeUndependentRequisites
+   |FROM
+   |	Document.ПриобретениеТоваровУслуг.Товары AS Goods
+   |WHERE
+   |	Goods.Ref IN(&invoicesList)
+   |
+   |UNION
+   |
+   |SELECT DISTINCT
+   |	Goods.Номенклатура.ЕдиницаИзмерения
+   |FROM
+   |	Document.ПриобретениеТоваровУслуг.Товары AS Goods
+   |WHERE
+   |	Goods.Ref IN(&invoicesList)";
 	requisitesQuery.SetParameter("invoicesList", documentsList);
 	requisitesQuery.Execute();
 	
@@ -162,94 +164,137 @@ EndFunction
 
 Function GetSaleOfGoodsDocumentRequisites(documentsList) Export
 
+	matchingTypes = ShipmentOfGoodsFromStorageMatchingTypes();
+	
 	tableManager = New TempTablesManager;
 	requisitesQuery = New Query;
 	requisitesQuery.TempTablesManager = tableManager;
-	requisitesQuery.Text = "SELECT DISTINCT
-	                       |	SaleOfGoods.Контрагент AS ref1C
-	                       |INTO typeDependentRequisites
-	                       |FROM
-	                       |	Document.РеализацияТоваровУслуг AS SaleOfGoods
-	                       |WHERE
-	                       |	SaleOfGoods.Ref IN(&documentsList)
-	                       |
-	                       |UNION
-	                       |
-	                       |SELECT DISTINCT
-	                       |	SaleOfGoods.Организация
-	                       |FROM
-	                       |	Document.РеализацияТоваровУслуг AS SaleOfGoods
-	                       |WHERE
-	                       |	SaleOfGoods.Ref IN(&documentsList)
-	                       |;
-	                       |
-	                       |////////////////////////////////////////////////////////////////////////////////
-	                       |SELECT DISTINCT
-	                       |	Goods.Номенклатура AS ref1C
-	                       |INTO typeUndependentRequisites
-	                       |FROM
-	                       |	Document.РеализацияТоваровУслуг.Товары AS Goods
-	                       |WHERE
-	                       |	Goods.Ref IN(&documentsList)
-	                       |
-	                       |UNION
-	                       |
-	                       |SELECT DISTINCT
-	                       |	Goods.Номенклатура.ЕдиницаИзмерения
-	                       |FROM
-	                       |	Document.РеализацияТоваровУслуг.Товары AS Goods
-	                       |WHERE
-	                       |	Goods.Ref IN(&documentsList)";
 	requisitesQuery.SetParameter("documentsList", documentsList);
+	requisitesQuery.SetParameter("matchingTypes", matchingTypes);
+	requisitesQuery.Text = "SELECT
+   |	mTypes.matchingType AS mType
+   |INTO tmpMatchingTypes
+   |FROM
+   |	&matchingTypes AS mTypes
+   |;
+   |
+   |////////////////////////////////////////////////////////////////////////////////
+   |SELECT DISTINCT
+   |	SaleOfGoods.Партнер AS ref1C,
+   |	mTypes.mType AS mType
+   |INTO typeDependentRequisites
+   |FROM
+   |	Document.РеализацияТоваровУслуг AS SaleOfGoods,
+   |	tmpMatchingTypes AS mTypes
+   |WHERE
+   |	SaleOfGoods.Ref IN(&documentsList)
+   |
+   |UNION
+   |
+   |SELECT DISTINCT
+   |	SaleOfGoods.Организация,
+   |	VALUE(Enum.like_matchingTypes.EmptyRef)
+   |FROM
+   |	Document.РеализацияТоваровУслуг AS SaleOfGoods
+   |WHERE
+   |	SaleOfGoods.Ref IN(&documentsList)
+   |;
+   |
+   |////////////////////////////////////////////////////////////////////////////////
+   |SELECT DISTINCT
+   |	Goods.Номенклатура AS ref1C
+   |INTO typeUndependentRequisites
+   |FROM
+   |	Document.РеализацияТоваровУслуг.Товары AS Goods
+   |WHERE
+   |	Goods.Ref IN(&documentsList)
+   |
+   |UNION
+   |
+   |SELECT DISTINCT
+   |	Goods.Номенклатура.ЕдиницаИзмерения
+   |FROM
+   |	Document.РеализацияТоваровУслуг.Товары AS Goods
+   |WHERE
+   |	Goods.Ref IN(&documentsList)";
 	requisitesQuery.Execute();
 	
 	Return tableManager;
 	
 EndFunction
 
+Function ShipmentOfGoodsFromStorageMatchingTypes() Export
+
+	matchingTypes =
+		like_TypesAndDescriptionsAtServer.GetTableWithColumns("matchingType;matchingTypes");
+		
+	newMatchingType = matchingTypes.Add();
+	newMatchingType.matchingType = Enums.like_matchingTypes.EmptyRef();
+	
+	newMatchingType = matchingTypes.Add();
+	newMatchingType.matchingType = Enums.like_matchingTypes.partnerConception;
+	
+	Return matchingTypes;
+
+EndFunction
+
 Function ShipmentOfGoodsFromStorageRequisites(documentsList) Export
+	
+	matchingTypes = ShipmentOfGoodsFromStorageMatchingTypes();
 	
 	tableManager = New TempTablesManager;
 	requisitesQuery = New Query;
 	requisitesQuery.TempTablesManager = tableManager;
-	requisitesQuery.Text = "SELECT DISTINCT
-	                       |	ShipmentOfGoods.Контрагент AS ref1C
-	                       |INTO typeDependentRequisites
-	                       |FROM
-	                       |	Document.ОтгрузкаТоваровСХранения AS ShipmentOfGoods
-	                       |WHERE
-	                       |	ShipmentOfGoods.Ref IN(&documentsList)
-	                       |
-	                       |UNION
-	                       |
-	                       |SELECT DISTINCT
-	                       |	ShipmentOfGoods.Склад
-	                       |FROM
-	                       |	Document.ОтгрузкаТоваровСХранения AS ShipmentOfGoods
-	                       |WHERE
-	                       |	ShipmentOfGoods.Ref IN(&documentsList)
-	                       |;
-	                       |
-	                       |////////////////////////////////////////////////////////////////////////////////
-	                       |SELECT DISTINCT
-	                       |	Goods.Номенклатура AS ref1C
-	                       |INTO typeUndependentRequisites
-	                       |FROM
-	                       |	Document.ОтгрузкаТоваровСХранения.Товары AS Goods
-	                       |WHERE
-	                       |	Goods.Ref IN(&documentsList)
-	                       |
-	                       |UNION
-	                       |
-	                       |SELECT DISTINCT
-	                       |	Goods.Номенклатура.ЕдиницаИзмерения
-	                       |FROM
-	                       |	Document.ОтгрузкаТоваровСХранения.Товары AS Goods
-	                       |WHERE
-	                       |	Goods.Ref IN(&documentsList)";
 	requisitesQuery.SetParameter("documentsList", documentsList);
+	requisitesQuery.SetParameter("matchingTypes", matchingTypes);
+	requisitesQuery.Text = "SELECT
+   |	mTypes.matchingType AS mType
+   |INTO tmpMatchingTypes
+   |FROM
+   |	&matchingTypes AS mTypes
+   |;
+   |
+   |////////////////////////////////////////////////////////////////////////////////
+   |SELECT DISTINCT
+   |	ShipmentOfGoods.Партнер AS ref1C,
+   |	mTypes.mType AS mType
+   |INTO typeDependentRequisites
+   |FROM
+   |	Document.ОтгрузкаТоваровСХранения AS ShipmentOfGoods,
+   |	tmpMatchingTypes AS mTypes
+   |WHERE
+   |	ShipmentOfGoods.Ref IN(&documentsList)
+   |
+   |UNION
+   |
+   |SELECT DISTINCT
+   |	ShipmentOfGoods.Склад,
+   |	VALUE(Enum.like_matchingTypes.EmptyRef)
+   |FROM
+   |	Document.ОтгрузкаТоваровСХранения AS ShipmentOfGoods
+   |WHERE
+   |	ShipmentOfGoods.Ref IN(&documentsList)
+   |;
+   |
+   |////////////////////////////////////////////////////////////////////////////////
+   |SELECT DISTINCT
+   |	Goods.Номенклатура AS ref1C
+   |INTO typeUndependentRequisites
+   |FROM
+   |	Document.ОтгрузкаТоваровСХранения.Товары AS Goods
+   |WHERE
+   |	Goods.Ref IN(&documentsList)
+   |
+   |UNION
+   |
+   |SELECT DISTINCT
+   |	Goods.Номенклатура.ЕдиницаИзмерения
+   |FROM
+   |	Document.ОтгрузкаТоваровСХранения.Товары AS Goods
+   |WHERE
+   |	Goods.Ref IN(&documentsList)";
 	requisitesQuery.Execute();
-	
+	         
 	Return tableManager;
 	
 EndFunction
@@ -260,7 +305,7 @@ Function GetIncomingInvoiceXDTO(ref1C, documentStructure, matchedObjects) Export
 	document.cls 					= "IncomingInvoice";
 	document.eid 					= documentStructure.id;
 	document.incomingDocumentNumber = ref1C.НомерВходящегоДокумента;   
-	document.supplier 				= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Контрагент).UUID;
+	document.supplier 				= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Партнер).UUID;
 	document.defaultStore 			= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Склад).UUID;
 	document.dateIncoming 			= Format(ref1C.Дата,"DF=yyyy-MM-ddTHH:mm:ss.000+03.00");
 	document.documentNumber			= documentStructure.number;
@@ -318,10 +363,14 @@ Function IncomingInvoiceXDTOBySalesDocument(ref1C, documentStructure, matchedObj
 	document.cls 					= "IncomingInvoice";
 	document.eid 					= documentStructure.id;
 	document.supplier 				= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Организация).UUID;
-	document.defaultStore 			= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Контрагент).UUID;
+	document.defaultStore 			= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Партнер).UUID;
 	document.dateIncoming 			= Format(ref1C.Дата,"DF=yyyy-MM-ddTHH:mm:ss.000+03.00");
 	document.documentNumber			= documentStructure.number;
 	document.status 				= "NEW";
+	conception = like_CommonAtServer.GetMatchedObject(matchedObjects, 
+		ref1C.Партнер,
+		Enums.like_matchingTypes.partnerConception).UUID; 
+	document.conception				= conception;
 	document.comment 				= "Создана Лайкой. " + ref1C.Комментарий;
 	document.id 					= documentStructure.id;
 
@@ -340,7 +389,6 @@ Function IncomingInvoiceXDTOBySalesDocument(ref1C, documentStructure, matchedObj
 		note.cls 			 = "IncomingInvoiceItem";
 		elementID 			 = String(New UUID);
 		note.eid 			 = elementID;
-		//note.store		 	 = like_CommonAtServer.GetMatchedObject(matchedObjects, product.Склад).UUID;
 		note.store			 = document.defaultStore;
 		note.code 		 	 = likeProduct.code;
 		note.sum			 = product.СуммаСНДС;
@@ -375,11 +423,15 @@ Function IncomingInvoiceXDTOByShipmentOfGoods(ref1C, documentStructure, matchedO
 	document 						= like_CreatingObjects.CreateXDTOObject("invoiceType");
 	document.cls 					= "IncomingInvoice";
 	document.eid 					= documentStructure.id;
-	document.supplier 				= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Контрагент).UUID;
+	document.supplier 				= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Партнер).UUID;
 	document.defaultStore 			= like_CommonAtServer.GetMatchedObject(matchedObjects, ref1C.Склад).UUID;
 	document.dateIncoming 			= Format(ref1C.Дата,"DF=yyyy-MM-ddTHH:mm:ss.000+03.00");
 	document.documentNumber			= documentStructure.number;
 	document.status 				= "NEW";
+	conception = like_CommonAtServer.GetMatchedObject(matchedObjects, 
+		ref1C.Партнер,
+		Enums.like_matchingTypes.partnerConception).UUID; 
+	document.conception				= conception;
 	document.comment 				= "Создана Лайкой. " + ref1C.Комментарий;
 	document.id 					= documentStructure.id;
 	
@@ -442,7 +494,7 @@ Procedure SendInvoices2IIKO(invoicesList) Export
 	
 	matchedObjects = like_DocumentAtServer.GetMatchedObjects(activeConnection, 
 															 invoicesRequisitesTempTable,
-															 MatchingTypeByDocumentsList(invoicesList));
+															 DocTypeByDocumentsList(invoicesList));
 	
 	For Each invoice In invoicesList Do
 		like_DocumentAtServer.SaveOrUpdateDocument(activeConnection, invoice, matchedObjects);	
@@ -460,7 +512,7 @@ Procedure SendSalesInvoices2IIKO(documentsList) Export
 	documentsRequisitesTempTable = GetSaleOfGoodsDocumentRequisites(documentsList);
 	matchedObjects = like_DocumentAtServer.GetMatchedObjects(activeConnection, 
 															 documentsRequisitesTempTable,
-															 MatchingTypeByDocumentsList(documentsList));
+															 DocTypeByDocumentsList(documentsList));
 
 	For Each document In documentsList Do
 		like_DocumentAtServer.SaveOrUpdateDocument(activeConnection, document, matchedObjects);	
@@ -468,7 +520,7 @@ Procedure SendSalesInvoices2IIKO(documentsList) Export
 
 EndProcedure
 
-Function MatchingTypeByDocumentsList(documentsList) Export
+Function DocTypeByDocumentsList(documentsList) Export
 
 	If documentsList.Count() = 0 Then
 		Return Undefined;

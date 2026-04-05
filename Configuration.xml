@@ -67,7 +67,7 @@
 			</UsePurposes>
 			<ScriptVariant>English</ScriptVariant>
 			<Vendor>izi.cloud</Vendor>
-			<Version>0.3.9.1</Version>
+			<Version>0.3.9.2</Version>
 			<Caption/>
 			<ShortCaption/>
 			<DefaultLanguage>Language.Русский</DefaultLanguage>
@@ -81,7 +81,7 @@
 			<Copyright>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Copyright (С) ООО "Изи Клауд", 2020. Все права защищены</v8:content>
+					<v8:content>Copyright (С) ООО "Изи Клауд", 2021. Все права защищены</v8:content>
 				</v8:item>
 			</Copyright>
 			<VendorInformationAddress>
@@ -142,7 +142,9 @@
 			<Catalog>Контрагенты</Catalog>
 			<Catalog>Номенклатура</Catalog>
 			<Catalog>Организации</Catalog>
+			<Catalog>Партнеры</Catalog>
 			<Catalog>Склады</Catalog>
+			<Catalog>СтавкиНДС</Catalog>
 			<Catalog>УпаковкиЕдиницыИзмерения</Catalog>
 			<Catalog>like_accounts</Catalog>
 			<Catalog>like_accountingCategories</Catalog>
@@ -156,12 +158,12 @@
 			<Catalog>like_products</Catalog>
 			<Catalog>like_stores</Catalog>
 			<Catalog>like_users</Catalog>
-			<Catalog>СтавкиНДС</Catalog>
 			<Document>ОтгрузкаТоваровСХранения</Document>
 			<Document>ПриобретениеТоваровУслуг</Document>
 			<Document>РеализацияТоваровУслуг</Document>
-			<Enum>like_serverStates</Enum>
+			<Enum>like_matchingTypes</Enum>
 			<Enum>like_productTypes</Enum>
+			<Enum>like_serverStates</Enum>
 			<Enum>like_supplierTypes</Enum>
 			<Enum>СтавкиНДС</Enum>
 			<Enum>СтатусыРеализацийТоваровУслуг</Enum>

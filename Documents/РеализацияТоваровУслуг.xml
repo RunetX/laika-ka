@@ -55,6 +55,18 @@
 					</Type>
 				</Properties>
 			</Attribute>
+			<Attribute uuid="8fc4b7f3-e2c6-468b-a445-c8a6b0375270">
+				<InternalInfo/>
+				<Properties>
+					<ObjectBelonging>Adopted</ObjectBelonging>
+					<Name>Партнер</Name>
+					<Comment/>
+					<ExtendedConfigurationObject>50c9ead0-2833-4f57-86bb-47fa6ffdc8aa</ExtendedConfigurationObject>
+					<Type>
+						<v8:Type>cfg:CatalogRef.Партнеры</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
 			<Form>ФормаСписка</Form>
 			<TabularSection uuid="dff4fa76-af2c-4b6e-80b7-054e977003d8">
 				<InternalInfo>

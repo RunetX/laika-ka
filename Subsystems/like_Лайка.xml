@@ -30,6 +30,7 @@
 				<xr:Item xsi:type="xr:MDObjectRef">Catalog.like_conceptions</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">Enum.like_productTypes</xr:Item>
 				<xr:Item xsi:type="xr:MDObjectRef">InformationRegister.like_documentsMatching</xr:Item>
+				<xr:Item xsi:type="xr:MDObjectRef">Enum.like_matchingTypes</xr:Item>
 			</Content>
 		</Properties>
 		<ChildObjects>

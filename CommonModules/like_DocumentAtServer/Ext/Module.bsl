@@ -148,17 +148,19 @@ Function GetDocumentXDTO(connection, ref1C, matchedObjects)
 
 EndFunction
 
-Function GetMatchedObjects(connection, tableManager, matchingType) Export
+Function GetMatchedObjects(connection, tableManager, docType) Export
 
 	matchedObjectsQuery = New Query;
 	matchedObjectsQuery.TempTablesManager = tableManager;
 	matchedObjectsQuery.Text = "SELECT
 	                           |	typeDependentRequisites.ref1C AS ref1C,
+							   |	typeDependentRequisites.mType AS mType,
 	                           |	like_objectMatching.likeRef AS likeRef
 	                           |FROM
 	                           |	typeDependentRequisites AS typeDependentRequisites
 	                           |		LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
 	                           |		ON typeDependentRequisites.ref1C = like_objectMatching.ref1C
+							   |			AND typeDependentRequisites.mType = like_objectMatching.matchingType
 	                           |			AND (like_objectMatching.connection = &connection)
 	                           |			AND (like_objectMatching.docType = &docType)
 	                           |
@@ -166,6 +168,7 @@ Function GetMatchedObjects(connection, tableManager, matchingType) Export
 	                           |
 	                           |SELECT
 	                           |	typeUndependentRequisites.ref1C,
+							   |  	VALUE(Enum.like_matchingTypes.EmptyRef),
 	                           |	like_objectMatching.likeRef
 	                           |FROM
 	                           |	typeUndependentRequisites AS typeUndependentRequisites
@@ -173,22 +176,24 @@ Function GetMatchedObjects(connection, tableManager, matchingType) Export
 	                           |		ON typeUndependentRequisites.ref1C = like_objectMatching.ref1C
 	                           |			AND (like_objectMatching.connection = &connection)";
 	matchedObjectsQuery.SetParameter("connection", connection);
-	matchedObjectsQuery.SetParameter("docType", matchingType);
+	matchedObjectsQuery.SetParameter("docType", docType);
 	Return matchedObjectsQuery.Execute().Unload();
 
 EndFunction
 
-Function GetUnmatchedObjects(connection, tableManager, matchingType) Export
+Function GetUnmatchedObjects(connection, tableManager, docType) Export
 	
 	unmatchedObjectsQuery = New Query;
 	unmatchedObjectsQuery.TempTablesManager = tableManager;
 	unmatchedObjectsQuery.Text = "SELECT
 	                             |	typeDependentRequisites.ref1C AS ref1C,
+								 |	typeDependentRequisites.mType AS mType,
 	                             |	like_objectMatching.likeRef AS likeRef
 	                             |FROM
 	                             |	typeDependentRequisites AS typeDependentRequisites
 	                             |		LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
 	                             |		ON typeDependentRequisites.ref1C = like_objectMatching.ref1C
+								 |			AND typeDependentRequisites.mType = like_objectMatching.matchingType
 	                             |			AND (like_objectMatching.connection = &connection)
 	                             |			AND (like_objectMatching.docType = &docType)
 	                             |WHERE
@@ -198,6 +203,7 @@ Function GetUnmatchedObjects(connection, tableManager, matchingType) Export
 	                             |
 	                             |SELECT
 	                             |	typeUndependentRequisites.ref1C,
+								 |  VALUE(Enum.like_matchingTypes.EmptyRef),
 	                             |	like_objectMatching.likeRef
 	                             |FROM
 	                             |	typeUndependentRequisites AS typeUndependentRequisites
@@ -207,7 +213,7 @@ Function GetUnmatchedObjects(connection, tableManager, matchingType) Export
 	                             |WHERE
 	                             |	like_objectMatching.likeRef IS NULL";
 	unmatchedObjectsQuery.SetParameter("connection", connection);
-	unmatchedObjectsQuery.SetParameter("docType", matchingType);
+	unmatchedObjectsQuery.SetParameter("docType", docType);
 	Return unmatchedObjectsQuery.Execute().Unload();
 	
 EndFunction
@@ -240,6 +246,7 @@ Function GetUnmatchedCount(documentsList) Export
 	                             |		typeDependentRequisites AS typeDependentRequisites
 	                             |			LEFT JOIN InformationRegister.like_objectMatching AS like_objectMatching
 	                             |			ON typeDependentRequisites.ref1C = like_objectMatching.ref1C
+								 |			AND typeDependentRequisites.mType = like_objectMatching.matchingType
 	                             |				AND (like_objectMatching.connection = &connection)
 	                             |				AND (like_objectMatching.docType = &docType)
 	                             |	WHERE
